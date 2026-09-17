@@ -18,7 +18,21 @@ cineposto/
 
 ## Avvio rapido
 
-### Backend
+### Con Docker (consigliato)
+
+Serve solo Docker Desktop avviato — Python 3.12 sta dentro l'immagine.
+
+```bash
+make up      # backend su http://localhost:8000 (Swagger: /docs)
+make seed    # popola il DB dai JSON in scraper/output/
+make test    # 26 test backend nel container
+make help    # tutti i comandi
+```
+
+Su Windows il setup completo (telefono, firewall, IP di rete, problemi noti) è in
+[docs/development-windows.md](docs/development-windows.md).
+
+### Backend senza Docker
 
 ```bash
 cd backend
@@ -59,6 +73,8 @@ Tutto in [`docs/`](docs/index.md). Da dove partire:
 | Documento | A cosa serve |
 |---|---|
 | [`docs/panoramica.md`](docs/panoramica.md) | Il sistema spiegato da cima a fondo |
+| [`docs/development-windows.md`](docs/development-windows.md) | Setup su Windows con Docker, telefono, firewall |
+| [`docs/development.md`](docs/development.md) | Setup nativo (venv + npm), test, lint, variabili d'ambiente |
 | [`docs/presentazione-14-luglio.md`](docs/presentazione-14-luglio.md) | Scaletta, script della demo e domande del prof per l'esposizione |
 | [`docs/development.md`](docs/development.md) | Setup, test, lint, variabili d'ambiente |
 | [`docs/backend/api.md`](docs/backend/api.md) | Contratto API completo |

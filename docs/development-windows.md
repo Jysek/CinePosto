@@ -1,0 +1,195 @@
+# Sviluppo su Windows
+
+Guida pratica per far girare CinePosto su Windows. Tutti i comandi qui sono stati eseguiti
+e verificati su questo ambiente (Windows 11, Git Bash, Docker Desktop).
+
+Il progetto si sviluppa su Windows e su macOS: il setup è **quasi identico**, cambiano solo
+i percorsi e due dettagli di rete. La fonte di verità portabile resta la CI su Ubuntu
+(`.github/workflows/ci.yml`).
+
+---
+
+## 1. Cosa serve installare (una volta sola)
+
+| Strumento | Perché | Come |
+|---|---|---|
+| **Docker Desktop** | backend e scraper girano in container: **Python 3.12 non serve installarlo** | installato, va solo **avviato** |
+| **Git** | ovvio | installato |
+| **Node.js 20+** | solo per l'app Expo | installato (Node 24) |
+| **make** *(opzionale)* | scorciatoie al posto dei comandi `docker compose` | `winget install --id ezwinports.make -e` |
+| **GitHub CLI** *(opzionale)* | PR, release | `winget install --id GitHub.cli -e` |
+
+**Python 3.12 non va installato su Windows**: vive dentro l'immagine Docker (`python:3.12-slim`).
+Serve solo nel fallback "senza Docker" del §6, e in quel caso **deve** essere 3.12 (non 3.13/3.14:
+`pydantic-core 2.27` non compila).
+
+**Prima di ogni sessione di lavoro: avvia Docker Desktop** e aspetta che l'icona smetta di
+girare. Se il daemon non è attivo, ogni comando `docker` fallisce con
+`failed to connect to the docker API ... dockerDesktopLinuxEngine`.
+
+---
+
+## 2. Primo avvio (5 minuti)
+
+```bash
+git clone https://github.com/Jysek/CinePosto.git ~/dev/CinePosto
+cd ~/dev/CinePosto
+
+docker compose up -d --build backend    # oppure: make up
+docker compose run --rm backend python -m app.seed_from_json   # oppure: make seed
+curl http://localhost:8000/health       # → {"status":"ok"}
+```
+
+- **Swagger UI**: http://localhost:8000/docs
+- Il seed legge i JSON in `scraper/output/` e popola `backend/data/cineposto.db`.
+  È idempotente: rilanciarlo non duplica nulla.
+
+> I JSON committati sono un **dataset storico** (ultimo aggiornamento: 14 luglio 2026).
+> Per questo `/api/v1/film/oggi` può rispondere `[]`: non ci sono spettacoli nella data odierna
+> finché non si fa uno scraping vero (`docker compose run --rm scraper`).
+
+---
+
+## 3. Comandi quotidiani
+
+Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la stessa cosa.
+
+| Cosa | `make` | Comando per esteso |
+|---|---|---|
+| Avvia il backend | `make up` | `docker compose up -d --build backend` |
+| Log del backend | `make logs` | `docker compose logs -f backend` |
+| Stato container | `make ps` | `docker compose ps` |
+| Test backend (26) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
+| Test scraper (75) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
+| Lint (ruff) | `make lint` | `docker compose run --rm backend python -m ruff check app/ tests/` |
+| Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |
+| Scraping **live** | `make scrape` | `docker compose run --rm scraper python -m scraper.main --once` |
+| Shell nel container | `make shell` | `docker compose run --rm backend bash` |
+| Ferma tutto | `make down` | `docker compose down` |
+| Reset completo (cancella il DB) | `make clean` | `docker compose down -v --remove-orphans` + `rm backend/data/cineposto.db` |
+| Aiuto | `make help` | — |
+
+`docker compose run` avvia un container "usa e getta" per quel comando: non tocca il backend
+che sta già girando, e non serve fermarlo per lanciare i test.
+
+**Scraping: pochi giri, non venti al giorno.** I siti dei cinema non sono nostri. In sviluppo
+usa i JSON già presenti come dati; lancia `make scrape` solo quando serve davvero un dataset
+fresco (una o due volte a settimana). Rispetto di `robots.txt`, rate limiting e User-Agent
+identificabile sono vincoli di progetto, non opzioni (vedi `NOTICE`).
+
+---
+
+## 4. App (Expo) su web e su iPhone
+
+```bash
+cd app
+npm install
+
+# Sostituisci <IP-LAN> con l'indirizzo del PC sulla rete locale:
+#   PowerShell:  ipconfig | findstr IPv4
+#   Git Bash:    ipconfig | grep IPv4
+EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
+```
+
+- **Web**: apri http://localhost:8081 (o premi `w`).
+- **iPhone**: apri **Expo Go** e scansiona il QR code.
+
+Non serve Android per sviluppare: l'app è React Native e gira anche su Android, ma non avendo
+un device Android la verifica su quella piattaforma non è stata fatta.
+
+### Se il telefono non si connette
+
+Quasi sempre è **rete o firewall**, non l'app. In ordine:
+
+1. **Stessa Wi-Fi**: PC e iPhone devono essere sulla stessa rete, e il PC non deve essere
+   connesso a una VPN.
+2. **Profilo di rete "Privata"** su Windows: `Get-NetConnectionProfile` (PowerShell). Se dice
+   `Public`, Windows blocca le connessioni in ingresso e Expo Go non raggiunge nulla:
+   ```powershell
+   Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private
+   ```
+3. **Regola firewall per la porta 8000** (PowerShell **come amministratore**, una volta sola):
+   ```powershell
+   New-NetFirewallRule -DisplayName "CinePosto backend 8000" -Direction Inbound `
+     -LocalPort 8000 -Protocol TCP -Action Allow -Profile Private
+   ```
+4. **IP cambiato**: il router assegna un IP nuovo → rileggi l'IP e riavvia `expo start`.
+
+`localhost` **non** funziona dal telefono: `localhost`, sul telefono, è il telefono stesso.
+
+---
+
+## 5. Dove stanno i dati (e cosa non va mai committato)
+
+| Percorso | Cos'è | Versionato? |
+|---|---|---|
+| `backend/data/cineposto.db` | DB SQLite di sviluppo (bind mount) | no |
+| `scraper/output/*.json` | dataset (fixture di sviluppo, in prod è live) | **sì** |
+| `scraper/output/cache/`, `history/` | cache per-cinema e snapshot giornalieri | no |
+| `backend/.env` | configurazione locale (copia da `.env.example`) | no |
+| `data/` | dati di **produzione** (DB + JSON live) | no |
+
+Il file `.env` è opzionale in sviluppo: il backend ha default sensati. Se ti serve
+personalizzarlo, `cp backend/.env.example backend/.env`. **Le variabili impostate in
+`compose.yaml` hanno la precedenza** su quelle del file `.env`.
+
+---
+
+## 6. Fallback: senza Docker (venv nativo)
+
+Serve **Python 3.12** installato (`winget install --id Python.Python.3.12 -e`, poi riapri il
+terminale). Utile quando Docker non è disponibile; i comandi sono quelli di
+[docs/development.md](development.md), tradotti per PowerShell.
+
+```powershell
+# Backend
+cd backend
+py -3.12 -m venv venv
+.\venv\Scripts\Activate.ps1        # Git Bash: source venv/Scripts/activate
+pip install -r requirements.txt
+copy .env.example .env
+python -m app.seed_from_json
+uvicorn app.main:app --reload --port 8000
+```
+
+```powershell
+# Scraper
+cd scraper
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+python -m scraper.main --once
+```
+
+Differenze rispetto a macOS/Linux: `python3` → `py -3.12`, `source venv/bin/activate` →
+`.\.venv\Scripts\Activate.ps1`, `ipconfig getifaddr en0` → `ipconfig | findstr IPv4`.
+
+---
+
+## 7. Produzione in locale (prova del deploy)
+
+Verifica che la configurazione di produzione funzioni **prima** di toccare una VPS:
+
+```bash
+make prod-test      # Caddy con TLS self-signed su https://localhost:8443
+curl -k https://localhost:8443/health
+make prod-down
+```
+
+Cosa cambia in produzione (`compose.prod.yaml`): nessun codice bind-montato, backend non
+pubblicato (l'unica porta esposta è Caddy su 80/443), backend come utente non privilegiato,
+dati in `data/` fuori dal repo, `ADMIN_TOKEN` e `CORS_ORIGINS` obbligatori (il compose si
+rifiuta di partire senza).
+
+---
+
+## 8. Problemi già incontrati (e soluzione)
+
+| Sintomo | Causa | Soluzione |
+|---|---|---|
+| `failed to connect to the docker API` | Docker Desktop non avviato | avvia Docker Desktop, aspetta l'icona ferma |
+| `port is already allocated` su 8000 | un backend già in ascolto | `make down`, oppure `netstat -ano \| findstr :8000` per trovare il processo |
+| `/api/v1/film/oggi` → `[]` | dataset storico (luglio 2026) | `make scrape` + `make seed` |
+| Il telefono non vede il backend | firewall / rete pubblica / IP cambiato | §4 |
+| Fine riga strani nei diff | `core.autocrlf=true` su Windows | già gestito da `.gitattributes` (LF forzato) |
+| `python` apre il Microsoft Store | alias di Windows App Execution | usa `py -3.12` o il container |

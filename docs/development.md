@@ -1,5 +1,11 @@
 # Guida allo sviluppo
 
+> **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
+> Scorciatoie in `make help`; setup passo-passo su Windows in
+> [development-windows.md](development-windows.md).
+>
+> Questa pagina descrive i comandi **nativi** (venv + npm), utili come fallback e su macOS.
+
 ## Prerequisiti
 
 - Python 3.12+

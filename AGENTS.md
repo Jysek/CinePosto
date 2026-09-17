@@ -21,7 +21,23 @@ docs/      documentazione tecnica (in italiano)
 
 ## Comandi canonici
 
-Esegui sempre dal componente giusto (`scraper/`, `backend/`, `app/`).
+L'ambiente primario è **Docker** (funziona uguale su Windows e macOS, e non richiede Python locale):
+
+| Cosa | Comando |
+|---|---|
+| Avvia il backend | `make up` |
+| Test backend (26) | `make test` |
+| Test scraper (75) | `make test-scraper` |
+| Lint | `make lint` |
+| Seed DB dai JSON | `make seed` |
+| Scraping live (con parsimonia) | `make scrape` |
+| Aiuto completo | `make help` |
+
+Ogni target stampa il comando `docker compose` equivalente: il Makefile è una scorciatoia.
+Setup completo (Docker, telefono, firewall, IP di rete) in
+[`docs/development-windows.md`](docs/development-windows.md).
+
+Senza Docker (fallback, richiede Python 3.12 locale), dal componente giusto:
 
 | Cosa | Comando |
 |---|---|
@@ -33,9 +49,6 @@ Esegui sempre dal componente giusto (`scraper/`, `backend/`, `app/`).
 | Avvio backend | `uvicorn app.main:app --reload --port 8000` |
 | App: web | `npx expo start --web` |
 | App: export statico | `npx expo export --platform web` |
-
-Su Windows il setup completo (Docker, venv, firewall, IP di rete) è in
-[`docs/development-windows.md`](docs/development-windows.md).
 
 ## Regole di architettura
 
