@@ -1,0 +1,84 @@
+# CinePosto — comandi di sviluppo.
+#
+# Il Makefile è una scorciatoia, non un requisito: ogni target riporta il comando
+# `docker compose` equivalente, così il progetto resta usabile anche senza `make`.
+#
+# Prima di tutto serve Docker Desktop avviato (su Windows: apri Docker Desktop e aspetta
+# che l'icona smetta di girare).
+
+COMPOSE      := docker compose
+COMPOSE_PROD := docker compose -f compose.yaml -f compose.prod.yaml
+BACKEND      := $(COMPOSE) run --rm backend
+SCRAPER      := $(COMPOSE) run --rm scraper
+API          := http://localhost:8000
+
+.DEFAULT_GOAL := help
+.PHONY: help up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
+
+help: ## Mostra questo aiuto
+	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
+
+up: ## Avvia il backend in background  →  docker compose up -d --build backend
+	$(COMPOSE) up -d --build backend
+	@echo "Backend su $(API) — Swagger: $(API)/docs"
+
+down: ## Ferma lo stack  →  docker compose down
+	$(COMPOSE) down
+
+restart: ## Riavvia il backend  →  docker compose restart backend
+	$(COMPOSE) restart backend
+
+logs: ## Segue i log del backend  →  docker compose logs -f backend
+	$(COMPOSE) logs -f backend
+
+ps: ## Stato dei container  →  docker compose ps
+	$(COMPOSE) ps
+
+build: ## Ricostruisce le immagini  →  docker compose build
+	$(COMPOSE) build
+
+shell: ## Shell nel container backend  →  docker compose run --rm backend bash
+	$(BACKEND) bash
+
+test: ## Test del backend (26)  →  docker compose run --rm backend python -m pytest tests/ -q
+	$(BACKEND) python -m pytest tests/ -q
+
+test-scraper: ## Test dello scraper  →  docker compose run --rm scraper python -m pytest tests/ -q
+	$(SCRAPER) python -m pytest tests/ -q
+
+lint: ## Ruff su backend e scraper
+	$(COMPOSE) run --rm backend python -m ruff check app/ tests/
+	$(SCRAPER) python -m ruff check scraper/ tests/
+
+seed: ## Popola il DB dai JSON committati  →  docker compose run --rm backend python -m app.seed_from_json
+	$(BACKEND) python -m app.seed_from_json
+
+scrape: ## Scraping LIVE di tutti i cinema (etichetta: pochi giri al giorno)
+	$(SCRAPER) python -m scraper.main --once
+	@echo "JSON aggiornati in scraper/output/ — ora: make seed"
+
+health: ## Verifica che il backend risponda
+	@curl -s -o /dev/null -w "GET /health → HTTP %{http_code}\n" $(API)/health
+
+prod-test: ## Prova la configurazione di produzione in locale (Caddy + TLS self-signed su 8443)
+	DOMAIN=localhost TLS_DIRECTIVE="tls internal" HTTP_PORT=8080 HTTPS_PORT=8443 \
+	ADMIN_TOKEN=test-locale CORS_ORIGINS='["https://localhost:8443"]' \
+	$(COMPOSE_PROD) up -d --build
+	@echo "Attendi qualche secondo, poi: curl -k https://localhost:8443/health"
+	@echo "Per fermarla: make prod-down"
+
+prod-up: ## Avvia in produzione (legge .env.prod: ADMIN_TOKEN, CORS_ORIGINS, DOMAIN)
+	$(COMPOSE_PROD) --env-file .env.prod up -d --build
+
+prod-scrape: ## Primo scrape reale in produzione  →  crea i JSON in ./data/output
+	$(COMPOSE_PROD) --env-file .env.prod run --rm scraper
+
+prod-seed: ## Popola il DB di produzione dai JSON in ./data/output
+	$(COMPOSE_PROD) --env-file .env.prod run --rm backend python -m app.seed_from_json
+
+prod-down: ## Ferma la produzione
+	$(COMPOSE_PROD) down
+
+clean: ## Ferma tutto e cancella DB locale e volumi  →  docker compose down -v
+	$(COMPOSE) down -v --remove-orphans
+	@rm -f backend/data/cineposto.db && echo "DB locale rimosso"
