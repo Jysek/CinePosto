@@ -97,6 +97,21 @@ EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 Non serve Android per sviluppare: l'app è React Native e gira anche su Android, ma non avendo
 un device Android la verifica su quella piattaforma non è stata fatta.
 
+### Se la porta 8081 è già occupata
+
+Succede se hai un altro progetto Expo avviato (Metro tiene la 8081). Expo in modalità
+non interattiva si ferma invece di chiedere. Usa un'altra porta **e aggiungi quell'origin
+alla CORS del backend**, altrimenti il browser blocca le chiamate API:
+
+```bash
+# backend/.env
+CORS_ORIGINS=["http://localhost:8081","http://localhost:8090",...]
+
+# poi (il backend deve rileggere il .env: `restart` non basta)
+docker compose up -d backend
+expo start --web --port 8090
+```
+
 ### Se il telefono non si connette
 
 Quasi sempre è **rete o firewall**, non l'app. In ordine:
@@ -108,7 +123,14 @@ Quasi sempre è **rete o firewall**, non l'app. In ordine:
    ```powershell
    Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private
    ```
-3. **Regola firewall per la porta 8000** (PowerShell **come amministratore**, una volta sola):
+3. **Regola firewall per le porte 8000 (backend) e 8081/8090 (Metro)**. Su una rete
+   **pubblica** (bar, università, hotspot) non conviene cambiare il profilo in Privato:
+   meglio una regola limitata alla subnet locale. PowerShell **come amministratore**:
+   ```powershell
+   New-NetFirewallRule -DisplayName "CinePosto dev (LAN)" -Direction Inbound `
+     -Protocol TCP -LocalPort 8000,8081,8090 -Action Allow -Profile Public -RemoteAddress LocalSubnet
+   ```
+   Se invece la rete è la tua di casa, il profilo Privato è la strada normale:
    ```powershell
    New-NetFirewallRule -DisplayName "CinePosto backend 8000" -Direction Inbound `
      -LocalPort 8000 -Protocol TCP -Action Allow -Profile Private
@@ -192,4 +214,6 @@ rifiuta di partire senza).
 | `/api/v1/film/oggi` → `[]` | dataset storico (luglio 2026) | `make scrape` + `make seed` |
 | Il telefono non vede il backend | firewall / rete pubblica / IP cambiato | §4 |
 | Fine riga strani nei diff | `core.autocrlf=true` su Windows | già gestito da `.gitattributes` (LF forzato) |
+| Expo si ferma con "Port 8081 is being used" | un altro progetto Expo è avviato | `expo start --web --port 8090` + origin in `CORS_ORIGINS` (§4) |
+| Il browser blocca le chiamate API (CORS) | origin non in `CORS_ORIGINS` | aggiungila in `backend/.env` e `docker compose up -d backend` |
 | `python` apre il Microsoft Store | alias di Windows App Execution | usa `py -3.12` o il container |
