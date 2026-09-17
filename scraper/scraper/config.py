@@ -106,7 +106,7 @@ SCRAPER_RETRY_DELAY = 300  # seconds before retrying a failed connector (5 min â
 
 WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql"
 # Wikimedia policy: identifica un endpoint contattabile reale.
-WIKIDATA_USER_AGENT = "CinePosto/1.0 (https://github.com/Emanuele2006iii/CinePosto; emanuele.ceccariglia@gmail.com)"
+WIKIDATA_USER_AGENT = "CinePosto/1.0 (+https://github.com/Jysek/CinePosto; 55837328+Jysek@users.noreply.github.com)"
 WIKIDATA_TIMEOUT = 15
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
