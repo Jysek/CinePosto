@@ -11,6 +11,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # In produzione vengono sovrascritti da CORS_ORIGINS nel .env.
 _DEV_CORS_DEFAULTS = [
     "http://localhost:8081",  # Metro bundler
+    "http://localhost:8090",  # Metro, quando la 8081 è occupata (make dev)
     "http://localhost:19006",  # Expo web
     "http://localhost:3000",  # test web occasionale
 ]

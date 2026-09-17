@@ -29,7 +29,40 @@ girare. Se il daemon non è attivo, ogni comando `docker` fallisce con
 
 ---
 
-## 2. Primo avvio (5 minuti)
+## 2. Avvio quotidiano: un solo comando
+
+Ogni volta che accendi il PC, per lavorare su CinePosto basta:
+
+```bash
+cd ~/dev/CinePosto
+make dev
+```
+
+Su Windows puoi anche fare **doppio clic su `dev.cmd`** nella cartella del progetto: fa la stessa cosa
+senza aprire il terminale.
+
+`make dev` fa tutto da solo:
+
+1. **accende Docker Desktop** se è spento e aspetta che sia pronto (un minuto circa);
+2. avvia il **backend** e aspetta che risponda;
+3. **ricava l'IP del PC** sulla rete locale;
+4. avvia l'**app** con l'indirizzo del backend già configurato, sulla porta 8090;
+5. stampa come vederla: premi `w` per il browser, oppure Expo Go con
+   `exp://<IP>:8090` (oppure inquadra il QR).
+
+Per fermare tutto: **Ctrl+C** nella finestra (o chiudila). I dati non si perdono: il database
+resta su disco. Al riavvio successivo basta rifare `make dev`.
+
+Se l'app dice *"nessun film in programmazione"*, il database è vuoto o vecchio:
+
+```bash
+make scrape   # scarica la programmazione aggiornata dai siti dei cinema
+make seed     # la carica nel database
+```
+
+---
+
+## 3. Primo avvio (solo la prima volta)
 
 ```bash
 git clone https://github.com/Jysek/CinePosto.git ~/dev/CinePosto
@@ -50,7 +83,7 @@ curl http://localhost:8000/health       # → {"status":"ok"}
 
 ---
 
-## 3. Comandi quotidiani
+## 4. Altri comandi utili
 
 Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la stessa cosa.
 
@@ -79,7 +112,10 @@ identificabile sono vincoli di progetto, non opzioni (vedi `NOTICE`).
 
 ---
 
-## 4. App (Expo) su web e su iPhone
+## 5. App (Expo) su web e su iPhone
+
+Con `make dev` l'app è già avviata con l'indirizzo giusto: salta questa sezione.
+La trovi qui per il caso in cui voglia avviare l'app **da sola** (senza backend in Docker).
 
 ```bash
 cd app
@@ -141,7 +177,7 @@ Quasi sempre è **rete o firewall**, non l'app. In ordine:
 
 ---
 
-## 5. Dove stanno i dati (e cosa non va mai committato)
+## 6. Dove stanno i dati (e cosa non va mai committato)
 
 | Percorso | Cos'è | Versionato? |
 |---|---|---|
@@ -157,7 +193,7 @@ personalizzarlo, `cp backend/.env.example backend/.env`. **Le variabili impostat
 
 ---
 
-## 6. Fallback: senza Docker (venv nativo)
+## 7. Fallback: senza Docker (venv nativo)
 
 Serve **Python 3.12** installato (`winget install --id Python.Python.3.12 -e`, poi riapri il
 terminale). Utile quando Docker non è disponibile; i comandi sono quelli di
@@ -188,7 +224,7 @@ Differenze rispetto a macOS/Linux: `python3` → `py -3.12`, `source venv/bin/ac
 
 ---
 
-## 7. Produzione in locale (prova del deploy)
+## 8. Produzione in locale
 
 Verifica che la configurazione di produzione funzioni **prima** di toccare una VPS:
 
@@ -205,7 +241,7 @@ rifiuta di partire senza).
 
 ---
 
-## 8. Problemi già incontrati (e soluzione)
+## 9. Problemi già incontrati (e soluzione)
 
 | Sintomo | Causa | Soluzione |
 |---|---|---|
@@ -214,6 +250,6 @@ rifiuta di partire senza).
 | `/api/v1/film/oggi` → `[]` | dataset storico (luglio 2026) | `make scrape` + `make seed` |
 | Il telefono non vede il backend | firewall / rete pubblica / IP cambiato | §4 |
 | Fine riga strani nei diff | `core.autocrlf=true` su Windows | già gestito da `.gitattributes` (LF forzato) |
-| Expo si ferma con "Port 8081 is being used" | un altro progetto Expo è avviato | `expo start --web --port 8090` + origin in `CORS_ORIGINS` (§4) |
+| Expo si ferma con "Port 8081 is being used" | un altro progetto Expo è avviato | `make dev` usa la 8090; per avviare a mano aggiungi `--port 8090` |
 | Il browser blocca le chiamate API (CORS) | origin non in `CORS_ORIGINS` | aggiungila in `backend/.env` e `docker compose up -d backend` |
 | `python` apre il Microsoft Store | alias di Windows App Execution | usa `py -3.12` o il container |

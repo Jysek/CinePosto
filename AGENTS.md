@@ -25,6 +25,7 @@ L'ambiente primario è **Docker** (funziona uguale su Windows e macOS, e non ric
 
 | Cosa | Comando |
 |---|---|
+| Avvia tutto (Docker + backend + app) | `make dev` |
 | Avvia il backend | `make up` |
 | Test backend (26) | `make test` |
 | Test scraper (75) | `make test-scraper` |

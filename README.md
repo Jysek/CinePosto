@@ -31,18 +31,20 @@ API REST tra backend e app. Ogni stadio si testa da solo — **101 test** (75 sc
 
 ## Avvio rapido
 
-Serve solo **Docker** avviato: Python 3.12 sta dentro l'immagine.
+Serve solo **Docker**: Python 3.12 sta dentro l'immagine. Su Windows si può anche fare
+doppio clic su `dev.cmd`.
 
 ```bash
 git clone https://github.com/Jysek/CinePosto.git && cd CinePosto
 
-make up      # backend su http://localhost:8000 (Swagger su /docs)
-make seed    # popola il DB dai JSON in scraper/output/
-make test    # 26 test backend dentro il container
+make dev     # accende Docker se serve, avvia backend e app (browser + telefono)
+make scrape  # scarica la programmazione aggiornata dai siti dei cinema
+make seed    # carica i dati nel database
+make test    # 31 test backend dentro il container
 make help    # tutti i comandi
 ```
 
-App (web e telefono):
+App (web e telefono): con `make dev` è già avviata con l'indirizzo giusto. Per avviarla da sola:
 
 ```bash
 cd app && npm install

@@ -13,10 +13,13 @@ SCRAPER      := $(COMPOSE) run --rm scraper
 API          := http://localhost:8000
 
 .DEFAULT_GOAL := help
-.PHONY: help up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
+.PHONY: help dev up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
 
 help: ## Mostra questo aiuto
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
+
+dev: ## AVVIA TUTTO: Docker (se spento), backend e app per browser e telefono
+	@bash scripts/dev.sh
 
 up: ## Avvia il backend in background  →  docker compose up -d --build backend
 	$(COMPOSE) up -d --build backend
