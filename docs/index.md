@@ -5,9 +5,17 @@ Aggregatore cinema Umbria: scraper Python, backend FastAPI, app React Native. Tu
 ## Da dove partire
 
 - [panoramica.md](panoramica.md) — il sistema da cima a fondo: flusso dei dati, componenti, decisioni di design. Il primo da leggere.
-- [presentazione-14-luglio.md](presentazione-14-luglio.md) — preparazione all'esposizione: scaletta, script della demo, piano B per la rete, domande probabili del prof.
-- [esposizione-discorsi.md](esposizione-discorsi.md) — divisione delle slide per persona, i discorsi (per ora quello backend di Emanuele) e la spiegazione test per test.
-- [development.md](development.md) — setup locale, test, lint e variabili d'ambiente di ogni componente.
+- [development.md](development.md) — setup locale, test, lint e variabili d'ambiente di ogni componente (comandi nativi, venv + npm).
+- [development-windows.md](development-windows.md) — setup su Windows con Docker, app sul telefono, firewall e problemi già incontrati.
+- [deploy.md](deploy.md) — come va in produzione: VPS, Caddy, scraping notturno, backup.
+
+## Archivio: materiale d'esame (14 luglio 2026)
+
+Questi documenti raccontano il progetto **così com'era all'esposizione**: restano come archivio
+storico e non vanno aggiornati (lo stato attuale è in [panoramica.md](panoramica.md) e nei README).
+
+- [presentazione-14-luglio.md](presentazione-14-luglio.md) — scaletta, script della demo, piano B per la rete, domande probabili del prof.
+- [esposizione-discorsi.md](esposizione-discorsi.md) — divisione delle slide per persona, i discorsi e la spiegazione test per test.
 
 ## Aree tecniche
 
@@ -29,13 +37,16 @@ Ingegneria del Software, ITS Umbria Academy a.a. 2025/2026 (team RepCode).
 docs/
 ├── index.md                     questo indice
 ├── panoramica.md                il sistema end-to-end
-├── presentazione-14-luglio.md   guida all'esposizione
-├── esposizione-discorsi.md      divisione, discorsi, approfondimento test
-├── development.md               setup, test, lint
+├── development.md               setup nativo, test, lint
+├── development-windows.md       setup su Windows con Docker + telefono
+├── deploy.md                    procedura di produzione
+├── assets/screenshot-web.png
+├── presentazione-14-luglio.md   ARCHIVIO: guida all'esposizione
+├── esposizione-discorsi.md      ARCHIVIO: divisione, discorsi, test
 ├── scraper/architecture.md
 ├── backend/{architecture,schema-mapping,api}.md
 ├── app/{overview,integrazione-e-fix}.md
-└── iss/{analisi-requisiti,sprint-plan,progettazione-uml}.md
+└── iss/{analisi-requisiti,sprint-plan,progettazione-uml}.md   ARCHIVIO del corso
 ```
 
 Convenzione: la documentazione tecnica sta in `docs/`, nell'area del suo componente; i README nel codice contengono solo i comandi rapidi; i documenti del corso stanno in `iss/`.
