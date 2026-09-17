@@ -1,0 +1,39 @@
+# CinePosto — crediti, provenienza e dati di terzi
+
+## Titolarità
+
+CinePosto è nato come progetto di gruppo del corso di Ingegneria del Software
+(ITS Umbria Academy, a.a. 2025/2026, prof. Montecchiani) ed è proseguito come
+progetto personale di Andrea Cestelli.
+
+Il codice è distribuito con licenza **MIT** (testo completo in `LICENSE`) con il
+consenso di tutti i componenti del team RepCode.
+
+**Team RepCode (autori originali):**
+- Emanuele Ceccariglia
+- Elio Casciola
+- Andrea Cestelli
+- Yonas Burka
+
+**Repository di origine (fork/upstream storico):**
+https://github.com/Emanuele2006iii/CinePosto
+
+## Dati di terzi
+
+- **Wikidata** — metadati dei film (poster, regista, anno, sinossi), interrogata via
+  SPARQL: dati rilasciati sotto **CC0 1.0**. Nelle richieste allo endpoint lo scraper
+  si identifica con uno User-Agent che riporta il repository e un contatto
+  (`scraper/scraper/config.py` → `WIKIDATA_USER_AGENT`).
+- **Siti delle sale cinematografiche** — la programmazione (film, date, orari) è
+  raccolta dai siti pubblici delle singole sale dell'Umbria, nel rispetto di
+  `robots.txt`, con rate limiting, una run notturna e uno User-Agent identificabile.
+  I contenuti restano © dei rispettivi cinema.
+- **Poster e sinossi** — i poster sono link/URL a risorse di terzi, non ridistribuiti
+  dal progetto.
+- **Marchi e loghi** — i nomi, i loghi e i marchi delle sale appartengono ai rispettivi
+  titolari e sono usati a solo scopo identificativo e informativo.
+
+Il progetto non è affiliato ad alcuna sala cinematografica, ad ANEC Umbria, a UCI
+Cinemas, a The Space Cinema o a PostModernissimo. Uso non commerciale, a scopo
+informativo: l'utente viene rimandato ai canali ufficiali delle sale per l'acquisto
+dei biglietti.
