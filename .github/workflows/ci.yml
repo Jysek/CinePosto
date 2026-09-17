@@ -1,5 +1,8 @@
-# CI monorepo — sostituisce scraper/.github/workflows/ci.yml (posizione dove GitHub non la eseguiva).
-# GitHub Actions legge i workflow SOLO da .github/workflows/ alla RADICE del repository.
+# CI monorepo.
+#
+# I test girano DENTRO le immagini Docker, le stesse che si usano in locale e in produzione:
+# così "funziona sulla mia macchina" e "funziona in CI" sono la stessa cosa, e la versione
+# di Python è definita in un posto solo (backend/Dockerfile, scraper/Dockerfile).
 name: CI
 
 on:
@@ -8,56 +11,62 @@ on:
   pull_request:
     branches: [main]
 
+# Una push nuova annulla la run precedente sullo stesso branch: non sprechiamo runner.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  scraper:
+  docker:
+    name: Backend e scraper (Docker)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: scraper
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Install dependencies
-        run: pip install -e ".[dev]"
+      - name: Build delle immagini
+        run: docker compose --profile scrape build
 
-      - name: Lint (ruff)
-        run: ruff check scraper/ tests/
+      - name: Backend — lint (ruff)
+        run: docker compose run --rm backend python -m ruff check app/ tests/
 
-      # Format check disattivato finché non si fa il pass di `ruff format` su tutto lo scraper
-      # (21 file da riformattare al 2026-07-07 — rimandato a dopo l'esposizione del 14/07).
-      # - name: Format check (ruff)
-      #   run: ruff format --check scraper/ tests/
+      - name: Backend — test
+        run: docker compose run --rm backend python -m pytest tests/ -q
 
-      - name: Test with coverage
-        run: pytest tests/ --cov --cov-report=term-missing --cov-fail-under=60
+      - name: Scraper — lint (ruff)
+        run: docker compose run --rm scraper python -m ruff check scraper/ tests/
 
-  backend:
+      - name: Scraper — test con coverage (minimo 60%)
+        run: docker compose run --rm scraper python -m pytest tests/ --cov --cov-report=term-missing --cov-fail-under=60
+
+      - name: La configurazione di produzione è valida?
+        # Verifica che compose.prod.yaml si risolva (volumi, Caddy, variabili obbligatorie).
+        run: |
+          ADMIN_TOKEN=ci CORS_ORIGINS='["https://example.org"]' \
+            docker compose -f compose.yaml -f compose.prod.yaml config --quiet
+
+  app:
+    name: App (Expo web)
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: app
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: "3.12"
-          cache: pip
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Installa le dipendenze
+        run: npm ci
 
-      - name: Lint (ruff)
-        run: ruff check app/ tests/
-
-      - name: Test
-        run: pytest tests/ -q
+      - name: Build web (expo export)
+        # La build statica è il modo più veloce per accorgersi di un errore di sintassi,
+        # di un import rotto o di un asset corrotto (è così che è emerso il favicon invalido).
+        run: npx expo export --platform web
