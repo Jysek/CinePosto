@@ -1,0 +1,21 @@
+# Normalizzazione line ending: il repo si sviluppa su Windows e su macOS.
+# Con core.autocrlf=true (default Git for Windows) i file finirebbero CRLF nella
+# working copy e LF nell'index: qui rendiamo la cosa deterministica per tutti.
+# Regola: LF in tutti i file di testo, così Windows e Mac vedono lo stesso contenuto.
+* text=auto eol=lf
+
+# File che devono restare LF per forza (verrebbero eseguiti su Linux, dove CRLF rompe)
+*.sh text eol=lf
+*.service text eol=lf
+*.timer text eol=lf
+
+# Binari: mai convertiti
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.pdf binary
+*.pptx binary
+*.ico binary
+*.woff binary
+*.woff2 binary
