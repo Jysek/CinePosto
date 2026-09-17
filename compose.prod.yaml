@@ -1,0 +1,67 @@
+# Overlay di PRODUZIONE — non viene letto automaticamente.
+#
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+#
+# NOTA: il progetto si chiama cineposto-prod e non cineposto, così sviluppo e produzione
+# non si contendono i container (hanno gli stessi nomi di servizio).
+#
+# Differenze rispetto allo sviluppo:
+#   - niente codice bind-montato: si usa ciò che è nell'immagine (deploy riproducibile, `git pull` pulito)
+#   - backend non pubblicato: l'unica porta esposta è Caddy (80/443, HTTPS)
+#   - backend come utente non privilegiato (`app`, creato nel Dockerfile)
+#   - dati (DB + JSON) fuori dal repo, in ${DATA_DIR} (default ./data): i JSON committati
+#     in scraper/output/ restano fixture di sviluppo e non vengono sovrascritti in produzione
+#   - variabili obbligatorie: senza ADMIN_TOKEN e CORS_ORIGINS non parte (fallisce subito)
+#
+# Ordine del primo avvio:
+#   1) docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+#   2) docker compose -f compose.yaml -f compose.prod.yaml run --rm scraper   # primo scrape reale
+#   3) docker compose -f compose.yaml -f compose.prod.yaml run --rm backend python -m app.seed_from_json
+name: cineposto-prod
+
+services:
+  backend:
+    image: cineposto-backend:prod
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+    restart: unless-stopped
+    user: app
+    environment:
+      ENV: production
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?ADMIN_TOKEN è obbligatorio in produzione}
+      CORS_ORIGINS: ${CORS_ORIGINS:?CORS_ORIGINS è obbligatorio in produzione (JSON array)}
+    volumes:
+      - ${DATA_DIR:-./data}/db:/data
+      # Lo scraper scrive qui: sola lettura per il backend.
+      - ${DATA_DIR:-./data}/output:/scraper/output:ro
+
+  scraper:
+    image: cineposto-scraper:prod
+    build:
+      args:
+        # In produzione non servono pytest/ruff/apscheduler nell'immagine.
+        INSTALL_EXTRAS: ""
+    volumes:
+      # Unica cosa montata: la directory di output. Il codice resta quello dell'immagine.
+      - ${DATA_DIR:-./data}/output:/app/output
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      # In produzione: DOMAIN=cineposto.example.org (certificato Let's Encrypt automatico).
+      # In test locale: DOMAIN=localhost TLS_DIRECTIVE="tls internal" (self-signed).
+      DOMAIN: ${DOMAIN:-localhost}
+      TLS_DIRECTIVE: ${TLS_DIRECTIVE:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

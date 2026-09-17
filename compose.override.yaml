@@ -1,0 +1,33 @@
+# Overlay di SVILUPPO — caricato automaticamente da `docker compose up`.
+#
+# Cosa aggiunge rispetto al file base:
+#   - codice bind-montato (le modifiche sono attive subito, senza rebuild)
+#   - --reload di uvicorn
+#   - backend pubblicato su tutte le interfacce (serve al telefono con Expo Go)
+#   - DB e JSON su cartelle del repo, così restano ispezionabili dall'host
+services:
+  backend:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    # 0.0.0.0 e non 127.0.0.1: il telefono raggiunge il backend via IP di rete locale.
+    ports:
+      - "0.0.0.0:8000:8000"
+    # Il .env locale resta valido anche per il venv nativo (fallback senza Docker).
+    # Le variabili in `environment` (file base) hanno comunque la precedenza sul file .env.
+    env_file:
+      - path: ./backend/.env
+        required: false
+    volumes:
+      - ./backend:/app
+      - ./backend/data:/data
+      - ./scraper/output:/scraper/output:ro
+    # Healthcheck: utile per capire subito se il backend è su e risponde.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  scraper:
+    volumes:
+      - ./scraper:/app

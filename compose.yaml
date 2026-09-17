@@ -1,0 +1,36 @@
+# CinePosto — stack Docker (file base).
+#
+# Tre file, tre ruoli:
+#   compose.yaml            base: cosa sono i servizi (build, variabili, comandi)
+#   compose.override.yaml   sviluppo: codice bind-montato, --reload, porte pubblicate
+#   compose.prod.yaml       produzione: immagini immutabili, Caddy per HTTPS, nessuna porta diretta
+#
+# Docker Compose legge da solo l'override, quindi:
+#   docker compose up -d backend                                 → sviluppo
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d     → produzione
+#
+# Scorciatoie: `make help`.
+name: cineposto
+
+services:
+  backend:
+    build:
+      context: ./backend
+    working_dir: /app
+    environment:
+      # Nel container DB e JSON non stanno in ../scraper: sono volumi, montati dagli overlay.
+      DATABASE_URL: sqlite:////data/cineposto.db
+      SCRAPER_OUTPUT_DIR: /scraper/output
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+  # Servizio one-shot: `docker compose run --rm scraper`. Il profilo impedisce che
+  # parta con un semplice `up` (ogni up farebbe uno scraping completo).
+  scraper:
+    profiles: ["scrape"]
+    build:
+      context: ./scraper
+    working_dir: /app
+    environment:
+      SCRAPER_TZ: ${SCRAPER_TZ:-Europe/Rome}
+      SCRAPER_LOG_LEVEL: ${SCRAPER_LOG_LEVEL:-INFO}

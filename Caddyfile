@@ -1,0 +1,19 @@
+# Caddy — reverse proxy HTTPS verso il backend FastAPI.
+#
+# Produzione:  DOMAIN=cineposto.example.org        → certificato Let's Encrypt automatico
+# Test locale: DOMAIN=localhost TLS_DIRECTIVE="tls internal"  → certificato self-signed
+#
+# TLS_DIRECTIVE vuota è valida: Caddy ignora le righe vuote.
+{$DOMAIN:localhost} {
+	{$TLS_DIRECTIVE}
+
+	encode zstd gzip
+
+	# L'header X-Forwarded-For arriva al backend per i log.
+	reverse_proxy backend:8000
+
+	log {
+		output stdout
+		format console
+	}
+}

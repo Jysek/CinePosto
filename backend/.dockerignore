@@ -1,0 +1,17 @@
+# Contesto di build del backend: si copia solo il necessario per installare e girare.
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+.env
+.env.*
+data/
+.git/
+.gitignore

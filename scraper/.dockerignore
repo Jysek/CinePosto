@@ -1,0 +1,15 @@
+# Contesto di build dello scraper.
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+output/cache/
+output/history/
+scraper.log
+.wikidata_cache.json
+.git/
+.gitignore

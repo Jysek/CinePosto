@@ -55,3 +55,10 @@ logs/
 .vscode/
 .idea/
 *.swp
+
+# DB locale del container (il file .db è già ignorato più sopra, la cartella no)
+backend/data/*
+!backend/data/.gitkeep
+
+# Dati di produzione (DB + JSON live): stanno fuori dal repo, come i segreti
+/data/
