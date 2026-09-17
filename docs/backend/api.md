@@ -365,12 +365,13 @@ Usato da UptimeRobot / monitoring. L'app **non** lo chiama.
 
 ## 6. CORS (per l'app web build)
 
-Il backend accetta richieste da questi origin (lista in `.env`):
+Il backend accetta richieste da questi origin (lista in `.env`, variabile `CORS_ORIGINS`):
 - `http://localhost:8081` (Metro bundler)
+- `http://localhost:8090` (Metro, quando la 8081 è occupata da un altro progetto)
 - `http://localhost:19006` (Expo web)
-- `https://cineposto.pages.dev` (Cloudflare Pages prod)
 
-Se aggiungi un altro origin, chiedi a Emanuele/Yonas di aggiornare `.env` e riavviare il backend.
+In produzione l'origin dell'app web va aggiunto a `CORS_ORIGINS` nel `.env` del server (vedi
+[docs/deploy.md](../deploy.md) quando il deploy sarà fatto).
 
 ---
 

@@ -1,70 +1,71 @@
 # CinePosto
 
-Aggregatore della programmazione dei cinema dell'Umbria. Uno scraper Python raccoglie ogni notte i film in cartellone da tre cinema — PostModernissimo, The Space Corciano, UCI Perugia — un backend FastAPI li serve via API REST e un'app React Native li mostra su web e smartphone dalla stessa codebase. Nessuna registrazione: apri e vedi cosa danno stasera.
+**La programmazione dei cinema dell'Umbria in un posto solo.** Uno scraper Python raccoglie ogni
+notte i film in cartellone, un backend FastAPI li serve via REST e un'app React Native li mostra
+su web, iOS e Android dalla stessa codebase. Nessuna registrazione: apri e vedi cosa danno stasera.
 
-Progetto di gruppo per il corso di Ingegneria del Software (ITS Umbria Academy, a.a. 2025/2026, prof. Montecchiani). Team RepCode: Emanuele, Elio, Andrea, Yonas.
+[![CI](https://github.com/Jysek/CinePosto/actions/workflows/ci.yml/badge.svg)](https://github.com/Jysek/CinePosto/actions/workflows/ci.yml)
+![Licenza MIT](https://img.shields.io/badge/licenza-MIT-blue.svg)
+
+![CinePosto su web](docs/assets/screenshot-web.png)
 
 ## Com'è fatto
 
 ```
 cineposto/
-├── scraper/   pipeline Python: legge i siti dei 3 cinema → 3 file JSON
+├── scraper/   pipeline Python: legge i siti dei cinema → JSON
 ├── backend/   API FastAPI su SQLite: importa i JSON e li espone via REST
 ├── app/       app React Native (Expo): consuma l'API, gira su web e mobile
 └── docs/      documentazione tecnica e del corso
 ```
 
-È una pipeline in tre stadi collegati da contratti espliciti: file JSON tra scraper e backend, API REST tra backend e app. Ogni stadio è indipendente e si testa da solo — 101 test in tutto, 75 sullo scraper e 26 sul backend.
+Una pipeline in tre stadi collegati da **contratti espliciti**: file JSON tra scraper e backend,
+API REST tra backend e app. Ogni stadio si testa da solo — **101 test** (75 scraper, 26 backend).
+
+| Componente | Tecnologie | Cosa fa |
+|---|---|---|
+| `scraper/` | Python 3.12, requests, BeautifulSoup, Wikidata SPARQL | un connettore per cinema (pattern Strategy), normalizzazione dei titoli, dedup, arricchimento metadati |
+| `backend/` | FastAPI, SQLAlchemy 2.0, SQLite, Pydantic | architettura a strati (routers → services → repositories → models), 11 endpoint REST, seed idempotente |
+| `app/` | Expo SDK 54, React Native 0.81, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
+| infra | Docker Compose, GitHub Actions, Caddy | Docker per sviluppo e produzione, CI che testa dentro le immagini, HTTPS gestito da Caddy |
 
 ## Avvio rapido
 
-### Con Docker (consigliato)
-
-Serve solo Docker Desktop avviato — Python 3.12 sta dentro l'immagine.
+Serve solo **Docker** avviato: Python 3.12 sta dentro l'immagine.
 
 ```bash
-make up      # backend su http://localhost:8000 (Swagger: /docs)
+git clone https://github.com/Jysek/CinePosto.git && cd CinePosto
+
+make up      # backend su http://localhost:8000 (Swagger su /docs)
 make seed    # popola il DB dai JSON in scraper/output/
-make test    # 26 test backend nel container
+make test    # 26 test backend dentro il container
 make help    # tutti i comandi
 ```
 
-Su Windows il setup completo (telefono, firewall, IP di rete, problemi noti) è in
-[docs/development-windows.md](docs/development-windows.md).
-
-### Backend senza Docker
+App (web e telefono):
 
 ```bash
-cd backend
-python3.12 -m venv venv && source venv/bin/activate   # serve Python 3.12
-pip install -r requirements.txt
-cp .env.example .env
-python -m app.seed_from_json          # popola il DB dai JSON dello scraper
-uvicorn app.main:app --reload --port 8000
-```
-
-Swagger su `http://localhost:8000/docs` (11 endpoint). Test: `pytest tests/`.
-
-### App
-
-```bash
-cd app
-npm install
-# IP LAN del Mac: ipconfig getifaddr en0
+cd app && npm install
 EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 ```
 
-Web su `http://localhost:8081`, telefono con Expo Go sulla stessa Wi-Fi. Non usare `create-expo-app`: installa un SDK troppo recente per Expo Go.
+`localhost` non funziona dal telefono: serve l'IP del computer sulla rete locale
+(`ipconfig | findstr IPv4`). Setup dettagliato, firewall e problemi noti:
+[`docs/development-windows.md`](docs/development-windows.md).
 
-### Scraper
+## Stato e roadmap
 
-```bash
-cd scraper
-pip install -e ".[dev]"
-python3 -m scraper.main --once
-```
+**Funziona end-to-end**: scraping dei 3 cinema coperti, backend, app su web e iOS. La CI testa
+backend, scraper e build web a ogni push.
 
-Produce i JSON in `scraper/output/`. In produzione gira con un systemd timer (file pronti in `scraper/deploy/`).
+- ✅ Scraper, backend e app completi e collegati
+- ✅ Ricerca in-app, mappa delle sale, orari per data
+- ✅ Docker per sviluppo e produzione, CI, deploy pronto e verificato in locale
+- 🔄 **Estensione a tutte le sale dell'Umbria**: oggi 3 su ~17+. Un connettore alla volta, con
+  una tabella di copertura che dichiara per ogni sala se ha una fonte leggibile
+- ⏳ Avviso "dati non aggiornati" nell'app
+- ⏳ Deploy sulla VPS (procedura pronta in [`docs/deploy.md`](docs/deploy.md))
+- ❌ Fuori scope per scelta: account utente, acquisto biglietti in-app, notifiche
 
 ## Documentazione
 
@@ -75,10 +76,17 @@ Tutto in [`docs/`](docs/index.md). Da dove partire:
 | [`docs/panoramica.md`](docs/panoramica.md) | Il sistema spiegato da cima a fondo |
 | [`docs/development-windows.md`](docs/development-windows.md) | Setup su Windows con Docker, telefono, firewall |
 | [`docs/development.md`](docs/development.md) | Setup nativo (venv + npm), test, lint, variabili d'ambiente |
-| [`docs/presentazione-14-luglio.md`](docs/presentazione-14-luglio.md) | Scaletta, script della demo e domande del prof per l'esposizione |
-| [`docs/development.md`](docs/development.md) | Setup, test, lint, variabili d'ambiente |
+| [`docs/deploy.md`](docs/deploy.md) | Come va in produzione (VPS, Caddy, timer, backup) |
 | [`docs/backend/api.md`](docs/backend/api.md) | Contratto API completo |
 
-## Stato
+## Crediti e licenza
 
-Scraper, backend e app sono completi e funzionano end-to-end. Fuori dallo scope dell'MVP, e quindi non realizzati per scelta: account utente, acquisto in-app, notifiche. Ricerca in-app e avviso "dati non aggiornati" sono rimandati alla Release 1.1.
+CinePosto è nato come progetto di gruppo del corso di Ingegneria del Software (ITS Umbria
+Academy, a.a. 2025/2026) ed è proseguito come progetto personale di Andrea Cestelli.
+Autori originali, team **RepCode**: Emanuele Ceccariglia, Elio Casciola, Andrea Cestelli,
+Yonas Burka. Repository di origine: [Emanuele2006iii/CinePosto](https://github.com/Emanuele2006iii/CinePosto).
+
+Codice con licenza **MIT** (vedi [`LICENSE`](LICENSE)). Metadati dei film da **Wikidata** (CC0);
+programmazione, poster e marchi restano dei rispettivi cinema e il progetto non è affiliato a
+nessuno di essi: dettagli in [`NOTICE`](NOTICE). Lo scraping rispetta `robots.txt`, applica rate
+limiting, gira una volta al giorno e si identifica con uno User-Agent che riporta repo e contatto.

@@ -32,11 +32,17 @@ jobs:
       - name: Backend — lint (ruff)
         run: docker compose run --rm backend python -m ruff check app/ tests/
 
+      - name: Backend — format (ruff)
+        run: docker compose run --rm backend python -m ruff format --check app/ tests/
+
       - name: Backend — test
         run: docker compose run --rm backend python -m pytest tests/ -q
 
       - name: Scraper — lint (ruff)
         run: docker compose run --rm scraper python -m ruff check scraper/ tests/
+
+      - name: Scraper — format (ruff)
+        run: docker compose run --rm scraper python -m ruff format --check scraper/ tests/
 
       - name: Scraper — test con coverage (minimo 60%)
         run: docker compose run --rm scraper python -m pytest tests/ --cov --cov-report=term-missing --cov-fail-under=60
