@@ -1,9 +1,10 @@
 """Settings centralizzate caricate da .env (pydantic-settings)."""
 
 from functools import lru_cache
+import os
 from pathlib import Path
 
-from pydantic import Field, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Default CORS per sviluppo locale (Expo dev server, Metro bundler, web build).
@@ -43,8 +44,8 @@ class Settings(BaseSettings):
     # CORS: se .env non specifica CORS_ORIGINS, usa i default dev.
     cors_origins: list[str] = Field(default_factory=lambda: list(_DEV_CORS_DEFAULTS))
 
-    # ADMIN TOKEN: nessun default insicuro. Se .env non lo setta,
-    # viene generato al boot un token random (stampato ai log una volta).
+    # ADMIN TOKEN: nessun default insicuro. In sviluppo, se .env non lo setta, viene
+    # generato un token random per il processo; in produzione la sua assenza è un errore.
     admin_token: str = ""
 
     @field_validator("scraper_output_dir", mode="after")
@@ -55,24 +56,35 @@ class Settings(BaseSettings):
 
     @field_validator("admin_token", mode="after")
     @classmethod
-    def _generate_admin_token_if_empty(cls, v: str) -> str:
-        """Garantisce un token admin sempre presente e mai banale.
+    def _generate_admin_token_if_empty(cls, v: str, info: ValidationInfo) -> str:
+        """Garantisce un token admin presente e mai banale, senza mai stamparlo in produzione.
 
-        Se .env non lo imposta, o contiene il placeholder di sviluppo, viene
-        generato un token random stampato una volta ai log: gli endpoint admin
-        restano protetti anche su un'installazione non configurata.
+        Sviluppo: se .env non lo imposta (o contiene il placeholder), viene generato un token
+        random e stampato **una volta** all'avvio, così gli endpoint admin restano protetti
+        anche su un'installazione non configurata.
+        Produzione: nessun token a runtime — se manca, il processo non parte. Un segreto
+        stampato nei log di produzione è un segreto bruciato (journald, aggregatori, backup).
         """
-        if not v or v == "change-me-before-deploy":
-            import secrets
+        if v and v != "change-me-before-deploy":
+            return v
 
-            generated = secrets.token_urlsafe(32)
-            print(
-                f"⚠️  ADMIN_TOKEN non configurato in .env — generato al volo:\n"
-                f"    {generated}\n"
-                f"    (imposta ADMIN_TOKEN=... in .env per averlo stabile)"
+        env = str(info.data.get("env") or os.environ.get("ENV") or "development")
+        if env == "production":
+            raise ValueError(
+                "ADMIN_TOKEN è obbligatorio con ENV=production: "
+                'genera un token con `python -c "import secrets; print(secrets.token_urlsafe(32))"` '
+                "e mettilo in .env"
             )
-            return generated
-        return v
+
+        import secrets
+
+        generated = secrets.token_urlsafe(32)
+        print(
+            f"⚠️  ADMIN_TOKEN non configurato in .env — generato al volo:\n"
+            f"    {generated}\n"
+            f"    (imposta ADMIN_TOKEN=... in .env per averlo stabile)"
+        )
+        return generated
 
 
 @lru_cache
