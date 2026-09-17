@@ -1,4 +1,5 @@
 """Endpoint REST per Cinema."""
+
 from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query

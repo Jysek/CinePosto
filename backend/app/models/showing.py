@@ -1,4 +1,5 @@
 """SQLAlchemy model: Showing (programmazione: film X cinema Y giorno Z, N orari)."""
+
 from datetime import date as date_type
 from datetime import datetime
 from typing import TYPE_CHECKING

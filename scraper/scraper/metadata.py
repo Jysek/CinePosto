@@ -1,4 +1,5 @@
 """Wikidata enrichment: fetches poster, description, director, duration, original title, year, wikidata_id."""
+
 from __future__ import annotations
 
 import json
@@ -91,7 +92,12 @@ def _sparql_query(query: str) -> list[dict] | None:
             retry_after = int(resp.headers.get("Retry-After", "30"))
             _rate_limited_until = time.time() + retry_after
             _consecutive_failures += 1
-            logger.warning("Wikidata 429 rate limit, backing off %ds (%d/%d)", retry_after, _consecutive_failures, _MAX_CONSECUTIVE_FAILURES)
+            logger.warning(
+                "Wikidata 429 rate limit, backing off %ds (%d/%d)",
+                retry_after,
+                _consecutive_failures,
+                _MAX_CONSECUTIVE_FAILURES,
+            )
             return None
         resp.raise_for_status()
         data = resp.json()
@@ -102,7 +108,9 @@ def _sparql_query(query: str) -> list[dict] | None:
         return bindings
     except Exception as exc:
         _consecutive_failures += 1
-        logger.warning("Wikidata SPARQL query failed (%d/%d): %s", _consecutive_failures, _MAX_CONSECUTIVE_FAILURES, exc)
+        logger.warning(
+            "Wikidata SPARQL query failed (%d/%d): %s", _consecutive_failures, _MAX_CONSECUTIVE_FAILURES, exc
+        )
         return None
 
 
@@ -130,7 +138,6 @@ def _search_wikidata(title: str) -> dict | None:
     _save_cache()
     time.sleep(1)
     return None
-
 
 
 def _search_fuzzy(title: str) -> dict | None:

@@ -3,6 +3,7 @@ I service orchestrano i repository; NON toccano direttamente il DB.
 Restituiscono oggetti Model (o tuple), NON schemi Pydantic (quello lo fa il
 router).
 """
+
 from sqlalchemy.orm import Session
 
 from app.models.cinema import Cinema

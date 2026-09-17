@@ -1,4 +1,5 @@
 """UCI Cinemas connector: undocumented Cloud Run programming API."""
+
 from __future__ import annotations
 
 import html
@@ -136,9 +137,7 @@ class UCIConnector(BaseConnector):
             source_poster=poster or None,
         )
 
-    def _build_showings_from_screens(
-        self, screens: list, today: str, detail_url: str
-    ) -> list[Showing]:
+    def _build_showings_from_screens(self, screens: list, today: str, detail_url: str) -> list[Showing]:
         """Appiattisce la struttura annidata `screens` dell'API in Showing.
 
         Struttura sorgente: lista di gruppi → {formato: [varianti]} → variante

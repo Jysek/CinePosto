@@ -1,4 +1,5 @@
 """Title normalization, fuzzy matching (Levenshtein), and duration parsing."""
+
 from __future__ import annotations
 
 import re
@@ -10,13 +11,9 @@ _TITLE_SUFFIXES = re.compile(
 
 _YEAR_SUFFIX = re.compile(r"\s*[\(\[]?\s*(?:19|20)\d{2}\s*[\)\]]?\s*$")
 
-_ROMAN_NUM_SUFFIX = re.compile(
-    r"\s+(I{1,3}V?|IV|VI{0,3}|IX|X{1,3}V?I{0,3}|XI{0,3})\s*$", re.IGNORECASE
-)
+_ROMAN_NUM_SUFFIX = re.compile(r"\s+(I{1,3}V?|IV|VI{0,3}|IX|X{1,3}V?I{0,3}|XI{0,3})\s*$", re.IGNORECASE)
 
-_RIEDITION_SUFFIX = re.compile(
-    r"\s+4K\s*\(RIED\.?\s*\d{4}\)\s*(C\.A\.?)?\s*$", re.IGNORECASE
-)
+_RIEDITION_SUFFIX = re.compile(r"\s+4K\s*\(RIED\.?\s*\d{4}\)\s*(C\.A\.?)?\s*$", re.IGNORECASE)
 
 _C_A_SUFFIX = re.compile(r"\s+C\.A\.?\s*$", re.IGNORECASE)
 

@@ -1,4 +1,5 @@
 """SQLAlchemy model: Film. PK = intera, dedup tramite UNIQUE(title_normalized, year)."""
+
 from datetime import datetime
 from typing import TYPE_CHECKING
 

@@ -1,4 +1,5 @@
 """CloakBrowser singleton: anti-fingerprint Chromium via Playwright, used as fallback for bot-protected sites."""
+
 from __future__ import annotations
 
 import logging
@@ -36,7 +37,9 @@ def get_browser():
     try:
         from cloakbrowser import launch
 
-        logger.info("Launching CloakBrowser (headless=%s, seed=%s)", CLOAKBROWSER_HEADLESS, CLOAKBROWSER_FINGERPRINT_SEED)
+        logger.info(
+            "Launching CloakBrowser (headless=%s, seed=%s)", CLOAKBROWSER_HEADLESS, CLOAKBROWSER_FINGERPRINT_SEED
+        )
         _browser_instance = launch(
             headless=CLOAKBROWSER_HEADLESS,
             humanize=True,

@@ -9,6 +9,7 @@ Puo' essere eseguito:
 - come script standalone: `python -m app.seed_from_json`
 - via endpoint admin: POST /api/v1/admin/reimport
 """
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -54,17 +55,20 @@ def _seed_cinemas(db: Session, data: dict) -> int:
     """Upsert dei cinema. Ritorna il numero di record processati."""
     count = 0
     for entry in data.get("cinemas", []):
-        cinema_repo.upsert(db, {
-            "slug": entry["slug"],
-            "name": entry["name"],
-            "city": entry["city"],
-            "address": entry["address"],
-            "region": entry.get("region", "Umbria"),
-            "lat": entry["lat"],
-            "lon": entry["lon"],
-            "website": entry.get("website"),
-            "phone": entry.get("phone"),
-        })
+        cinema_repo.upsert(
+            db,
+            {
+                "slug": entry["slug"],
+                "name": entry["name"],
+                "city": entry["city"],
+                "address": entry["address"],
+                "region": entry.get("region", "Umbria"),
+                "lat": entry["lat"],
+                "lon": entry["lon"],
+                "website": entry.get("website"),
+                "phone": entry.get("phone"),
+            },
+        )
         count += 1
     return count
 
@@ -93,13 +97,13 @@ def _seed_films(db: Session, data: dict) -> tuple[int, dict[str, int]]:
         payload = {
             "title": entry["title"],
             "original_title": entry.get("original_title"),
-            "year": entry.get("year"),        # da Wikidata P577; null se il film non è stato arricchito
+            "year": entry.get("year"),  # da Wikidata P577; null se il film non è stato arricchito
             "runtime_minutes": runtime,
             "genres": genres_csv,
             "director": entry.get("director"),
             "poster_url": entry.get("poster") or entry.get("poster_url"),
             "synopsis": entry.get("synopsis") or entry.get("description"),
-            "wikidata_id": entry.get("wikidata_id"),   # null se il film non è su Wikidata
+            "wikidata_id": entry.get("wikidata_id"),  # null se il film non è su Wikidata
         }
         film = film_repo.upsert_from_scraper(db, payload)
         # entry['id'] e' il TITOLO stringa nel JSON scraper; lo usiamo come chiave.
@@ -131,10 +135,7 @@ def _seed_showings(db: Session, data: dict, film_lookup: dict[str, int]) -> int:
 
         # Parsing data
         date_raw = entry["date"]
-        showing_date = (
-            datetime.strptime(date_raw, "%Y-%m-%d").date()
-            if isinstance(date_raw, str) else date_raw
-        )
+        showing_date = datetime.strptime(date_raw, "%Y-%m-%d").date() if isinstance(date_raw, str) else date_raw
 
         key = (film_id, entry["cinema_slug"], showing_date)
         times_raw = entry.get("times", [])
@@ -166,15 +167,18 @@ def _seed_showings(db: Session, data: dict, film_lookup: dict[str, int]) -> int:
     for agg in aggregated.values():
         agg["times"].sort()
         screen = next(iter(agg["screens"])) if len(agg["screens"]) == 1 else None
-        showing_repo.upsert(db, {
-            "film_id": agg["film_id"],
-            "cinema_slug": agg["cinema_slug"],
-            "date": agg["date"],
-            "times": json.dumps(agg["times"]),
-            "language": agg["language"],
-            "screen": screen,
-            "buy_url": agg["buy_url"],
-        })
+        showing_repo.upsert(
+            db,
+            {
+                "film_id": agg["film_id"],
+                "cinema_slug": agg["cinema_slug"],
+                "date": agg["date"],
+                "times": json.dumps(agg["times"]),
+                "language": agg["language"],
+                "screen": screen,
+                "buy_url": agg["buy_url"],
+            },
+        )
         count += 1
 
     if skipped:
@@ -207,8 +211,7 @@ def seed_from_json(db: Session, output_dir: Path) -> dict[str, int]:
         db.rollback()
         raise
 
-    logger.info("Seed completato: %d cinema, %d film, %d showings",
-                n_cinemas, n_films, n_showings)
+    logger.info("Seed completato: %d cinema, %d film, %d showings", n_cinemas, n_films, n_showings)
 
     return {
         "cinemas": n_cinemas,
@@ -220,6 +223,7 @@ def seed_from_json(db: Session, output_dir: Path) -> dict[str, int]:
 def main():
     """Uso standalone: python -m app.seed_from_json"""
     from app.config import get_settings
+
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     settings = get_settings()

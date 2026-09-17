@@ -1,4 +1,5 @@
 """Endpoint amministrativi — protetti da token."""
+
 from pathlib import Path
 import secrets
 

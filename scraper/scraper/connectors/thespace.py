@@ -1,4 +1,5 @@
 """The Space Cinema connector: OAuth2 REST API with CloakBrowser fallback."""
+
 from __future__ import annotations
 
 from datetime import datetime

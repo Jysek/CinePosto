@@ -1,4 +1,5 @@
 """Test della normalizzazione titoli, fuzzy match e parsing durate."""
+
 from __future__ import annotations
 
 from scraper.normalizer import fuzzy_match, normalize_duration, normalize_title, title_key
@@ -32,6 +33,7 @@ def test_normalize_duration():
 
 
 # --- fuzzy_match ---
+
 
 def test_fuzzy_identical_strings_match():
     assert fuzzy_match("Dune", "Dune")

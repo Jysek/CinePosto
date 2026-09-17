@@ -1,4 +1,5 @@
 """SQLAlchemy model: Cinema (sala fisica). PK = slug stringa."""
+
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Float, String

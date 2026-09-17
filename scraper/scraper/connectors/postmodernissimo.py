@@ -1,4 +1,5 @@
 """PostModernissimo connector: parses RSC (Next.js) payload for film schedules."""
+
 from __future__ import annotations
 
 import html
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def _decode_html_entities(text: str) -> str:
     """Decodifica i titoli estratti dal payload RSC: prima gli escape Unicode JSON (\\u0026 -> &), poi le entità HTML (&amp; -> &). L'ordine conta."""
-    text = re.sub(r'\\u([0-9a-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), text)
+    text = re.sub(r"\\u([0-9a-fA-F]{4})", lambda m: chr(int(m.group(1), 16)), text)
     return html.unescape(text)
 
 
@@ -41,7 +42,6 @@ def _normalize(label: str | None) -> str | None:
         if real_url:
             return real_url
     return label
-
 
 
 class PostModernissimoConnector(BaseConnector):
@@ -74,9 +74,7 @@ class PostModernissimoConnector(BaseConnector):
         films: list[Film] = []
         errors: list[CinemaError] = []
         self._homepage_session = requests.Session()
-        self._homepage_session.headers.update(
-            {"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"}
-        )
+        self._homepage_session.headers.update({"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"})
 
         try:
             resp = retry_request("get", POSTMOD_CINEMA_URL, self._homepage_session, label="POSTMOD")
@@ -106,9 +104,7 @@ class PostModernissimoConnector(BaseConnector):
                 week_shows = [
                     s
                     for s in shows
-                    if s.get("date", "") in target_date_ints
-                    and s.get("orario")
-                    and s.get("opzioni") != "noprog"
+                    if s.get("date", "") in target_date_ints and s.get("orario") and s.get("opzioni") != "noprog"
                 ]
 
                 if not week_shows:
@@ -192,9 +188,7 @@ class PostModernissimoConnector(BaseConnector):
         biggest = max(matches, key=len)
         unescaped = biggest.replace('\\"', '"').replace("\\\\", "\\")
 
-        movie_re = re.compile(
-            r'\{"id":(\d+),"title":"([^"]+)","slug":"([^"]+)","permalink":"([^"]+)"'
-        )
+        movie_re = re.compile(r'\{"id":(\d+),"title":"([^"]+)","slug":"([^"]+)","permalink":"([^"]+)"')
 
         candidates_by_permalink: dict[str, dict] = {}
 
@@ -233,9 +227,7 @@ class PostModernissimoConnector(BaseConnector):
                 existing["_stream_pos"] = m.start()
 
         return [
-            {k: v for k, v in m.items() if k != "_stream_pos"}
-            for m in candidates_by_permalink.values()
-            if m["shows"]
+            {k: v for k, v in m.items() if k != "_stream_pos"} for m in candidates_by_permalink.values() if m["shows"]
         ]
 
     _EVENT_HINTS = (
@@ -321,9 +313,7 @@ class PostModernissimoConnector(BaseConnector):
             return None
         try:
             session = requests.Session()
-            session.headers.update(
-                {"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"}
-            )
+            session.headers.update({"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"})
             resp = retry_request("get", film_url, session, label="POSTMOD")
             soup = BeautifulSoup(resp.text, "lxml")
             # 1. Meta description
@@ -358,10 +348,7 @@ class PostModernissimoConnector(BaseConnector):
                 permalink_in_detail = m.get("permalink", "")
                 slug_in_detail = m.get("slug", "")
                 target_slug = permalink.rstrip("/").split("/")[-1]
-                if (
-                    permalink_in_detail == permalink
-                    or slug_in_detail == target_slug
-                ):
+                if permalink_in_detail == permalink or slug_in_detail == target_slug:
                     return [s for s in m.get("shows", []) if s.get("orario")]
         except Exception as exc:
             logger.warning("POSTMOD detail-shows fetch failed %s: %s", permalink, exc)
@@ -384,9 +371,7 @@ class PostModernissimoConnector(BaseConnector):
             return  # dettaglio non disponibile: tieni homepage
 
         try:
-            target_date_ints = {
-                s.date.replace("-", "") for s in film.present_in
-            }
+            target_date_ints = {s.date.replace("-", "") for s in film.present_in}
         except Exception:
             return
 
@@ -410,14 +395,8 @@ class PostModernissimoConnector(BaseConnector):
             return  # dettaglio non ha show nella finestra: tieni homepage
 
         # Calcola la firma (set di (date, ora)) degli show in homepage vs dettaglio
-        homepage_sig = {
-            (s.date, tuple(s.times))
-            for s in film.present_in
-        }
-        detail_sig = {
-            (iso, tuple(sorted(times)))
-            for iso, times in date_groups.items()
-        }
+        homepage_sig = {(s.date, tuple(s.times)) for s in film.present_in}
+        detail_sig = {(iso, tuple(sorted(times))) for iso, times in date_groups.items()}
 
         if homepage_sig == detail_sig:
             return  # concordano, no-op

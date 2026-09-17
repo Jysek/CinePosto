@@ -3,6 +3,7 @@
 Testiamo direttamente i repository con una session in-memory,
 senza far girare FastAPI. Test veloci e mirati.
 """
+
 from datetime import date, timedelta
 
 import pytest
@@ -12,6 +13,7 @@ from app.models.showing import Showing
 from app.repositories import cinema_repo, film_repo, showing_repo
 
 # ============ CinemaRepository ============
+
 
 def test_upsert_insert_new_cinema(session):
     """upsert crea un cinema se non esiste."""
@@ -67,19 +69,24 @@ def test_list_all_ordered_by_name(session):
 
 # ============ FilmRepository — normalize_title ============
 
-@pytest.mark.parametrize("input_title,expected", [
-    ("Dune", "dune"),
-    ("Città Perduta", "citta perduta"),                              # rimuove accenti
-    ("Ricchi…da morire – Delitti", "ricchi da morire delitti"),      # punteggiatura speciale
-    ("  spazi   multipli  ", "spazi multipli"),                       # collassa spazi
-    ("It's Wonderful!", "it s wonderful"),                            # apostrofi
-])
+
+@pytest.mark.parametrize(
+    "input_title,expected",
+    [
+        ("Dune", "dune"),
+        ("Città Perduta", "citta perduta"),  # rimuove accenti
+        ("Ricchi…da morire – Delitti", "ricchi da morire delitti"),  # punteggiatura speciale
+        ("  spazi   multipli  ", "spazi multipli"),  # collassa spazi
+        ("It's Wonderful!", "it s wonderful"),  # apostrofi
+    ],
+)
 def test_normalize_title(input_title, expected):
     """La normalizzazione produce forme consistenti per dedup."""
     assert film_repo.normalize_title(input_title) == expected
 
 
 # ============ FilmRepository — CRUD + search ============
+
 
 def test_upsert_from_scraper_insert_and_lookup_by_natural_key(session):
     """upsert_from_scraper crea un film e lo si ritrova con la chiave naturale."""
@@ -98,20 +105,30 @@ def test_upsert_from_scraper_insert_and_lookup_by_natural_key(session):
 def test_upsert_from_scraper_updates_only_non_null(session):
     """Un secondo upsert con campi null NON sovrascrive i valori esistenti."""
     # 1. Insert iniziale con sinossi
-    film_repo.upsert_from_scraper(session, {
-        "title": "Dune", "year": 2021, "synopsis": "Sinossi vera",
-    })
+    film_repo.upsert_from_scraper(
+        session,
+        {
+            "title": "Dune",
+            "year": 2021,
+            "synopsis": "Sinossi vera",
+        },
+    )
     session.commit()
 
     # 2. Secondo upsert senza sinossi → non deve cancellarla
-    film_repo.upsert_from_scraper(session, {
-        "title": "Dune", "year": 2021, "director": "Villeneuve",
-    })
+    film_repo.upsert_from_scraper(
+        session,
+        {
+            "title": "Dune",
+            "year": 2021,
+            "director": "Villeneuve",
+        },
+    )
     session.commit()
 
     found = film_repo.get_by_natural_key(session, "dune", 2021)
-    assert found.synopsis == "Sinossi vera"     # preservata
-    assert found.director == "Villeneuve"       # aggiornata
+    assert found.synopsis == "Sinossi vera"  # preservata
+    assert found.director == "Villeneuve"  # aggiornata
 
 
 def test_search_by_title_ignora_accenti(session):
@@ -130,10 +147,14 @@ def test_list_in_programming(session, sample_film):
     c = Cinema(slug="c1", name="C1", city="P", address="A", region="U", lat=1, lon=1)
     session.add(c)
     # Showing di sample_film oggi
-    session.add(Showing(
-        film_id=sample_film.id, cinema_slug="c1",
-        date=date.today(), times='["20:00"]',
-    ))
+    session.add(
+        Showing(
+            film_id=sample_film.id,
+            cinema_slug="c1",
+            date=date.today(),
+            times='["20:00"]',
+        )
+    )
     session.commit()
 
     today = date.today()
@@ -148,14 +169,18 @@ def test_list_in_programming(session, sample_film):
 
 # ============ ShowingRepository ============
 
+
 def test_showing_upsert_and_joinedload(session, sample_cinema, sample_film):
     """Upsert di uno showing + fetch con eager loading di film e cinema."""
-    showing_repo.upsert(session, {
-        "film_id": sample_film.id,
-        "cinema_slug": sample_cinema.slug,
-        "date": date.today(),
-        "times": '["19:30", "22:00"]',
-    })
+    showing_repo.upsert(
+        session,
+        {
+            "film_id": sample_film.id,
+            "cinema_slug": sample_cinema.slug,
+            "date": date.today(),
+            "times": '["19:30", "22:00"]',
+        },
+    )
     session.commit()
 
     result = showing_repo.list_by_date(session, date.today())
@@ -171,13 +196,13 @@ def test_count_by_cinema_only_future(session, sample_cinema, sample_film):
     yesterday = date.today() - timedelta(days=1)
     tomorrow = date.today() + timedelta(days=1)
 
-    session.add_all([
-        Showing(film_id=sample_film.id, cinema_slug=sample_cinema.slug,
-                date=yesterday, times='["20:00"]'),
-        Showing(film_id=sample_film.id, cinema_slug=sample_cinema.slug,
-                date=tomorrow, times='["21:00"]'),
-    ])
+    session.add_all(
+        [
+            Showing(film_id=sample_film.id, cinema_slug=sample_cinema.slug, date=yesterday, times='["20:00"]'),
+            Showing(film_id=sample_film.id, cinema_slug=sample_cinema.slug, date=tomorrow, times='["21:00"]'),
+        ]
+    )
     session.commit()
 
     count = showing_repo.count_by_cinema(session, sample_cinema.slug)
-    assert count == 1   # solo domani, ieri escluso
+    assert count == 1  # solo domani, ieri escluso

@@ -1,4 +1,5 @@
 """FastAPI entrypoint — composizione app + router + middleware + lifecycle."""
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI

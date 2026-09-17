@@ -1,4 +1,5 @@
 """Runtime configuration: paths, URLs, API constants, and timezone helpers."""
+
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
@@ -89,9 +90,7 @@ POSTMOD_CINEMA_URL = POSTMOD_BASE_URL
 REQUEST_TIMEOUT = 30
 
 DEFAULT_USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/126.0.0.0 Safari/537.36"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 )
 REQUEST_RETRY = 3
 RETRY_BACKOFF = 2

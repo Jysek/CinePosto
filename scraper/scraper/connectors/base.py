@@ -1,4 +1,5 @@
 """Abstract base class for all cinema connectors."""
+
 from __future__ import annotations
 
 import abc

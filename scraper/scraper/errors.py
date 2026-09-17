@@ -1,4 +1,5 @@
 """Atomic write of per-run errors to errors.json, with deduplication by date."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -53,10 +54,7 @@ def write_errors(errors: list[CinemaError], today: str) -> None:
             except Exception:
                 existing = {"errors": []}
 
-            existing["errors"] = [
-                e for e in existing.get("errors", [])
-                if not e.get("timestamp", "").startswith(today)
-            ]
+            existing["errors"] = [e for e in existing.get("errors", []) if not e.get("timestamp", "").startswith(today)]
             existing["last_clean_date"] = today
             _write_atomic_errors(existing)
         return
@@ -70,8 +68,7 @@ def write_errors(errors: list[CinemaError], today: str) -> None:
 
         new_errors = [e.to_dict() for e in errors]
         existing["errors"] = [
-            e for e in existing.get("errors", [])
-            if not e.get("timestamp", "").startswith(today)
+            e for e in existing.get("errors", []) if not e.get("timestamp", "").startswith(today)
         ] + new_errors
         existing["last_error_date"] = today
         existing["last_error_timestamp"] = datetime.now().isoformat()

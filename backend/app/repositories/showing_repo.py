@@ -1,4 +1,5 @@
 """Data access layer: query su Showing (spettacoli)."""
+
 from datetime import date as date_type
 
 from sqlalchemy import func, select
@@ -27,9 +28,7 @@ def list_by_date(db: Session, target_date: date_type) -> list[Showing]:
     return list(db.scalars(stmt))
 
 
-def list_by_date_range(
-    db: Session, date_from: date_type, date_to: date_type
-) -> list[Showing]:
+def list_by_date_range(db: Session, date_from: date_type, date_to: date_type) -> list[Showing]:
     """Spettacoli nel range di date (estremi inclusi), con Film e Cinema pre-caricati."""
     stmt = (
         select(Showing)
@@ -40,16 +39,14 @@ def list_by_date_range(
     return list(db.scalars(stmt))
 
 
-def list_by_cinema_in_range(
-    db: Session, cinema_slug: str, date_from: date_type, date_to: date_type
-) -> list[Showing]:
+def list_by_cinema_in_range(db: Session, cinema_slug: str, date_from: date_type, date_to: date_type) -> list[Showing]:
     """Programmazione di un singolo cinema nel range di date (estremi inclusi).
 
     Eager loading del solo Film: il Cinema è già noto al chiamante (è il filtro).
     """
     stmt = (
         select(Showing)
-        .options(joinedload(Showing.film))   # solo film, cinema noto
+        .options(joinedload(Showing.film))  # solo film, cinema noto
         .where(
             Showing.cinema_slug == cinema_slug,
             Showing.date >= date_from,
@@ -60,9 +57,7 @@ def list_by_cinema_in_range(
     return list(db.scalars(stmt))
 
 
-def list_by_film(
-    db: Session, film_id: int, from_date: date_type
-) -> list[Showing]:
+def list_by_film(db: Session, film_id: int, from_date: date_type) -> list[Showing]:
     """Prossimi spettacoli di un dato film a partire da una data. Include cinema."""
     stmt = (
         select(Showing)
@@ -76,9 +71,13 @@ def list_by_film(
 def count_by_cinema(db: Session, cinema_slug: str) -> int:
     """Numero di spettacoli attivi (futuri) per un cinema. Usato in CinemaWithCount."""
     # COUNT eseguito dal DB: evita di caricare tutte le righe solo per contarle
-    stmt = select(func.count()).select_from(Showing).where(
-        Showing.cinema_slug == cinema_slug,
-        Showing.date >= date_type.today(),
+    stmt = (
+        select(func.count())
+        .select_from(Showing)
+        .where(
+            Showing.cinema_slug == cinema_slug,
+            Showing.date >= date_type.today(),
+        )
     )
     return db.scalar(stmt)
 

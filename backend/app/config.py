@@ -1,4 +1,5 @@
 """Settings centralizzate caricate da .env (pydantic-settings)."""
+
 from functools import lru_cache
 from pathlib import Path
 
@@ -8,9 +9,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # Default CORS per sviluppo locale (Expo dev server, Metro bundler, web build).
 # In produzione vengono sovrascritti da CORS_ORIGINS nel .env.
 _DEV_CORS_DEFAULTS = [
-    "http://localhost:8081",     # Metro bundler
-    "http://localhost:19006",    # Expo web
-    "http://localhost:3000",     # test web occasionale
+    "http://localhost:8081",  # Metro bundler
+    "http://localhost:19006",  # Expo web
+    "http://localhost:3000",  # test web occasionale
 ]
 
 
@@ -63,6 +64,7 @@ class Settings(BaseSettings):
         """
         if not v or v == "change-me-before-deploy":
             import secrets
+
             generated = secrets.token_urlsafe(32)
             print(
                 f"⚠️  ADMIN_TOKEN non configurato in .env — generato al volo:\n"

@@ -1,4 +1,5 @@
 """Data access layer: query su Cinema. SOLO query, niente logica business."""
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -30,5 +31,5 @@ def upsert(db: Session, data: dict) -> Cinema:
             if key != "slug":
                 setattr(cinema, key, value)
 
-    db.flush()   # forza l'esecuzione della query SENZA fare commit
+    db.flush()  # forza l'esecuzione della query SENZA fare commit
     return cinema

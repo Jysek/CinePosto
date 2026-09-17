@@ -5,6 +5,7 @@ Strategie di test adottate:
 - Dependency override → l'app FastAPI usa la nostra session di test invece di quella prod.
 - Fixture 'session' e 'client' → il test dichiara cosa gli serve, pytest glielo passa.
 """
+
 from __future__ import annotations
 
 from fastapi.testclient import TestClient

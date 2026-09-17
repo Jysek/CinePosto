@@ -1,4 +1,5 @@
 """Entry point: orchestrates scraper run, deduplication, Wikidata enrichment, and JSON output."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -104,21 +105,23 @@ def _load_cache(cinema_slug: str) -> list[Film] | None:
                 )
                 for s in showings_data
             ]
-            films.append(Film(
-                title=d.get("title", ""),
-                title_normalized=d.get("title_normalized", ""),
-                present_in=showings,
-                poster=d.get("poster"),
-                description=d.get("description"),
-                genres=d.get("genres", []),
-                status=d.get("status", "in_programmazione"),
-                director=d.get("director"),
-                duration=d.get("duration"),
-                source_poster=d.get("source_poster") or d.get("poster"),
-                original_title=d.get("original_title") or d.get("originalTitle"),
-                year=d.get("year"),
-                wikidata_id=d.get("wikidata_id"),
-            ))
+            films.append(
+                Film(
+                    title=d.get("title", ""),
+                    title_normalized=d.get("title_normalized", ""),
+                    present_in=showings,
+                    poster=d.get("poster"),
+                    description=d.get("description"),
+                    genres=d.get("genres", []),
+                    status=d.get("status", "in_programmazione"),
+                    director=d.get("director"),
+                    duration=d.get("duration"),
+                    source_poster=d.get("source_poster") or d.get("poster"),
+                    original_title=d.get("original_title") or d.get("originalTitle"),
+                    year=d.get("year"),
+                    wikidata_id=d.get("wikidata_id"),
+                )
+            )
         logger.info("  Cache loaded for %s (%d films)", cinema_slug, len(films))
         return films
     except Exception as exc:
@@ -176,9 +179,7 @@ def run_scraper() -> None:
             all_films.extend(result.films)
             all_errors.extend(result.errors)
         except Exception as exc:
-            logger.error(
-                "  %s: SCRAPE FAILED - %s", connector.cinema_name, exc, exc_info=True
-            )
+            logger.error("  %s: SCRAPE FAILED - %s", connector.cinema_name, exc, exc_info=True)
             failed_connectors.append(connector)
             # Store cache for later — only use it if retry also fails
             cached = _load_cache(connector.cinema_slug)
@@ -213,9 +214,7 @@ def run_scraper() -> None:
                     all_films.extend(result.films)
                 all_errors.extend(result.errors)
             except Exception as exc:
-                logger.error(
-                    "  %s (retry): STILL FAILED - %s", connector.cinema_name, exc
-                )
+                logger.error("  %s (retry): STILL FAILED - %s", connector.cinema_name, exc)
                 # Both attempts failed — fall back to stale cache
                 cached = cache_fallbacks.get(connector.cinema_slug)
                 if cached:

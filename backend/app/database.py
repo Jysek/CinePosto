@@ -1,4 +1,5 @@
 """Configurazione SQLAlchemy: engine + SessionLocal + Base + get_db()."""
+
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
@@ -8,6 +9,7 @@ from .config import get_settings
 
 class Base(DeclarativeBase):
     """Base dichiarativa condivisa da tutti i modelli in app/models/."""
+
     pass
 
 

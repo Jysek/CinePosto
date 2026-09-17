@@ -1,4 +1,5 @@
 """Test dell'arricchimento Wikidata: cache, sentinella dei miss, estrazione property."""
+
 from __future__ import annotations
 
 from unittest.mock import patch
@@ -40,6 +41,7 @@ def _empty_film() -> Film:
 
 
 # --- enrich_film skip condition ---
+
 
 def test_enrich_skips_when_all_fields_present():
     film = _complete_film()
@@ -103,6 +105,7 @@ def test_enrich_falls_back_to_normalized_title():
 
 # --- _search_wikidata cache ---
 
+
 def test_search_returns_cached_result_without_api_call():
     meta._cache = {"oppenheimer": {"poster": "https://cached.com/p.jpg"}}
     with patch.object(meta, "_search_fuzzy") as mock_fuzzy:
@@ -138,6 +141,7 @@ def test_search_stores_sentinel_in_cache_on_miss():
 
 # --- _sparql_query circuit breaker ---
 
+
 def test_sparql_skips_after_max_consecutive_failures():
     meta._consecutive_failures = meta._MAX_CONSECUTIVE_FAILURES
     with patch("scraper.metadata.requests.get") as mock_get:
@@ -154,11 +158,15 @@ def test_sparql_increments_failure_counter_on_error():
 
 def test_sparql_resets_failure_counter_on_success():
     meta._consecutive_failures = 2
-    mock_resp = type("R", (), {
-        "status_code": 200,
-        "raise_for_status": lambda self: None,
-        "json": lambda self: {"results": {"bindings": [{"x": "val"}]}},
-    })()
+    mock_resp = type(
+        "R",
+        (),
+        {
+            "status_code": 200,
+            "raise_for_status": lambda self: None,
+            "json": lambda self: {"results": {"bindings": [{"x": "val"}]}},
+        },
+    )()
     with patch("scraper.metadata.requests.get", return_value=mock_resp):
         with patch("scraper.metadata.time.sleep"):
             result = meta._sparql_query("SELECT ?x WHERE { ?x ?y ?z }")

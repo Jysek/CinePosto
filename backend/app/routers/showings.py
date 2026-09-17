@@ -1,4 +1,5 @@
 """Endpoint REST per Showings (spettacoli)."""
+
 from datetime import date
 
 from fastapi import APIRouter, Depends, Query

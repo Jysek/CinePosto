@@ -1,4 +1,5 @@
 """Data access layer: query su Film."""
+
 from datetime import date as date_type
 import re
 import unicodedata
@@ -31,9 +32,7 @@ def get_by_id(db: Session, film_id: int) -> Film | None:
     return db.get(Film, film_id)
 
 
-def get_by_natural_key(
-    db: Session, title_normalized: str, year: int | None
-) -> Film | None:
+def get_by_natural_key(db: Session, title_normalized: str, year: int | None) -> Film | None:
     """Cerca per la UNIQUE key (title_normalized, year). Usato dal seed."""
     stmt = select(Film).where(
         Film.title_normalized == title_normalized,
@@ -45,18 +44,11 @@ def get_by_natural_key(
 def search_by_title(db: Session, query: str, limit: int = 20) -> list[Film]:
     """Ricerca 'contains' sul titolo normalizzato."""
     q_norm = normalize_title(query)
-    stmt = (
-        select(Film)
-        .where(Film.title_normalized.like(f"%{q_norm}%"))
-        .order_by(Film.title)
-        .limit(limit)
-    )
+    stmt = select(Film).where(Film.title_normalized.like(f"%{q_norm}%")).order_by(Film.title).limit(limit)
     return list(db.scalars(stmt))
 
 
-def list_in_programming(
-    db: Session, date_from: date_type, date_to: date_type
-) -> list[Film]:
+def list_in_programming(db: Session, date_from: date_type, date_to: date_type) -> list[Film]:
     """Film con almeno uno spettacolo tra date_from e date_to (inclusi).
     JOIN con showings + DISTINCT per evitare duplicati.
     """
@@ -100,10 +92,9 @@ def upsert_from_scraper(db: Session, data: dict) -> Film:
     else:
         # Esiste — aggiorna solo i campi NON null nel JSON (i null non sovrascrivono).
         # Utile se Wikidata inizialmente non aveva la sinossi e poi la trova.
-        for key in ("original_title", "runtime_minutes", "genres",
-                    "director", "poster_url", "synopsis", "wikidata_id"):
+        for key in ("original_title", "runtime_minutes", "genres", "director", "poster_url", "synopsis", "wikidata_id"):
             if data.get(key) is not None:
                 setattr(film, key, data[key])
 
-    db.flush()   # forza l'assegnazione dell'id (serve al seed di showings)
+    db.flush()  # forza l'assegnazione dell'id (serve al seed di showings)
     return film

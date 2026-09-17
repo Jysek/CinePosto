@@ -12,6 +12,7 @@ Per ogni test:
 
 Run: python3 -m pytest tests/test_fix_validation.py -v
 """
+
 from __future__ import annotations
 
 import json
@@ -32,6 +33,7 @@ from scraper.models import Film, Showing
 
 # ---------- UCI FIXES ----------
 
+
 @responses.activate
 def test_fix_uci_filters_performances_by_day():
     """Fix 1: `_build_showings_from_screens` deve filtrare performance per `day == target_date`.
@@ -43,24 +45,39 @@ def test_fix_uci_filters_performances_by_day():
     target_date = "2026-06-16"
     mock_url = UCI_PROGRAMMING_URL.format(date=target_date)
     responses.add(
-        responses.GET, mock_url,
-        json={"data": [{
-            "id": 1, "title": "Disclosure Day", "slug": "disclosure-day",
-            "poster": "", "description": "", "genres": [],
-            "screens": [{"2D": [{
-                "language": {"name": "ITA"},
-                "screen": {"name": "2D"},
-                "performances": [
-                    # performance spurie di altre date
-                    {"actual_start_at": "16:00", "day": "2026-06-17", "room": "Sala 1"},
-                    {"actual_start_at": "17:00", "day": "2026-06-17", "room": "Sala 2"},
-                    # performance vere del target
-                    {"actual_start_at": "20:20", "day": "2026-06-16", "room": "Sala 1"},
-                    {"actual_start_at": "21:30", "day": "2026-06-16", "room": "Sala 2"},
-                    {"actual_start_at": "22:00", "day": "2026-06-16", "room": "Sala 3"},
-                ],
-            }]}],
-        }]},
+        responses.GET,
+        mock_url,
+        json={
+            "data": [
+                {
+                    "id": 1,
+                    "title": "Disclosure Day",
+                    "slug": "disclosure-day",
+                    "poster": "",
+                    "description": "",
+                    "genres": [],
+                    "screens": [
+                        {
+                            "2D": [
+                                {
+                                    "language": {"name": "ITA"},
+                                    "screen": {"name": "2D"},
+                                    "performances": [
+                                        # performance spurie di altre date
+                                        {"actual_start_at": "16:00", "day": "2026-06-17", "room": "Sala 1"},
+                                        {"actual_start_at": "17:00", "day": "2026-06-17", "room": "Sala 2"},
+                                        # performance vere del target
+                                        {"actual_start_at": "20:20", "day": "2026-06-16", "room": "Sala 1"},
+                                        {"actual_start_at": "21:30", "day": "2026-06-16", "room": "Sala 2"},
+                                        {"actual_start_at": "22:00", "day": "2026-06-16", "room": "Sala 3"},
+                                    ],
+                                }
+                            ]
+                        }
+                    ],
+                }
+            ]
+        },
         status=200,
     )
 
@@ -69,8 +86,7 @@ def test_fix_uci_filters_performances_by_day():
 
     assert len(result.films) == 1
     times = sorted(result.films[0].present_in[0].times)
-    assert times == ["20:20", "21:30", "22:00"], \
-        f"BUG: day filter non applicato, trovati {times} (atteso solo 16/06)"
+    assert times == ["20:20", "21:30", "22:00"], f"BUG: day filter non applicato, trovati {times} (atteso solo 16/06)"
 
 
 @responses.activate
@@ -82,16 +98,49 @@ def test_fix_uci_skips_not_today_true():
     """
     target_date = "2026-06-16"
     mock_url = UCI_PROGRAMMING_URL.format(date=target_date)
-    responses.add(responses.GET, mock_url, json={"data": [
-        {"id": 1, "title": "Pecore sotto copertura", "slug": "pecore",
-         "not_today": True,
-         "screens": [{"2D": [{"language": {"name": "ITA"}, "screen": {"name": "2D"},
-                              "performances": [{"actual_start_at": "16:00", "day": target_date}]}]}]},
-        {"id": 2, "title": "Disclosure Day", "slug": "dd",
-         "not_today": False,
-         "screens": [{"2D": [{"language": {"name": "ITA"}, "screen": {"name": "2D"},
-                              "performances": [{"actual_start_at": "21:30", "day": target_date}]}]}]},
-    ]}, status=200)
+    responses.add(
+        responses.GET,
+        mock_url,
+        json={
+            "data": [
+                {
+                    "id": 1,
+                    "title": "Pecore sotto copertura",
+                    "slug": "pecore",
+                    "not_today": True,
+                    "screens": [
+                        {
+                            "2D": [
+                                {
+                                    "language": {"name": "ITA"},
+                                    "screen": {"name": "2D"},
+                                    "performances": [{"actual_start_at": "16:00", "day": target_date}],
+                                }
+                            ]
+                        }
+                    ],
+                },
+                {
+                    "id": 2,
+                    "title": "Disclosure Day",
+                    "slug": "dd",
+                    "not_today": False,
+                    "screens": [
+                        {
+                            "2D": [
+                                {
+                                    "language": {"name": "ITA"},
+                                    "screen": {"name": "2D"},
+                                    "performances": [{"actual_start_at": "21:30", "day": target_date}],
+                                }
+                            ]
+                        }
+                    ],
+                },
+            ]
+        },
+        status=200,
+    )
 
     result = UCIConnector().scrape(target_date, dates=[target_date])
     titles = [f.title for f in result.films]
@@ -99,6 +148,7 @@ def test_fix_uci_skips_not_today_true():
 
 
 # ---------- POSTMOD FIXES ----------
+
 
 def _rsc(movies):
     """Mock del payload RSC reale: ogni movie dict compare come `{...}` top-level.
@@ -108,11 +158,7 @@ def _rsc(movies):
     """
     inner = "".join(json.dumps(m, ensure_ascii=False, separators=(",", ":")) for m in movies)
     esc = inner.replace("\\", "\\\\").replace('"', '\\"')
-    return (
-        "<html><body><script>"
-        f'self.__next_f.push([1,"{esc}"]);'
-        "</script></body></html>"
-    )
+    return f'<html><body><script>self.__next_f.push([1,"{esc}"]);</script></body></html>'
 
 
 @responses.activate
@@ -122,19 +168,26 @@ def test_fix_postmod_filters_opzioni_noprog():
     Caso: Amarga Navidad 16/06 ha slot noprog alle 16:45 e 21:15 + slot vost alle 19:00.
     Il fix deve scartare i due noprog.
     """
-    rsc = _rsc([{
-        "id": 1, "title": "Amarga Navidad", "slug": "amarga-navidad",
-        "permalink": "https://www.postmodernissimo.com/films/amarga-navidad",
-        "content": "", "details": {"genere": "", "regia": "", "durata": None},
-        "programmazione": {
-            "spazio_prog": "postmod",
-            "shows": [
-                {"date": "20260616", "orario": "16:45", "opzioni": "noprog", "nota": None, "ticket": ""},
-                {"date": "20260616", "orario": "19:00", "opzioni": "vost",   "nota": None, "ticket": ""},
-                {"date": "20260616", "orario": "21:15", "opzioni": "noprog", "nota": None, "ticket": ""},
-            ],
-        },
-    }])
+    rsc = _rsc(
+        [
+            {
+                "id": 1,
+                "title": "Amarga Navidad",
+                "slug": "amarga-navidad",
+                "permalink": "https://www.postmodernissimo.com/films/amarga-navidad",
+                "content": "",
+                "details": {"genere": "", "regia": "", "durata": None},
+                "programmazione": {
+                    "spazio_prog": "postmod",
+                    "shows": [
+                        {"date": "20260616", "orario": "16:45", "opzioni": "noprog", "nota": None, "ticket": ""},
+                        {"date": "20260616", "orario": "19:00", "opzioni": "vost", "nota": None, "ticket": ""},
+                        {"date": "20260616", "orario": "21:15", "opzioni": "noprog", "nota": None, "ticket": ""},
+                    ],
+                },
+            }
+        ]
+    )
     responses.add(responses.GET, POSTMOD_CINEMA_URL, body=rsc, status=200)
 
     result = PostModernissimoConnector().scrape("2026-06-16", dates=["2026-06-16"])
@@ -155,7 +208,7 @@ def test_fix_postmod_duplicati_stream_order():
         '"content":"","details":{"genere":"","regia":"","durata":null},'
         '"programmazione":{"spazio_prog":"postmod","shows":['
         '{"date":"20260617","orario":"18:30","opzioni":"off","nota":null,"ticket":""}'
-        ']}}'
+        "]}}"
     )
     occ_b = (
         '{"id":1,"title":"Don Chisciotte","slug":"don-chisciotte",'
@@ -163,9 +216,9 @@ def test_fix_postmod_duplicati_stream_order():
         '"content":"","details":{"genere":"","regia":"","durata":null},'
         '"programmazione":{"spazio_prog":"postmod","shows":['
         '{"date":"20260617","orario":"21:00","opzioni":"off","nota":null,"ticket":""}'
-        ']}}'
+        "]}}"
     )
-    rsc = "self.__next_f.push([1,\"" + (occ_a + occ_b).replace('"', '\\"') + "\"]);"
+    rsc = 'self.__next_f.push([1,"' + (occ_a + occ_b).replace('"', '\\"') + '"]);'
     html = f"<html><body><script>{rsc}</script></body></html>"
     responses.add(responses.GET, POSTMOD_CINEMA_URL, body=html, status=200)
 
@@ -184,9 +237,9 @@ def test_fix_postmod_filters_event_stub_by_title_hint():
         '"content":"","details":{"genere":"","regia":"","durata":null},'
         '"programmazione":{"spazio_prog":"postmod","shows":['
         '{"date":"20260617","orario":"21:00","opzioni":"off","nota":null,"ticket":""}'
-        ']}}'
+        "]}}"
     )
-    rsc = "self.__next_f.push([1,\"" + occ.replace('"', '\\"') + "\"]);"
+    rsc = 'self.__next_f.push([1,"' + occ.replace('"', '\\"') + '"]);'
     html = f"<html><body><script>{rsc}</script></body></html>"
     responses.add(responses.GET, POSTMOD_CINEMA_URL, body=html, status=200)
 
@@ -196,6 +249,7 @@ def test_fix_postmod_filters_event_stub_by_title_hint():
 
 
 # ---------- THESPACE FIXES ----------
+
 
 @responses.activate
 def test_fix_thespace_filters_showing_groups_by_date():
@@ -211,30 +265,38 @@ def test_fix_thespace_filters_showing_groups_by_date():
     # Per 16/06: solo SCARY MOVIE 18:35 20:45
     # Per 17/06: solo SCARY MOVIE 16:10 + spurio 16:10 anche per 16/06
     responses.add(
-        responses.GET, THE_SPACE_FILMS_URL,
-        json={"result": [
-            {
-                "filmTitle": "SCARY MOVIE",
-                "filmUrl": "/film/scary-movie",
-                "showingGroups": [
-                    {"date": "2026-06-16T00:00:00", "sessions": [
-                        {"startTime": "2026-06-16T18:35:00", "attributes": []},
-                        {"startTime": "2026-06-16T20:45:00", "attributes": []},
-                    ]},
-                ],
-            },
-        ]},
+        responses.GET,
+        THE_SPACE_FILMS_URL,
+        json={
+            "result": [
+                {
+                    "filmTitle": "SCARY MOVIE",
+                    "filmUrl": "/film/scary-movie",
+                    "showingGroups": [
+                        {
+                            "date": "2026-06-16T00:00:00",
+                            "sessions": [
+                                {"startTime": "2026-06-16T18:35:00", "attributes": []},
+                                {"startTime": "2026-06-16T20:45:00", "attributes": []},
+                            ],
+                        },
+                    ],
+                },
+            ]
+        },
         status=200,
     )
     result = TheSpaceConnector().scrape(target_dates[1], dates=target_dates)
     # Atteso dopo fix: SCARY MOVIE 16/06 SOLO con (18:35, 20:45); 17/06 con (16:10)
     scary = next(f for f in result.films if "SCARY" in f.title.upper())
     per_date = {s.date: sorted(s.times) for s in scary.present_in}
-    assert "2026-06-16" in per_date and "16:10" not in per_date.get("2026-06-16", []),\
+    assert "2026-06-16" in per_date and "16:10" not in per_date.get("2026-06-16", []), (
         f"BUG Thespace: 16:10 leak su 16/06: {per_date}"
+    )
 
 
 # ---------- DEDUP FIXES ----------
+
 
 def test_fix_dedup_unescapes_html_before_match():
     """Fix dedup: applicare html.unescape ai titoli PRIMA del fuzzy_match.

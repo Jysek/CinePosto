@@ -1,4 +1,5 @@
 """Test del delta merge: history, grace period, rimozione e purge dei film."""
+
 from __future__ import annotations
 
 from scraper.delta import _last_removal_date, _showings_changed, merge_films
@@ -10,9 +11,7 @@ def test_merge_new_film():
         Film(
             title="New Film",
             title_normalized="new film",
-            present_in=[
-                Showing(cinema="Cinema A", cinema_slug="cinema-a", date="2026-06-12", times=["18:00"])
-            ],
+            present_in=[Showing(cinema="Cinema A", cinema_slug="cinema-a", date="2026-06-12", times=["18:00"])],
         )
     ]
     merged = merge_films(new_films, [], "2026-06-12")
@@ -26,9 +25,7 @@ def test_merge_existing_film_unchanged():
         {
             "title": "Existing Film",
             "title_normalized": "existing film",
-            "present_in": [
-                {"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-12", "times": ["18:00"]}
-            ],
+            "present_in": [{"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-12", "times": ["18:00"]}],
             "history": [{"date": "2026-06-11", "action": "added"}],
             "status": "in_programmazione",
         }
@@ -37,9 +34,7 @@ def test_merge_existing_film_unchanged():
         Film(
             title="Existing Film",
             title_normalized="existing film",
-            present_in=[
-                Showing(cinema="Cinema A", cinema_slug="cinema-a", date="2026-06-12", times=["18:00"])
-            ],
+            present_in=[Showing(cinema="Cinema A", cinema_slug="cinema-a", date="2026-06-12", times=["18:00"])],
         )
     ]
     merged = merge_films(new_films, previous, "2026-06-12")
@@ -53,9 +48,7 @@ def test_merge_existing_film_updated():
         {
             "title": "Updated Film",
             "title_normalized": "updated film",
-            "present_in": [
-                {"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-12", "times": ["18:00"]}
-            ],
+            "present_in": [{"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-12", "times": ["18:00"]}],
             "history": [{"date": "2026-06-11", "action": "added"}],
             "status": "in_programmazione",
         }
@@ -79,9 +72,7 @@ def test_merge_missing_film_within_threshold():
         {
             "title": "Recent Film",
             "title_normalized": "recent film",
-            "present_in": [
-                {"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-11", "times": ["18:00"]}
-            ],
+            "present_in": [{"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-11", "times": ["18:00"]}],
             "history": [{"date": "2026-06-11", "action": "added"}],
             "status": "in_programmazione",
         }
@@ -95,9 +86,7 @@ def test_merge_missing_film_beyond_threshold():
         {
             "title": "Old Film",
             "title_normalized": "old film",
-            "present_in": [
-                {"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-01", "times": ["18:00"]}
-            ],
+            "present_in": [{"cinema": "Cinema A", "cinema_slug": "cinema-a", "date": "2026-06-01", "times": ["18:00"]}],
             "history": [{"date": "2026-06-01", "action": "added"}],
             "status": "in_programmazione",
         }

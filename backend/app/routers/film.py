@@ -1,4 +1,5 @@
 """Endpoint REST per Film."""
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
@@ -28,7 +29,7 @@ def search_films(
     db: Session = Depends(get_db),
 ):
     """Ricerca film per titolo (case-insensitive, ignora
-punteggiatura/accenti)."""
+    punteggiatura/accenti)."""
     return film_service.search_films(db, q, limit=limit)
 
 

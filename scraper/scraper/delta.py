@@ -1,4 +1,5 @@
 """Delta merge: reconciles current run with previous output and manages film history."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -89,9 +90,7 @@ def merge_films(new_films: list[Film], previous_data: list[dict], today: str) ->
             ]
 
             if _showings_changed(old_showings, new_showings_dicts):
-                film.history = existing_history + [
-                    {"date": today, "action": "updated"}
-                ]
+                film.history = existing_history + [{"date": today, "action": "updated"}]
             else:
                 film.history = existing_history
 
@@ -119,8 +118,7 @@ def merge_films(new_films: list[Film], previous_data: list[dict], today: str) ->
         removed_date = _last_removal_date(prev_history)
         if removed_date:
             days_since_removal = (
-                datetime.strptime(today, "%Y-%m-%d")
-                - datetime.strptime(removed_date, "%Y-%m-%d")
+                datetime.strptime(today, "%Y-%m-%d") - datetime.strptime(removed_date, "%Y-%m-%d")
             ).days
         else:
             days_since_removal = 0
@@ -131,10 +129,7 @@ def merge_films(new_films: list[Film], previous_data: list[dict], today: str) ->
             if p.get("date", "") > last_date:
                 last_date = p["date"]
         if last_date:
-            days_since = (
-                datetime.strptime(today, "%Y-%m-%d")
-                - datetime.strptime(last_date, "%Y-%m-%d")
-            ).days
+            days_since = (datetime.strptime(today, "%Y-%m-%d") - datetime.strptime(last_date, "%Y-%m-%d")).days
         else:
             days_since = REMOVAL_THRESHOLD_DAYS + 1
 
@@ -168,17 +163,14 @@ def merge_films(new_films: list[Film], previous_data: list[dict], today: str) ->
     removed_count = sum(1 for f in merged if f.status == "rimosso")
     if removed_count:
         logger.info("Removed films (filtered from output): %d", removed_count)
-    return [
-        f
-        for f in merged
-        if f.status != "rimosso" and any(s.times for s in f.present_in)
-    ]
+    return [f for f in merged if f.status != "rimosso" and any(s.times for s in f.present_in)]
 
 
 def _showings_changed(old: list[dict], new: list[dict]) -> bool:
     """True se la programmazione è cambiata tra le run (confronto per chiave cinema:data:orari)."""
+
     def _showing_key(s: dict) -> str:
-        return f"{s.get('cinema_slug','')}:{s.get('date','')}:{','.join(s.get('times', []))}"
+        return f"{s.get('cinema_slug', '')}:{s.get('date', '')}:{','.join(s.get('times', []))}"
 
     old_keys = sorted(_showing_key(s) for s in old)
     new_keys = sorted(_showing_key(s) for s in new)

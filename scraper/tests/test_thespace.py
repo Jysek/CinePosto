@@ -1,10 +1,12 @@
 """Test del connettore The Space su risposte API registrate."""
+
 from __future__ import annotations
 
 from scraper.connectors.thespace import TheSpaceConnector
 from scraper.models import Film
 
 # --- _parse_api_film ---
+
 
 def test_parse_api_film_returns_film_with_all_fields():
     connector = TheSpaceConnector()
@@ -74,6 +76,7 @@ def test_parse_api_film_unknown_duration_is_none():
 
 
 # --- _parse_api_showing_groups ---
+
 
 def test_parse_showing_groups_extracts_time_from_iso_datetime():
     connector = TheSpaceConnector()

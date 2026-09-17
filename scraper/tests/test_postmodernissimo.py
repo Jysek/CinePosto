@@ -1,4 +1,5 @@
 """Test del connettore PostModernissimo su payload RSC e HTML registrati."""
+
 from __future__ import annotations
 
 import json

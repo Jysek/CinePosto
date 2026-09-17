@@ -1,4 +1,5 @@
 """Test di retry_request: retry con backoff, 403 non ritentato, propagazione errori."""
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
@@ -21,6 +22,7 @@ def _mock_response(status_code: int) -> MagicMock:
 
 
 # --- retry_request ---
+
 
 def test_success_on_first_attempt():
     session = MagicMock()

@@ -1,4 +1,5 @@
-"""Business logic per Film. Contiene la logica 'cosa c'e in programmazione' che e' il cuore dell'app. """
+"""Business logic per Film. Contiene la logica 'cosa c'e in programmazione' che e' il cuore dell'app."""
+
 from datetime import date, timedelta
 
 from sqlalchemy.orm import Session
@@ -23,9 +24,7 @@ def get_films_this_week(db: Session) -> list[Film]:
     return film_repo.list_in_programming(db, today, week_end)
 
 
-def get_film_detail(
-    db: Session, film_id: int
-) -> tuple[Film, list[Showing]] | None:
+def get_film_detail(db: Session, film_id: int) -> tuple[Film, list[Showing]] | None:
     """Ritorna il film + i suoi prossimi spettacoli (dal giorno stesso in poi).
     None se il film non esiste.
     """

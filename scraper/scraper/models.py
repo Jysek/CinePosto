@@ -1,4 +1,5 @@
 """Domain models (Film, Showing, CinemaError, ScrapeResult) and JSON serializers."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -189,22 +190,24 @@ def films_to_json(films: list[Film]) -> dict:
             (h["date"] for h in reversed(film.history) if h.get("action") in ("added", "updated")),
             first_seen,
         )
-        result.append({
-            "id": film.title_normalized,
-            "title": html.unescape(film.title) if film.title else film.title,
-            "title_normalized": film.title_normalized,
-            "original_title": film.original_title,
-            "poster": _clean_poster(film.poster),
-            "description": html.unescape(film.description) if film.description else film.description,
-            "genres": film.genres or [],
-            "director": film.director,
-            "duration": normalize_duration(film.duration),
-            "year": film.year,
-            "wikidata_id": film.wikidata_id,
-            "status": film.status,
-            "first_seen": first_seen,
-            "last_seen": last_seen,
-        })
+        result.append(
+            {
+                "id": film.title_normalized,
+                "title": html.unescape(film.title) if film.title else film.title,
+                "title_normalized": film.title_normalized,
+                "original_title": film.original_title,
+                "poster": _clean_poster(film.poster),
+                "description": html.unescape(film.description) if film.description else film.description,
+                "genres": film.genres or [],
+                "director": film.director,
+                "duration": normalize_duration(film.duration),
+                "year": film.year,
+                "wikidata_id": film.wikidata_id,
+                "status": film.status,
+                "first_seen": first_seen,
+                "last_seen": last_seen,
+            }
+        )
     return {
         "generated_at": datetime.now(_ROME).isoformat(),
         "films": result,
@@ -220,10 +223,12 @@ def showings_to_json(films: list[Film], date_from: str, date_to: str) -> dict:
     rows = []
     for film in films:
         for group in _consolidate_showings(film.present_in):
-            rows.append({
-                "film_id": film.title_normalized,
-                **{k: v for k, v in group.items() if k != "cinema"},
-            })
+            rows.append(
+                {
+                    "film_id": film.title_normalized,
+                    **{k: v for k, v in group.items() if k != "cinema"},
+                }
+            )
     return {
         "generated_at": datetime.now(_ROME).isoformat(),
         "date_from": date_from,

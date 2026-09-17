@@ -1,4 +1,5 @@
 """Test di config: finestra date della run e calcolo di oggi in Europe/Rome."""
+
 from __future__ import annotations
 
 from datetime import date, datetime
