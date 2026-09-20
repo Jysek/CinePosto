@@ -6,9 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "splash": {
-      "backgroundColor": "#141414"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -22,7 +19,14 @@
     },
     "plugins": [
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#141414"
+        }
+      ]
     ]
   }
 }
