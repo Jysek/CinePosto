@@ -57,6 +57,16 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lon": 12.39403,
         "website": "https://cinemazenith.it",
     },
+    "nuovo-cinema-castello": {
+        "name": "Nuovo Cinema Castello",
+        # Verificato dal JSON-LD del sito ufficiale (2026-09-19)
+        "address": "Piazza Gioberti, 06012 Città di Castello PG",
+        "city": "Città di Castello",
+        "region": "Umbria",
+        "lat": 43.45808,
+        "lon": 12.24147,
+        "website": "https://www.nuovocinemacastello.it",
+    },
 }
 SCRAPER_LOG = BASE_DIR / "scraper.log"
 WIKIDATA_CACHE = BASE_DIR / ".wikidata_cache.json"
@@ -103,6 +113,13 @@ CINEMA_ZENITH_SLUG = "cinema-zenith"
 CINEMA_ZENITH_BASE_URL = "https://cinemazenith.it"
 CINEMA_ZENITH_URL = f"{CINEMA_ZENITH_BASE_URL}/"
 CINEMA_ZENITH_WEEK_URL = f"{CINEMA_ZENITH_BASE_URL}/programmazione-settimana/"
+
+# Il sito senza `www` risponde 301 verso il proxy Aruba: l'host con `www` è
+# obbligatorio in ogni richiesta (vedi docs/scraper/connettori/nuovo-cinema-castello.md).
+NUOVO_CASTELLO_NAME = "Nuovo Cinema Castello"
+NUOVO_CASTELLO_SLUG = "nuovo-cinema-castello"
+NUOVO_CASTELLO_BASE_URL = "https://www.nuovocinemacastello.it"
+NUOVO_CASTELLO_URL = f"{NUOVO_CASTELLO_BASE_URL}/"
 
 REQUEST_TIMEOUT = 30
 

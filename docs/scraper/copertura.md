@@ -15,8 +15,8 @@
 | Comuni dell'Umbria | 92 |
 | Comuni con almeno una sala nota | 21 |
 | Comuni senza sala nota | 71 |
-| **Sale implementate** | **4** |
-| Sale con fonte verificata, pronte per il connettore | 4 |
+| **Sale implementate** | **5** |
+| Sale con fonte verificata, pronte per il connettore | 3 |
 | Sale con sito noto, tecnica da analizzare | 11 |
 | Sale con identità o sito da verificare | 11 |
 | Sale escluse con motivazione | 8 |
@@ -42,7 +42,7 @@
 | 2 | The Space Cinema Corciano | Corciano | PG | thespacecinema.it | consentito | API REST OAuth2 (venue 1027) | ✅ |
 | 3 | UCI Cinemas Perugia | Perugia | PG | ucicinemas.it | consentito | API JSON (Cloud Run) | ✅ |
 | 4 | Cinema Zenith | Perugia | PG | cinemazenith.it | `Disallow:` vuoto → ok | JSON-LD schema.org (fallback microdata settimana) | ✅ |
-| 5 | Nuovo Cinema Castello | Città di Castello | PG | nuovocinemacastello.it | ok | microdata schema.org `startDate` | 🟢 |
+| 5 | Nuovo Cinema Castello | Città di Castello | PG | nuovocinemacastello.it | ok | JSON-LD schema.org (tema `zen25`, come Zenith) | ✅ |
 | 6 | Cinema Metropolis | Umbertide | PG | cinemametropolis.it | ok | microdata schema.org `startDate` | 🟢 |
 | 7 | Cinema Teatro Concordia | Marsciano | PG | cineconcordia.it | ok | microdata schema.org `startDate` | 🟢 |
 | 8 | The Space Cinema Terni | Terni | TR | thespacecinema.it | ok | **stessa API di Corciano** (da confermare venue) | 🟢 |
