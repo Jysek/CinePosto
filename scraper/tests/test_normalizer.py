@@ -30,6 +30,9 @@ def test_normalize_duration():
     assert normalize_duration("1:45:30") == "106 min"
     assert normalize_duration("1h 30m") == "90 min"
     assert normalize_duration("2h") == "120 min"
+    # ISO 8601 schema.org: rete di sicurezza se l'estrattore non converte già
+    assert normalize_duration("PT102M") == "102 min"
+    assert normalize_duration("PT1H49M") == "109 min"
 
 
 # --- fuzzy_match ---

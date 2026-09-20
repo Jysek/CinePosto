@@ -47,6 +47,16 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lon": 12.3554,
         "website": "https://ucicinemas.it",
     },
+    "cinema-zenith": {
+        "name": "Cinema Zenith",
+        # Verificato dal JSON-LD del sito ufficiale (2026-09-19)
+        "address": "Via Benedetto Bonfigli, 5, 06126 Perugia PG",
+        "city": "Perugia",
+        "region": "Umbria",
+        "lat": 43.10421,
+        "lon": 12.39403,
+        "website": "https://cinemazenith.it",
+    },
 }
 SCRAPER_LOG = BASE_DIR / "scraper.log"
 WIKIDATA_CACHE = BASE_DIR / ".wikidata_cache.json"
@@ -87,11 +97,22 @@ POSTMOD_CINEMA_NAME = "PostModernissimo"
 POSTMOD_CINEMA_SLUG = "postmodernissimo"
 POSTMOD_BASE_URL = "https://www.postmodernissimo.com"
 POSTMOD_CINEMA_URL = POSTMOD_BASE_URL
+
+CINEMA_ZENITH_NAME = "Cinema Zenith"
+CINEMA_ZENITH_SLUG = "cinema-zenith"
+CINEMA_ZENITH_BASE_URL = "https://cinemazenith.it"
+CINEMA_ZENITH_URL = f"{CINEMA_ZENITH_BASE_URL}/"
+CINEMA_ZENITH_WEEK_URL = f"{CINEMA_ZENITH_BASE_URL}/programmazione-settimana/"
+
 REQUEST_TIMEOUT = 30
 
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 )
+# User-Agent identificabile del progetto (richiesto da AGENTS.md): i nuovi connettori
+# lo usano al posto di DEFAULT_USER_AGENT. NON sostituire DEFAULT_USER_AGENT qui:
+# i connettori esistenti (postmodernissimo, thespace, uci) si appoggiano a quello Chrome.
+PROJECT_USER_AGENT = "CinePosto/1.0 (+https://github.com/Jysek/CinePosto; 55837328+Jysek@users.noreply.github.com)"
 REQUEST_RETRY = 3
 RETRY_BACKOFF = 2
 
@@ -105,7 +126,7 @@ SCRAPER_RETRY_DELAY = 300  # seconds before retrying a failed connector (5 min â
 
 WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql"
 # Wikimedia policy: identifica un endpoint contattabile reale.
-WIKIDATA_USER_AGENT = "CinePosto/1.0 (+https://github.com/Jysek/CinePosto; 55837328+Jysek@users.noreply.github.com)"
+WIKIDATA_USER_AGENT = PROJECT_USER_AGENT
 WIKIDATA_TIMEOUT = 15
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"

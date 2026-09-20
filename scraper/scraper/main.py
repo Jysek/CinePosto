@@ -27,6 +27,7 @@ from scraper.config import (
 from scraper.config import (
     SCRAPER_RETRY_DELAY as RETRY_DELAY,
 )
+from scraper.connectors.cinema_zenith import CinemaZenithConnector
 from scraper.connectors.postmodernissimo import PostModernissimoConnector
 from scraper.connectors.thespace import TheSpaceConnector
 from scraper.connectors.uci import UCIConnector
@@ -157,6 +158,7 @@ def run_scraper() -> None:
         PostModernissimoConnector(),
         TheSpaceConnector(),
         UCIConnector(),
+        CinemaZenithConnector(),
     ]
 
     all_films: list[Film] = []
