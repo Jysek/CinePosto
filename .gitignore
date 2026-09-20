@@ -14,6 +14,9 @@ scraper/scraper.log
 # Cloudflare worker
 .wrangler/
 
+# Artefatti delle sessioni di verifica con Playwright (snapshot, screenshot)
+.playwright-mcp/
+
 # Node / Expo
 node_modules/
 .expo/

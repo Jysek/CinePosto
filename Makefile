@@ -29,13 +29,16 @@ else
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help dev up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
+.PHONY: help dev check-app-web up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
 
 help: ## Mostra questo aiuto
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
 
 dev: ## AVVIA TUTTO: Docker (se spento), backend e app per browser e telefono
 	@"$(BASH)" scripts/dev.sh
+
+check-app-web: ## Verifica l'export web: build + server statico su :3000 (richiede: make up && make seed)
+	@"$(BASH)" scripts/check-app-web.sh
 
 up: ## Avvia il backend in background  →  docker compose up -d --build backend
 	$(COMPOSE) up -d --build backend
