@@ -1,3 +1,5 @@
+import { cinemaInitials } from '../constants/cinemas';
+
 // Genera l'HTML della mappa Leaflet con i marker dei cinema.
 // Usato sia dalla WebView nativa che dall'iframe sul web.
 export default function buildMapHtml(cinemas) {
@@ -7,6 +9,7 @@ export default function buildMapHtml(cinemas) {
     address: c.address,
     color: c.color,
     logo: c.logoDataUri,
+    initials: cinemaInitials(c.name),
     lat: c.coords.latitude,
     lon: c.coords.longitude,
   }));
@@ -38,9 +41,14 @@ export default function buildMapHtml(cinemas) {
       var cinemas = ${JSON.stringify(markers)};
 
       cinemas.forEach(function(cinema) {
+        // Con logo si mostra l'immagine; senza logo le iniziali nel colore
+        // del cinema, dentro lo stesso cerchio bordo + ombra (nessun pin rotto).
+        var inner = cinema.logo
+          ? '<img src="' + cinema.logo + '" style="width:100%;height:100%;object-fit:cover;" />'
+          : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:sans-serif;font-weight:700;font-size:15px;color:' + cinema.color + ';">' + cinema.initials + '</div>';
         var icon = L.divIcon({
           className: 'custom-marker',
-          html: '<div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:3px solid ' + cinema.color + ';box-shadow:0 2px 8px rgba(0,0,0,0.5);background:white;"><img src="' + cinema.logo + '" style="width:100%;height:100%;object-fit:cover;" /></div>',
+          html: '<div style="width:44px;height:44px;border-radius:50%;overflow:hidden;border:3px solid ' + cinema.color + ';box-shadow:0 2px 8px rgba(0,0,0,0.5);background:white;">' + inner + '</div>',
           iconSize: [44, 44],
           iconAnchor: [22, 22]
         });

@@ -19,12 +19,12 @@ import SwipeableHero from '../components/SwipeableHero';
 import DateBar from '../components/DateBar';
 import MovieGrid from '../components/MovieGrid';
 import Colors from '../constants/colors';
-import CINEMAS, { CINEMA_NAMES } from '../constants/cinemas';
 import { getToday } from '../utils/dates';
 import { getCinemas, getCinemaShowings } from '../api/api';
 
 export default function FilmsTab({ navigation }) {
   const [films, setFilms] = useState([]);
+  const [cinemas, setCinemas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -42,6 +42,7 @@ export default function FilmsTab({ navigation }) {
       setError(null);
       setUpdating(true);
       const cinemasData = await getCinemas();
+      setCinemas(cinemasData);
 
       // La lista film si costruisce dagli spettacoli della data selezionata:
       // ogni showing (ShowingDetail) porta con sé il film annidato. Così ogni
@@ -99,6 +100,9 @@ export default function FilmsTab({ navigation }) {
   const filteredFilms = films
     .filter((f) => !selectedCinema || f.cinemaSlugs?.includes(selectedCinema))
     .sort((a, b) => a.title.localeCompare(b.title));
+
+  // Nome leggibile del cinema a partire dallo slug (i dati arrivano dall'API).
+  const cinemaName = (slug) => cinemas.find((c) => c.slug === slug)?.name || slug;
 
   const featuredMovies = filteredFilms.slice(0, 6);
 
@@ -158,7 +162,7 @@ export default function FilmsTab({ navigation }) {
         {selectedCinema && (
           <View style={styles.activeFilters}>
             <TouchableOpacity style={styles.filterChip} onPress={() => setSelectedCinema(null)}>
-              <Text style={styles.filterChipText}>{CINEMA_NAMES[selectedCinema]}</Text>
+              <Text style={styles.filterChipText}>{cinemaName(selectedCinema)}</Text>
               <Ionicons name="close" size={14} color={Colors.white} />
             </TouchableOpacity>
           </View>
@@ -185,7 +189,7 @@ export default function FilmsTab({ navigation }) {
           ) : (
             <>
               <Text style={styles.gridTitle}>
-                {selectedCinema ? CINEMA_NAMES[selectedCinema] : 'Tutti i film'}
+                {selectedCinema ? cinemaName(selectedCinema) : 'Tutti i film'}
               </Text>
               <MovieGrid movies={filteredFilms} onMoviePress={handleMoviePress} />
             </>
@@ -209,7 +213,7 @@ export default function FilmsTab({ navigation }) {
               </TouchableOpacity>
             </View>
 
-            {[null, ...CINEMAS.map((c) => c.slug)].map((slug) => (
+            {[null, ...cinemas.map((c) => c.slug)].map((slug) => (
               <TouchableOpacity
                 key={slug || 'all'}
                 style={[
@@ -227,7 +231,7 @@ export default function FilmsTab({ navigation }) {
                     selectedCinema === slug && styles.modalOptionTextActive,
                   ]}
                 >
-                  {slug ? CINEMA_NAMES[slug] : 'Tutti i cinema'}
+                  {slug ? cinemaName(slug) : 'Tutti i cinema'}
                 </Text>
                 {selectedCinema === slug && (
                   <Ionicons name="checkmark" size={20} color={Colors.primary} />

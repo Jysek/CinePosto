@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import PosterImage from '../components/PosterImage';
 import Colors from '../constants/colors';
-import CINEMAS, { CINEMA_COLORS, CINEMA_LOGOS, CINEMA_NAMES } from '../constants/cinemas';
+import { CINEMA_LOGOS, cinemaColor, cinemaInitials } from '../constants/cinemas';
 import { getToday, getNext7Days, formatShortDate, isToday } from '../utils/dates';
 import { getFilmById, getCinemas, getCinemaShowings } from '../api/api';
 
@@ -77,8 +77,8 @@ export default function MovieDetailScreen({ route, navigation }) {
     load();
   }, [id]);
 
-  // Raggruppa gli spettacoli del giorno selezionato per cinema,
-  // nell'ordine fisso definito in constants/cinemas.js.
+  // Raggruppa gli spettacoli del giorno selezionato per cinema, ordinati per
+  // nome (i cinema arrivano dall'API, non c'è più un ordine fisso hardcoded).
   const groupedShowtimes = useMemo(() => {
     const groups = {};
     showings
@@ -86,7 +86,12 @@ export default function MovieDetailScreen({ route, navigation }) {
       .forEach((show) => {
         const slug = show.cinema?.slug || 'sconosciuto';
         if (!groups[slug]) {
-          groups[slug] = { slug, buy_url: show.buy_url, entries: [] };
+          groups[slug] = {
+            slug,
+            name: show.cinema?.name || slug,
+            buy_url: show.buy_url,
+            entries: [],
+          };
         }
         const times = Array.isArray(show.times) ? show.times : [];
         times.forEach((time) => {
@@ -99,10 +104,7 @@ export default function MovieDetailScreen({ route, navigation }) {
         });
       });
 
-    const order = CINEMAS.map((c) => c.slug);
-    return Object.values(groups).sort(
-      (a, b) => order.indexOf(a.slug) - order.indexOf(b.slug)
-    );
+    return Object.values(groups).sort((a, b) => a.name.localeCompare(b.name));
   }, [showings, selectedDate]);
 
   const dates = useMemo(() => getNext7Days(), []);
@@ -256,14 +258,24 @@ export default function MovieDetailScreen({ route, navigation }) {
                   key={group.slug}
                   style={[
                     styles.showCard,
-                    { borderLeftColor: CINEMA_COLORS[group.slug] || Colors.primary },
+                    { borderLeftColor: cinemaColor(group.slug) },
                   ]}
                 >
                   <View style={styles.showHeader}>
-                    {CINEMA_LOGOS[group.slug] && (
+                    {CINEMA_LOGOS[group.slug] ? (
                       <Image source={CINEMA_LOGOS[group.slug]} style={styles.cinemaLogo} resizeMode="cover" />
+                    ) : (
+                      <View
+                        style={[
+                          styles.cinemaLogo,
+                          styles.cinemaInitialsBadge,
+                          { backgroundColor: cinemaColor(group.slug) },
+                        ]}
+                      >
+                        <Text style={styles.cinemaInitialsText}>{cinemaInitials(group.name)}</Text>
+                      </View>
                     )}
-                    <Text style={styles.cinemaName}>{CINEMA_NAMES[group.slug] || group.slug}</Text>
+                    <Text style={styles.cinemaName}>{group.name}</Text>
                   </View>
                   <View style={styles.timesRow}>
                     {group.entries.map((entry, eIdx) => (
@@ -466,6 +478,15 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
+  },
+  cinemaInitialsBadge: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cinemaInitialsText: {
+    color: Colors.white,
+    fontSize: 11,
+    fontWeight: 'bold',
   },
   cinemaName: {
     color: Colors.white,
