@@ -12,6 +12,22 @@ BACKEND      := $(COMPOSE) run --rm backend
 SCRAPER      := $(COMPOSE) run --rm scraper
 API          := http://localhost:8000
 
+# ── Shell delle ricette ───────────────────────────────────────────────────────
+# Su Windows `bash` preso dal PATH può risolversi in quello di WSL, la cui distro
+# di default (`docker-desktop`) non ha /bin/bash: da PowerShell `make dev` falliva
+# con "execvpe(/bin/bash) failed". Usiamo il bash di Git per TUTTE le ricette, così
+# `make` funziona identico da PowerShell, Git Bash e cmd. Il percorso 8.3
+# (PROGRA~1) evita gli spazi, che `make` non sa gestire in SHELL.
+ifeq ($(OS),Windows_NT)
+  BASH := C:/PROGRA~1/Git/bin/bash.exe
+  ifeq ($(wildcard $(BASH)),)
+    BASH := bash
+  endif
+  SHELL := $(BASH)
+else
+  BASH := bash
+endif
+
 .DEFAULT_GOAL := help
 .PHONY: help dev up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
 
@@ -19,7 +35,7 @@ help: ## Mostra questo aiuto
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
 
 dev: ## AVVIA TUTTO: Docker (se spento), backend e app per browser e telefono
-	@bash scripts/dev.sh
+	@"$(BASH)" scripts/dev.sh
 
 up: ## Avvia il backend in background  →  docker compose up -d --build backend
 	$(COMPOSE) up -d --build backend
