@@ -76,3 +76,8 @@ jobs:
         # La build statica è il modo più veloce per accorgersi di un errore di sintassi,
         # di un import rotto o di un asset corrotto (è così che è emerso il favicon invalido).
         run: npx expo export --platform web
+
+      - name: Diagnostica (expo-doctor)
+        # Controlla che le dipendenze native restino allineate all'SDK di Expo e che
+        # app.json sia valido: gli stessi controlli fatti a mano dopo un upgrade.
+        run: npx expo-doctor@latest
