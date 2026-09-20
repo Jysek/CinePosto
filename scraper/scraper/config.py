@@ -37,6 +37,16 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lon": 12.3144,
         "website": "https://www.thespacecinema.it",
     },
+    "the-space-terni": {
+        "name": "The Space Cinema Terni",
+        # Verificato dal sito ufficiale thespacecinema.it (2026-09-19)
+        "address": "Viale Donato Bramante, Snc, 05100 Terni TR",
+        "city": "Terni",
+        "region": "Umbria",
+        "lat": 42.5727,
+        "lon": 12.6355,
+        "website": "https://www.thespacecinema.it",
+    },
     "uci-perugia": {
         "name": "UCI Cinemas Perugia",
         # Indirizzo indicato da Emanuele (2026-07-02). Verificare su Maps.
@@ -67,6 +77,26 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lon": 12.24147,
         "website": "https://www.nuovocinemacastello.it",
     },
+    "cinema-teatro-concordia": {
+        "name": "Cinema Teatro Concordia",
+        # Verificato dal microdata del sito ufficiale (2026-09-19)
+        "address": "Largo Carlo Goldoni 9, 06055 Marsciano PG",
+        "city": "Marsciano",
+        "region": "Umbria",
+        "lat": 42.90966,
+        "lon": 12.33726,
+        "website": "https://www.cineconcordia.it",
+    },
+    "cinema-metropolis": {
+        "name": "Cinema Metropolis",
+        # Verificato dal microdata del sito ufficiale (2026-09-19)
+        "address": "Piazza Carlo Marx, 06019 Umbertide PG",
+        "city": "Umbertide",
+        "region": "Umbria",
+        "lat": 43.30572,
+        "lon": 12.33572,
+        "website": "https://www.cinemametropolis.it",
+    },
 }
 SCRAPER_LOG = BASE_DIR / "scraper.log"
 WIKIDATA_CACHE = BASE_DIR / ".wikidata_cache.json"
@@ -91,9 +121,17 @@ THE_SPACE_CINEMA_SLUG = "the-space-corciano"
 THE_SPACE_BASE_URL = "https://www.thespacecinema.it"
 THE_SPACE_API_BASE = f"{THE_SPACE_BASE_URL}/api/microservice"
 THE_SPACE_AUTH_URL = f"{THE_SPACE_API_BASE}/auth/token"
-THE_SPACE_FILMS_URL = f"{THE_SPACE_API_BASE}/showings/cinemas/{THE_SPACE_CINEMA_ID}/films"
+# I venue id non sono stabili: `/showings/cinemas` è l'elenco corrente e i connettori
+# risolvono l'id dal nome, con la costante per cinema come fallback (vedi thespace.py).
+THE_SPACE_CINEMAS_URL = f"{THE_SPACE_API_BASE}/showings/cinemas"
+THE_SPACE_FILMS_URL_TEMPLATE = f"{THE_SPACE_CINEMAS_URL}/{{cinema_id}}/films"
 THE_SPACE_FILM_DETAIL_URL = f"{THE_SPACE_BASE_URL}/film/{{film_slug}}"
 THE_SPACE_CINEMA_URL = f"{THE_SPACE_BASE_URL}/cinema/corciano/al-cinema"
+# Terni: stesso microservizio di Corciano, venue 1006 (verificato 2026-09-19).
+THE_SPACE_TERNI_ID = 1006
+THE_SPACE_TERNI_NAME = "The Space Cinema Terni"
+THE_SPACE_TERNI_SLUG = "the-space-terni"
+THE_SPACE_TERNI_URL = f"{THE_SPACE_BASE_URL}/cinema/terni/al-cinema"
 
 UCI_CINEMA_NAME = "UCI Cinemas Perugia"
 UCI_CINEMA_SLUG = "uci-perugia"
@@ -120,6 +158,21 @@ NUOVO_CASTELLO_NAME = "Nuovo Cinema Castello"
 NUOVO_CASTELLO_SLUG = "nuovo-cinema-castello"
 NUOVO_CASTELLO_BASE_URL = "https://www.nuovocinemacastello.it"
 NUOVO_CASTELLO_URL = f"{NUOVO_CASTELLO_BASE_URL}/"
+
+# `www` obbligatorio: senza risponde 301 verso il proxy Aruba (come Castello).
+CONCORDIA_NAME = "Cinema Teatro Concordia"
+CONCORDIA_SLUG = "cinema-teatro-concordia"
+CONCORDIA_BASE_URL = "https://www.cineconcordia.it"
+CONCORDIA_URL = f"{CONCORDIA_BASE_URL}/"
+
+# `www` obbligatorio (come Castello/Concordia). La homepage non ha orari: il
+# connettore scopre i film correnti da `/` e poi legge `/films/<slug>/`.
+METROPOLIS_NAME = "Cinema Metropolis"
+METROPOLIS_SLUG = "cinema-metropolis"
+METROPOLIS_BASE_URL = "https://www.cinemametropolis.it"
+METROPOLIS_URL = f"{METROPOLIS_BASE_URL}/"
+# Alternativa a finestra corta (solo oggi); non usata dal connettore a due fasi.
+METROPOLIS_TODAY_URL = f"{METROPOLIS_BASE_URL}/oggi-in-sala/"
 
 REQUEST_TIMEOUT = 30
 
@@ -148,6 +201,11 @@ WIKIDATA_TIMEOUT = 15
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 LOG_LEVEL = os.environ.get("SCRAPER_LOG_LEVEL", "INFO")
+
+
+def thespace_films_url(cinema_id: int) -> str:
+    """URL delle sessioni di un venue The Space: il cinema è parametrizzato per istanza."""
+    return THE_SPACE_FILMS_URL_TEMPLATE.format(cinema_id=cinema_id)
 
 
 def get_week_dates(ref_date: date | None = None) -> list[str]:

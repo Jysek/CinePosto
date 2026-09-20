@@ -19,7 +19,7 @@ storico e non vanno aggiornati (lo stato attuale è in [panoramica.md](panoramic
 
 ## Aree tecniche
 
-- **Scraper** — [scraper/architecture.md](scraper/architecture.md): connettori, normalizzazione, Wikidata, delta, deploy systemd.
+- **Scraper** — [scraper/architecture.md](scraper/architecture.md): connettori, normalizzazione, Wikidata, delta, deploy systemd. Stato delle sale coperte: [scraper/copertura.md](scraper/copertura.md).
 - **Backend** — [backend/architecture.md](backend/architecture.md) (layer, modelli, endpoint), [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna, autorevole per il seed), [backend/api.md](backend/api.md) (contratto API completo).
 - **App** — [app/overview.md](app/overview.md) (stack, schermate, client API, avvio), [app/integrazione-e-fix.md](app/integrazione-e-fix.md) (integrazione del frontend e fix applicati).
 
@@ -43,7 +43,7 @@ docs/
 ├── assets/screenshot-web.png
 ├── presentazione-14-luglio.md   ARCHIVIO: guida all'esposizione
 ├── esposizione-discorsi.md      ARCHIVIO: divisione, discorsi, test
-├── scraper/architecture.md
+├── scraper/{architecture,copertura}.md
 ├── backend/{architecture,schema-mapping,api}.md
 ├── app/{overview,integrazione-e-fix}.md
 └── iss/{analisi-requisiti,sprint-plan,progettazione-uml}.md   ARCHIVIO del corso

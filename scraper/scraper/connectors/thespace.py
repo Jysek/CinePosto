@@ -1,23 +1,22 @@
-"""The Space Cinema connector: OAuth2 REST API with CloakBrowser fallback."""
+"""The Space Cinema connector: API REST microservice, con venue parametrizzato per istanza."""
 
 from __future__ import annotations
 
 from datetime import datetime
 import logging
 import re
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 import requests
 
 from scraper.config import (
     DEFAULT_USER_AGENT,
+    REQUEST_TIMEOUT,
     THE_SPACE_AUTH_URL,
     THE_SPACE_BASE_URL,
-    THE_SPACE_CINEMA_NAME,
-    THE_SPACE_CINEMA_SLUG,
-    THE_SPACE_CINEMA_URL,
-    THE_SPACE_FILMS_URL,
+    THE_SPACE_CINEMAS_URL,
+    thespace_films_url,
 )
 from scraper.connectors.base import BaseConnector
 from scraper.errors import make_error
@@ -27,24 +26,74 @@ from scraper.normalizer import normalize_genres, normalize_title
 
 logger = logging.getLogger(__name__)
 
+# Parametri di query accettati da /showings/cinemas/{id}/films (fissi per ogni data).
+_FILMS_QUERY = "includesSession=true&includeSessionAttributes=true"
+
+# Chiave e segmento con cui /showings/cinemas identifica un venue.
+_VENUE_ID_FIELD = "cinemaId"
+_VENUE_URL_SEGMENT = "cinema"
+
+
+def _extract_venues(payload: object) -> list[dict]:
+    """Estrae i record cinema da /showings/cinemas, che li raggruppa per lettera.
+
+    La forma del raggruppamento (lista di gruppi o dict lettera → lista) non è
+    contrattuale: si cammina ricorsivamente il JSON e si tengono i dict con
+    `cinemaId`. Così il parser sopravvive a un cambio di raggruppamento.
+    """
+    venues: list[dict] = []
+    nodes = [payload]
+    while nodes:
+        node = nodes.pop()
+        if isinstance(node, dict):
+            if _VENUE_ID_FIELD in node:
+                venues.append(node)
+            else:
+                nodes.extend(node.values())
+        elif isinstance(node, list):
+            nodes.extend(node)
+    return venues
+
+
+def _cinema_url_city(cinema_url: str) -> str:
+    """Segmento città dell'URL pubblico del cinema (`/cinema/terni/al-cinema` → `terni`)."""
+    segments = urlparse(cinema_url).path.strip("/").split("/")
+    if len(segments) >= 2 and segments[0] == _VENUE_URL_SEGMENT:
+        return segments[1].lower()
+    return ""
+
 
 class TheSpaceConnector(BaseConnector):
-    """Connettore The Space Corciano — API REST del sito, con fallback browser.
+    """Connettore di un cinema The Space — la stessa API per ogni venue.
 
-    Fonte primaria: l'API microservice del sito (token guest via POST vuoto
+    Il cinema è parametrizzato per istanza (venue id, nome, slug, URL pubblico):
+    Corciano (1027) e Terni (1006) differiscono solo per questi valori. Fonte
+    primaria: l'API microservice del sito (token guest via POST vuoto
     all'endpoint auth, poi una chiamata films per data). Se l'API fallisce si
     degrada allo scraping HTML via CloakBrowser, che copre il solo giorno corrente.
     """
 
+    def __init__(self, cinema_id: int, name: str, slug: str, cinema_url: str) -> None:
+        """Args:
+        cinema_id: venue id di fallback, se la risoluzione da /showings/cinemas fallisce.
+        name: nome pubblico (es. "The Space Cinema Terni"), usato anche per risolvere il venue.
+        slug: slug stabile del cinema, chiave in CINEMA_LOCATIONS e nel DB.
+        cinema_url: pagina pubblica del cinema (Referer e fallback browser).
+        """
+        self._cinema_id = cinema_id
+        self._name = name
+        self._slug = slug
+        self._cinema_url = cinema_url
+
     @property
     def cinema_name(self) -> str:
-        """Nome pubblico del cinema (da config)."""
-        return THE_SPACE_CINEMA_NAME
+        """Nome pubblico di questa istanza."""
+        return self._name
 
     @property
     def cinema_slug(self) -> str:
-        """Slug stabile del cinema (da config)."""
-        return THE_SPACE_CINEMA_SLUG
+        """Slug stabile di questa istanza."""
+        return self._slug
 
     def scrape(self, today: str, dates: list[str] | None = None) -> ScrapeResult:
         """Prova l'API per tutte le date; su errore ripiega sul browser (solo oggi).
@@ -67,15 +116,60 @@ class TheSpaceConnector(BaseConnector):
                             self.cinema_name,
                             browser_exc,
                             "scrape_fallback",
-                            url=THE_SPACE_CINEMA_URL,
+                            url=self._cinema_url,
                             detail=f"API failed: {exc}; Browser failed: {browser_exc}",
                         )
                     ]
                 )
 
+    def _resolve_cinema_id(self, session: requests.Session) -> int:
+        """Risolve il venue id corrente dal nome, con fallback su quello configurato.
+
+        The Space può rinumerare i cinema: `/showings/cinemas` è l'elenco pubblico
+        che lega nome e id. La chiamata è best-effort e senza retry — non è un dato
+        di palinsesto, e un fallimento si risolve da sé con `self._cinema_id`.
+        """
+        try:
+            resp = session.get(THE_SPACE_CINEMAS_URL, timeout=REQUEST_TIMEOUT)
+            resp.raise_for_status()
+            venues = _extract_venues(resp.json())
+        except Exception as exc:
+            logger.warning("TheSpace venue lookup failed for %s, using id %s: %s", self._name, self._cinema_id, exc)
+            return self._cinema_id
+
+        for venue in venues:
+            if not self._matches_venue(venue):
+                continue
+            try:
+                resolved_id = int(venue[_VENUE_ID_FIELD])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if resolved_id != self._cinema_id:
+                logger.info("TheSpace %s: venue id risolto a %s (config %s)", self._name, resolved_id, self._cinema_id)
+            return resolved_id
+
+        logger.warning("TheSpace venue '%s' non trovato in /showings/cinemas, uso id %s", self._name, self._cinema_id)
+        return self._cinema_id
+
+    def _matches_venue(self, venue: dict) -> bool:
+        """True se il record di /showings/cinemas descrive questo cinema.
+
+        L'API usa il nome corto ("Terni") mentre il nome pubblico è "The Space
+        Cinema Terni": basta che il primo sia contenuto nel secondo. In più si
+        confronta il segmento città dell'URL pubblico, che resta valido anche se
+        il sito cambia il formato di `cinemaName`.
+        """
+        api_name = str(venue.get("cinemaName") or "").strip().lower()
+        if api_name and api_name in self._name.lower():
+            return True
+        city = _cinema_url_city(self._cinema_url)
+        return bool(city) and f"/{city}/" in str(venue.get("whatsOnUrl") or "").lower()
+
     def _scrape_via_api(self, today: str, dates: list[str]) -> ScrapeResult:
         """Percorso primario: una chiamata API per data, dedup dei film per titolo.
 
+        Una sola `requests.Session` per tutto il percorso: il cookie anonimo
+        ottenuto dal POST auth vale per ogni chiamata successiva (non ricrearlo).
         Lo stesso film appare nella risposta di ogni data in cui è programmato:
         `seen_titles` accumula gli showings sul primo Film incontrato. Gli
         errori di parsing del singolo film non fermano il resto della risposta.
@@ -87,20 +181,24 @@ class TheSpaceConnector(BaseConnector):
             {
                 "User-Agent": DEFAULT_USER_AGENT,
                 "Accept": "application/json",
-                "Referer": THE_SPACE_CINEMA_URL,
+                "Referer": self._cinema_url,
             }
         )
 
         try:
-            # Empty POST body returns a guest Bearer token; the API requires it before any films endpoint
+            # Empty POST body opens an anonymous session; the Set-Cookie is what matters,
+            # the JSON body is irrelevant. Required before any films endpoint.
             auth_resp = retry_request("post", THE_SPACE_AUTH_URL, session, label="THESPACE", json={})
             logger.info("The Space auth status: %s", auth_resp.status_code)
+
+            cinema_id = self._resolve_cinema_id(session)
+            films_url = thespace_films_url(cinema_id)
 
             seen_titles: dict[str, Film] = {}
 
             for target_date in dates:
-                films_url = f"{THE_SPACE_FILMS_URL}?showingDate={target_date}&includesSession=true&includeSessionAttributes=true"
-                resp = retry_request("get", films_url, session, label="THESPACE")
+                url = f"{films_url}?showingDate={target_date}&{_FILMS_QUERY}"
+                resp = retry_request("get", url, session, label="THESPACE")
                 data = resp.json()
 
                 api_films = data.get("result") or data.get("films") or []
@@ -145,7 +243,7 @@ class TheSpaceConnector(BaseConnector):
         if not detail_url:
             film_id = data.get("filmId") or ""
             slug = data.get("filmUrl", "").rstrip("/").split("/")[-1] if data.get("filmUrl") else film_id
-            detail_url = f"{THE_SPACE_BASE_URL}/film/{slug}" if slug else THE_SPACE_CINEMA_URL
+            detail_url = f"{THE_SPACE_BASE_URL}/film/{slug}" if slug else self._cinema_url
 
         poster = data.get("posterImageSrc") or data.get("panelImageUrl") or ""
         if poster and not poster.startswith("http"):
@@ -248,11 +346,12 @@ class TheSpaceConnector(BaseConnector):
 
         Copre solo il giorno corrente e meno metadati dell'API — è la modalità
         degradata, non quella di regime. Selettori CSS multipli per resistere
-        ai piccoli restyling del sito.
+        ai piccoli restyling del sito (non verificati per ogni venue: se un
+        cinema cambia tema, qui si logga e si degrada).
         """
         from scraper.browser import fetch_page_html
 
-        html = fetch_page_html(THE_SPACE_CINEMA_URL, wait_for=".showing-listing")
+        html = fetch_page_html(self._cinema_url, wait_for=".showing-listing")
         soup = BeautifulSoup(html, "lxml")
         films: list[Film] = []
         errors: list[CinemaError] = []
@@ -287,7 +386,7 @@ class TheSpaceConnector(BaseConnector):
                     cinema_slug=self.cinema_slug,
                     date=today,
                     times=times,
-                    source_url=detail_url or THE_SPACE_CINEMA_URL,
+                    source_url=detail_url or self._cinema_url,
                 )
 
                 film = Film(

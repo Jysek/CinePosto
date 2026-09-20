@@ -1,0 +1,62 @@
+{
+  "result": [
+    {
+      "filmId": "14123",
+      "filmTitle": "Il Gladiatore",
+      "filmUrl": "/film/il-gladiatore",
+      "posterImageSrc": "/media/films/il-gladiatore.jpg",
+      "synopsisShort": "Ridotto in schiavitù, il generale romano Massimo cerca vendetta contro l'imperatore che gli ha distrutto la famiglia.",
+      "runningTime": 155,
+      "isDurationUnknown": false,
+      "director": "Ridley Scott",
+      "genres": ["Azione", "Drammatico"],
+      "showingGroups": [
+        {
+          "date": "2026-09-19T00:00:00",
+          "sessions": [
+            {
+              "startTime": "2026-09-19T17:30:00",
+              "screenName": "Sala 2",
+              "attributes": [
+                { "name": "ITALIANO", "attributeType": "Language" },
+                { "name": "2D", "attributeType": "Session" },
+                { "name": "BACK ON THE BIG SCREEN", "attributeType": "Movie" }
+              ]
+            },
+            {
+              "startTime": "2026-09-19T21:00:00",
+              "screenName": "Sala 5",
+              "attributes": [
+                { "name": "INGLESE", "attributeType": "Language" },
+                { "name": "3D", "attributeType": "Session" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filmId": "15387",
+      "filmTitle": "Vermiglio",
+      "filmUrl": "/film/vermiglio",
+      "posterImageSrc": "/media/films/vermiglio.jpg",
+      "synopsisShort": "Trentino, 1944: la vita di una famiglia di montagna attraversata dalla guerra.",
+      "runningTime": 119,
+      "isDurationUnknown": false,
+      "director": "Maura Delpero",
+      "genres": [],
+      "showingGroups": [
+        {
+          "date": "2026-09-19T00:00:00",
+          "sessions": [
+            {
+              "startTime": "2026-09-19T20:00:00",
+              "screenName": "Sala 1",
+              "attributes": [{ "name": "ITALIANO", "attributeType": "Language" }]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

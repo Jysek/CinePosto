@@ -1,0 +1,24 @@
+{
+  "result": [
+    {
+      "letter": "C",
+      "cinemas": [
+        {
+          "cinemaId": "1027",
+          "cinemaName": "Corciano",
+          "whatsOnUrl": "https://www.thespacecinema.it/cinema/corciano/al-cinema"
+        }
+      ]
+    },
+    {
+      "letter": "T",
+      "cinemas": [
+        {
+          "cinemaId": "1006",
+          "cinemaName": "Terni",
+          "whatsOnUrl": "https://www.thespacecinema.it/cinema/terni/al-cinema"
+        }
+      ]
+    }
+  ]
+}

@@ -22,8 +22,12 @@ import responses
 from scraper.config import (
     POSTMOD_CINEMA_URL,
     THE_SPACE_AUTH_URL,
-    THE_SPACE_FILMS_URL,
+    THE_SPACE_CINEMA_ID,
+    THE_SPACE_CINEMA_NAME,
+    THE_SPACE_CINEMA_SLUG,
+    THE_SPACE_CINEMA_URL,
     UCI_PROGRAMMING_URL,
+    thespace_films_url,
 )
 from scraper.connectors.postmodernissimo import PostModernissimoConnector
 from scraper.connectors.thespace import TheSpaceConnector
@@ -266,7 +270,7 @@ def test_fix_thespace_filters_showing_groups_by_date():
     # Per 17/06: solo SCARY MOVIE 16:10 + spurio 16:10 anche per 16/06
     responses.add(
         responses.GET,
-        THE_SPACE_FILMS_URL,
+        thespace_films_url(THE_SPACE_CINEMA_ID),
         json={
             "result": [
                 {
@@ -286,7 +290,9 @@ def test_fix_thespace_filters_showing_groups_by_date():
         },
         status=200,
     )
-    result = TheSpaceConnector().scrape(target_dates[1], dates=target_dates)
+    result = TheSpaceConnector(
+        THE_SPACE_CINEMA_ID, THE_SPACE_CINEMA_NAME, THE_SPACE_CINEMA_SLUG, THE_SPACE_CINEMA_URL
+    ).scrape(target_dates[1], dates=target_dates)
     # Atteso dopo fix: SCARY MOVIE 16/06 SOLO con (18:35, 20:45); 17/06 con (16:10)
     scary = next(f for f in result.films if "SCARY" in f.title.upper())
     per_date = {s.date: sorted(s.times) for s in scary.present_in}

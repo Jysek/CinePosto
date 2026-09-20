@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T15:00:47.448546+02:00",
+  "generated_at": "2026-09-20T18:24:38.331407+02:00",
   "cinemas": [
     {
       "slug": "postmodernissimo",
@@ -22,6 +22,16 @@
       "website": "https://www.thespacecinema.it"
     },
     {
+      "slug": "the-space-terni",
+      "name": "The Space Cinema Terni",
+      "address": "Viale Donato Bramante, Snc, 05100 Terni TR",
+      "city": "Terni",
+      "region": "Umbria",
+      "lat": 42.5727,
+      "lon": 12.6355,
+      "website": "https://www.thespacecinema.it"
+    },
+    {
       "slug": "uci-perugia",
       "name": "UCI Cinemas Perugia",
       "address": "Viale Centova 1D, 06100 Perugia PG",
@@ -30,6 +40,46 @@
       "lat": 43.0965,
       "lon": 12.3554,
       "website": "https://ucicinemas.it"
+    },
+    {
+      "slug": "cinema-zenith",
+      "name": "Cinema Zenith",
+      "address": "Via Benedetto Bonfigli, 5, 06126 Perugia PG",
+      "city": "Perugia",
+      "region": "Umbria",
+      "lat": 43.10421,
+      "lon": 12.39403,
+      "website": "https://cinemazenith.it"
+    },
+    {
+      "slug": "nuovo-cinema-castello",
+      "name": "Nuovo Cinema Castello",
+      "address": "Piazza Gioberti, 06012 Città di Castello PG",
+      "city": "Città di Castello",
+      "region": "Umbria",
+      "lat": 43.45808,
+      "lon": 12.24147,
+      "website": "https://www.nuovocinemacastello.it"
+    },
+    {
+      "slug": "cinema-teatro-concordia",
+      "name": "Cinema Teatro Concordia",
+      "address": "Largo Carlo Goldoni 9, 06055 Marsciano PG",
+      "city": "Marsciano",
+      "region": "Umbria",
+      "lat": 42.90966,
+      "lon": 12.33726,
+      "website": "https://www.cineconcordia.it"
+    },
+    {
+      "slug": "cinema-metropolis",
+      "name": "Cinema Metropolis",
+      "address": "Piazza Carlo Marx, 06019 Umbertide PG",
+      "city": "Umbertide",
+      "region": "Umbria",
+      "lat": 43.30572,
+      "lon": 12.33572,
+      "website": "https://www.cinemametropolis.it"
     }
   ]
 }

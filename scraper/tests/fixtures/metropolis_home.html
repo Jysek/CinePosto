@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="it-IT">
+<head>
+	<meta charset="UTF-8" />
+	<title>Cinema Metropolis - Umbertide</title>
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+	<link rel="canonical" href="https://www.cinemametropolis.it/" />
+</head>
+<body class="home">
+	<header id="masthead">
+		<nav class="main-navigation">
+			<a href="https://www.cinemametropolis.it/">Home</a>
+			<a href="https://www.cinemametropolis.it/oggi-in-sala/">Oggi in sala</a>
+			<a href="https://www.cinemametropolis.it/films/">Tutti i film</a>
+		</nav>
+	</header>
+
+	<main id="primary">
+		<!-- Lo slider ripete le stesse card: la dedup per URL deve tenerne una sola. -->
+		<section class="home-slider">
+			<article class="film-card" itemscope itemtype="https://schema.org/Movie">
+				<meta itemprop="name" content="Serpenti"/>
+				<meta itemprop="image" content="https://www.cinemametropolis.it/wp-content/uploads/2026/09/serpenti-1.jpg"/>
+				<meta itemprop="url" content="https://www.cinemametropolis.it/films/serpenti/"/>
+				<a class="film-card__title" href="https://www.cinemametropolis.it/films/serpenti/">Serpenti</a>
+			</article>
+			<article class="film-card" itemscope itemtype="https://schema.org/Movie">
+				<meta itemprop="name" content="Naza"/>
+				<meta itemprop="image" content="https://www.cinemametropolis.it/wp-content/uploads/2026/09/naza-1.jpg"/>
+				<meta itemprop="url" content="https://www.cinemametropolis.it/films/naza/"/>
+				<a class="film-card__title" href="/films/naza/">Naza</a>
+			</article>
+			<article class="film-card" itemscope itemtype="https://schema.org/Movie">
+				<meta itemprop="name" content="Serpenti"/>
+				<meta itemprop="image" content="https://www.cinemametropolis.it/wp-content/uploads/2026/09/serpenti-1.jpg"/>
+				<meta itemprop="url" content="https://www.cinemametropolis.it/films/serpenti/"/>
+				<a class="film-card__title" href="https://www.cinemametropolis.it/films/serpenti/">Serpenti</a>
+			</article>
+		</section>
+
+		<section class="in-programmazione">
+			<h2>In programmazione</h2>
+			<article class="film-card" itemscope itemtype="http://schema.org/Movie">
+				<meta itemprop="name" content="Serpenti"/>
+				<meta itemprop="url" content="https://www.cinemametropolis.it/films/serpenti/"/>
+				<a href="https://www.cinemametropolis.it/films/serpenti/">Serpenti</a>
+			</article>
+			<article class="film-card" itemscope itemtype="http://schema.org/Movie">
+				<meta itemprop="name" content="Naza"/>
+				<meta itemprop="url" content="https://www.cinemametropolis.it/films/naza/"/>
+				<a href="/films/naza/">Naza</a>
+			</article>
+		</section>
+	</main>
+
+	<footer id="colophon">
+		<!-- La sitemap storica (~500 film) NON è la programmazione corrente: da ignorare. -->
+		<a href="https://www.cinemametropolis.it/films-sitemap.xml">Sitemap film</a>
+		<a href="https://www.cinemametropolis.it/sitemap_index.xml">Sitemap</a>
+	</footer>
+</body>
+</html>

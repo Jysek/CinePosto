@@ -21,12 +21,22 @@ from scraper.config import (
     SCHEDULE_INTERVAL_HOURS,
     SCRAPER_LOG,
     SHOWINGS_JSON,
+    THE_SPACE_CINEMA_ID,
+    THE_SPACE_CINEMA_NAME,
+    THE_SPACE_CINEMA_SLUG,
+    THE_SPACE_CINEMA_URL,
+    THE_SPACE_TERNI_ID,
+    THE_SPACE_TERNI_NAME,
+    THE_SPACE_TERNI_SLUG,
+    THE_SPACE_TERNI_URL,
     get_week_dates,
     today_local,
 )
 from scraper.config import (
     SCRAPER_RETRY_DELAY as RETRY_DELAY,
 )
+from scraper.connectors.cinema_metropolis import CinemaMetropolisConnector
+from scraper.connectors.cinema_teatro_concordia import CinemaTeatroConcordiaConnector
 from scraper.connectors.cinema_zenith import CinemaZenithConnector
 from scraper.connectors.nuovo_cinema_castello import NuovoCinemaCastelloConnector
 from scraper.connectors.postmodernissimo import PostModernissimoConnector
@@ -157,10 +167,13 @@ def run_scraper() -> None:
 
     connectors = [
         PostModernissimoConnector(),
-        TheSpaceConnector(),
+        TheSpaceConnector(THE_SPACE_CINEMA_ID, THE_SPACE_CINEMA_NAME, THE_SPACE_CINEMA_SLUG, THE_SPACE_CINEMA_URL),
+        TheSpaceConnector(THE_SPACE_TERNI_ID, THE_SPACE_TERNI_NAME, THE_SPACE_TERNI_SLUG, THE_SPACE_TERNI_URL),
         UCIConnector(),
         CinemaZenithConnector(),
         NuovoCinemaCastelloConnector(),
+        CinemaTeatroConcordiaConnector(),
+        CinemaMetropolisConnector(),
     ]
 
     all_films: list[Film] = []
