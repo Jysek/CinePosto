@@ -26,7 +26,7 @@ API REST tra backend e app. Ogni stadio si testa da solo — **101 test** (75 sc
 |---|---|---|
 | `scraper/` | Python 3.12, requests, BeautifulSoup, Wikidata SPARQL | un connettore per cinema (pattern Strategy), normalizzazione dei titoli, dedup, arricchimento metadati |
 | `backend/` | FastAPI, SQLAlchemy 2.0, SQLite, Pydantic | architettura a strati (routers → services → repositories → models), 11 endpoint REST, seed idempotente |
-| `app/` | Expo SDK 54, React Native 0.81, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
+| `app/` | Expo SDK 57, React Native 0.86, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
 | infra | Docker Compose, GitHub Actions, Caddy | Docker per sviluppo e produzione, CI che testa dentro le immagini, HTTPS gestito da Caddy |
 
 ## Avvio rapido

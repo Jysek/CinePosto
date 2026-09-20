@@ -130,6 +130,13 @@ EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 - **Web**: apri http://localhost:8081 (o premi `w`).
 - **iPhone**: apri **Expo Go** e scansiona il QR code.
 
+> **Nota (SDK 57)** — Expo Go sugli store supporta **una sola versione dell'SDK**, che
+> cambia a ogni release di Expo: non è una base stabile per un progetto che dura. Con il
+> progetto su SDK 57, la strada consigliata per il nativo è un **development build**
+> (`npx eas build --profile development --platform ios`), che si installa una volta sul
+> telefono e non dipende da Expo Go. Su **Android**, `npx expo start` può installare da sé
+> la versione di Expo Go corrispondente all'SDK in uso.
+
 Non serve Android per sviluppare: l'app è React Native e gira anche su Android, ma non avendo
 un device Android la verifica su quella piattaforma non è stata fatta.
 

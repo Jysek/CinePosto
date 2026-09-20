@@ -13,17 +13,22 @@ Stato: **integrata e funzionante su web e smartphone**, agganciata al backend
 
 | Cosa | Versione / scelta |
 |---|---|
-| React Native | 0.81.5 |
-| Expo | SDK 54 (massimo compatibile con Expo Go) |
-| React | 19.1.0 |
+| React Native | 0.86.3 |
+| Expo | SDK 57 |
+| React | 19.2.3 |
 | Navigazione | **React Navigation 7** (bottom-tabs + native-stack) — entry classico `App.js`, *non* Expo Router |
 | Linguaggio | JavaScript `.js` |
 | Web | `react-native-web` 0.21 (stessa codebase per il browser) |
 | Mappa | Leaflet dentro `react-native-webview` (nativo) / `<iframe>` (web) |
 | Storage locale | `@react-native-async-storage/async-storage` (preferiti) |
 
-> **NON usare `npx create-expo-app`**: installa sempre l'SDK più recente (55+),
-> incompatibile con Expo Go. Il progetto è già inizializzato: basta `npm install`.
+> **NON usare `npx create-expo-app`**: il progetto è già inizializzato, basta
+> `npm install`. Per rigenerare i file nativi si usa `npx expo prebuild`, non un
+> template nuovo.
+>
+> Per il nativo non si inseguono le release di **Expo Go** (supporta solo l'ultima
+> SDK e cambia a ogni release): conviene un **development build**
+> (`eas build --profile development`), così la versione dell'app la controlliamo noi.
 
 ---
 
@@ -34,7 +39,7 @@ app/
 ├── App.js                 ← root: splash + navigazione (tab + stack annidati)
 ├── index.js               ← registerRootComponent(App)
 ├── app.json               ← name "CinePosto", slug "cineposto", tema scuro
-├── package.json           ← dipendenze SDK 54
+├── package.json           ← dipendenze SDK 57
 ├── babel.config.js        ← babel-preset-expo
 ├── metro.config.js        ← shim web per react-native-webview
 ├── shims/                 ← codegenNativeComponent.web.js (compat web WebView)
@@ -44,7 +49,7 @@ app/
     ├── constants/
     │   ├── config.js      ← API_BASE (configurabile via env)
     │   ├── colors.js      ← palette tema scuro
-    │   └── cinemas.js     ← dati statici dei 3 cinema (slug, colore, coordinate, logo)
+    │   └── cinemas.js     ← presentazione dei cinema: colore e logo (l'anagrafica arriva dall'API)
     ├── utils/dates.js     ← date in ora locale (YYYY-MM-DD), prossimi 7 giorni
     ├── components/
     │   ├── SwipeableHero.js   ← carosello "hero" della Home
@@ -93,9 +98,11 @@ SplashScreen
   C'è un filtro per cinema (modal) e il pull-to-refresh.
 - **SearchTab** (Cerca): ricerca per titolo con **debounce 300 ms** e annullamento
   delle risposte obsolete (`requestId`): se digiti in fretta conta solo l'ultima query.
-- **LocationTab** (Località): mappa Leaflet con i tre cinema (marker con logo) e
-  l'elenco con indirizzi; il tap apre il cinema in Google Maps. I dati dei cinema
-  qui sono statici (`constants/cinemas.js`), incluse le coordinate.
+- **LocationTab** (Località): mappa Leaflet con i cinema (marker con logo) e
+  l'elenco con indirizzi; il tap apre il cinema in Google Maps. **I dati dei cinema
+  arrivano dall'API** (`getCinemas()`, oggi 8 sale): slug, nome, indirizzo e
+  coordinate non sono più costanti dell'app. In `constants/cinemas.js` restano solo
+  colore e logo (presentazione).
 - **MovieDetailScreen** (dettaglio): poster, durata, regista, generi, trama con
   "leggi di più", link al trailer (ricerca YouTube) e **orari raggruppati per cinema**
   nella data scelta. Si apre sulla data da cui arrivi (passata dalla Home) e, se quel
@@ -176,6 +183,17 @@ EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 ```bash
 npx expo export --platform web    # output in dist/
 ```
+
+### Verifica dell'app web
+
+```bash
+make up && make seed        # backend con dati
+make check-app-web          # build + server statico su http://localhost:3000
+```
+
+`scripts/check-app-web.sh` costruisce l'export e lo serve, stampando la checklist
+di accettazione (home, filtro cinema, mappa, dettaglio). È il modo ripetibile di
+controllare l'app dopo un upgrade di SDK o una modifica alle schermate.
 
 ---
 

@@ -130,8 +130,9 @@ Setup dei test:
 
 ## App (React Native)
 
-App integrata e collegata al backend (React Navigation, Expo SDK 54). **NON usare
-`create-expo-app`** — installa SDK 55+ incompatibile con Expo Go.
+App integrata e collegata al backend (React Navigation, **Expo SDK 57**). **NON usare
+`create-expo-app`** — il progetto è già inizializzato e per il nativo serve un
+**development build** (`expo prebuild` + EAS), non Expo Go.
 
 ```bash
 cd app
