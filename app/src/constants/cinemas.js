@@ -2,25 +2,33 @@
 // indirizzo e coordinate arrivano dall'API via `getCinemas()`), ma scelte
 // grafiche, quindi vivono qui.
 //
-// Nota sui loghi: sono inclusi solo i 3 marchi pre-esistenti. Per gli altri
-// cinema la UI mostra le iniziali nello stesso slot grafico, così non
-// ridistribuiamo marchi di terzi per cui non abbiamo un permesso scritto.
+// Nota sui loghi: ogni cinema mappato ha il suo marchio, così i marker della
+// mappa e i badge del dettaglio sono riconoscibili a colpo d'occhio. Le immagini
+// sono i loghi pubblicati dai siti ufficiali delle sale (favicon/immagine
+// social). `cinemaInitials` resta come ripiego per un cinema nuovo, non ancora
+// mappato: nessun marker senza immagine (vedi `mapHtml.js`).
 
 const SPACE_LOGO = require('../../assets/the-space.jpg');
 const UCI_LOGO = require('../../assets/uci.png');
 const POST_LOGO = require('../../assets/post.jpg');
+// Loghi dei siti ufficiali delle sale (scaricati il 2026-09-21).
+const ZENITH_LOGO = require('../../assets/zenith.png');
+const CASTELLO_LOGO = require('../../assets/castello.png');
+const CONCORDIA_LOGO = require('../../assets/concordia.png');
+const METROPOLIS_LOGO = require('../../assets/metropolis.png');
 
-// Mappa slug -> presentazione. `color` è usato da mappa, elenco e dettaglio;
-// `logo` è opzionale (solo i marchi che possiamo mostrare).
+// Mappa slug -> presentazione. `color` distingue i cinema (non è il colore del
+// marchio); `logo` è l'immagine mostrata su mappa ed elenco del dettaglio.
 const CINEMA_PRESENTATION = {
   'the-space-corciano': { color: '#1E90FF', logo: SPACE_LOGO },
+  // Stesso marchio di Corciano: il logo non va scaricato di nuovo.
+  'the-space-terni': { color: '#1E90FF', logo: SPACE_LOGO },
   'uci-perugia': { color: '#FFA500', logo: UCI_LOGO },
   postmodernissimo: { color: '#E50914', logo: POST_LOGO },
-  'the-space-terni': { color: '#1E90FF' },
-  'cinema-zenith': { color: '#FFA500' },
-  'nuovo-cinema-castello': { color: '#1E90FF' },
-  'cinema-teatro-concordia': { color: '#FFA500' },
-  'cinema-metropolis': { color: '#E50914' },
+  'cinema-zenith': { color: '#FFA500', logo: ZENITH_LOGO },
+  'nuovo-cinema-castello': { color: '#1E90FF', logo: CASTELLO_LOGO },
+  'cinema-teatro-concordia': { color: '#FFA500', logo: CONCORDIA_LOGO },
+  'cinema-metropolis': { color: '#E50914', logo: METROPOLIS_LOGO },
 };
 
 // Palette dei 3 colori storici, riusata per generare un colore stabile
@@ -52,7 +60,7 @@ export function cinemaInitials(name) {
   return (words[0][0] + words[1][0]).toUpperCase();
 }
 
-// Solo i cinema con un marchio disponibile (gli altri usano le iniziali).
+// Solo i cinema con un marchio disponibile (per tutti quelli mappati).
 export const CINEMA_LOGOS = Object.fromEntries(
   Object.entries(CINEMA_PRESENTATION)
     .filter(([, presentation]) => presentation.logo)
