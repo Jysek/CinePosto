@@ -17,6 +17,10 @@ scraper/scraper.log
 # Artefatti delle sessioni di verifica con Playwright (snapshot, screenshot)
 .playwright-mcp/
 
+# Piani di lavoro temporanei: ordini di fase da eseguire in sessioni separate.
+# Una volta eseguiti diventano carta straccia, quindi non entrano nella storia del repo.
+pianificazione/
+
 # Node / Expo
 node_modules/
 .expo/
