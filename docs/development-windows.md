@@ -94,8 +94,8 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Avvia il backend | `make up` | `docker compose up -d --build backend` |
 | Log del backend | `make logs` | `docker compose logs -f backend` |
 | Stato container | `make ps` | `docker compose ps` |
-| Test backend (26) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
-| Test scraper (75) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
+| Test backend (31) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
+| Test scraper (141) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff) | `make lint` | `docker compose run --rm backend python -m ruff check app/ tests/` |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |
 | Scraping **live** | `make scrape` | `docker compose run --rm scraper python -m scraper.main --once` |

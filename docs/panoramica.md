@@ -1,10 +1,10 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `0c56a7e` (`2026-09-21`).
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 
-**Cos'è**: aggregatore della programmazione dei cinema dell'Umbria. L'utente apre l'app e vede in un posto solo cosa danno stasera in 3 cinema (PostModernissimo, The Space Corciano, UCI Perugia), con orari, scheda film e link per comprare il biglietto. Nessuna registrazione.
+**Cos'è**: aggregatore della programmazione dei cinema dell'Umbria. L'utente apre l'app e vede in un posto solo cosa danno stasera nelle **8 sale coperte**, con orari, scheda film e link per comprare il biglietto. L'elenco aggiornato delle sale sta in [`scraper/copertura.md`](scraper/copertura.md). Nessuna registrazione.
 
 ---
 
@@ -14,7 +14,7 @@ Il sistema è una **pipeline in 3 stadi**: raccolta → esposizione → consumo.
 
 ```mermaid
 flowchart LR
-    SITI["Siti dei 3 cinema<br>+ Wikidata"]
+    SITI["Siti delle sale<br>+ Wikidata"]
     SCRAPER["Scraper<br>Python — ogni notte alle 03:00"]
     JSON[("JSON<br>cinemas · films · showings")]
     BACKEND["Backend<br>FastAPI + SQLite"]
@@ -30,23 +30,26 @@ flowchart LR
     class SITI,APP api
 ```
 
-**Una notte tipo**: alle 03:00 il timer systemd sveglia lo scraper → i 3 connettori raccolgono la programmazione dei prossimi 8 giorni → i titoli vengono normalizzati e deduplicati → Wikidata arricchisce ogni film (poster, regista, anno, sinossi) → escono 3 JSON "DB-ready" → il backend li importa nel DB SQLite (seed idempotente) → da quel momento l'app riceve dati freschi dall'API.
+**Una notte tipo**: alle 03:00 il timer systemd sveglia lo scraper → gli 8 connettori raccolgono la programmazione dei prossimi 8 giorni → i titoli vengono normalizzati e deduplicati → Wikidata arricchisce ogni film (poster, regista, anno, sinossi) → escono 3 JSON "DB-ready" → il backend li importa nel DB SQLite (seed idempotente) → da quel momento l'app riceve dati freschi dall'API.
 
 ## 2. Stadio 1 — Scraper (`scraper/`)
 
-**Compito**: trasformare 3 siti web eterogenei in dati strutturati uniformi.
+**Compito**: trasformare siti web eterogenei in dati strutturati uniformi.
 
-Ogni cinema ha il suo **connettore** (pattern Strategy: stessa interfaccia `scrape()`, implementazione diversa):
+Ogni cinema ha il suo **connettore** (pattern Strategy: stessa interfaccia `scrape()`, implementazione diversa). Le tecniche si raggruppano in poche famiglie:
 
-| Connettore | Fonte | Tecnica |
-|---|---|---|
-| PostModernissimo | sito Next.js | parsing del payload RSC + HTML (BeautifulSoup/lxml) |
-| The Space Corciano | API REST OAuth2 | chiamate API, con fallback CloakBrowser |
-| UCI Perugia | API Cloud Run non documentata | chiamate API dirette (ricostruite dal traffico di rete) |
+| Famiglia tecnica | Tecnica |
+|---|---|
+| HTML/JS proprietario | parsing del payload RSC (Next.js) + HTML (BeautifulSoup/lxml) |
+| API REST con OAuth2 | chiamate API, con fallback CloakBrowser; un connettore parametrizzato copre più sale |
+| API non documentata | chiamate dirette all'API Cloud Run (ricostruita dal traffico di rete) |
+| schema.org | JSON-LD o microdata `Movie`+`ScreeningEvent`, con l'estrattore condiviso `SchemaOrgExtractor` |
+
+Le **8 sale** e la tecnica di ciascuna sono nel registro [`scraper/copertura.md`](scraper/copertura.md); le schede tecniche delle famiglie non banali stanno in [`scraper/connettori/README.md`](scraper/connettori/README.md).
 
 Dopo la raccolta: **normalizzazione titoli** (minuscole, via accenti e punteggiatura — serve a capire che "Dune – Parte 2" e "DUNE Parte 2" sono lo stesso film), **dedup**, **arricchimento Wikidata** (SPARQL, con cache locale per non ribombardare l'endpoint), **delta tracking** (un film che sparisce dalla programmazione viene marcato "rimosso" dopo 7 giorni, non cancellato subito).
 
-- Numeri: **75 test**, 3 connettori; l'output copre i 3 cinema con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
+- Numeri: **141 test**, 8 connettori; l'output copre le 8 sale con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
 - Etica scraping: rispetto robots.txt, rate limiting, run notturna, User-Agent identificabile con contatto reale (RF-09/RNF-04).
 - Produzione: systemd timer + service `--once` su VM Linux (decisione L3 — niente scheduler interno: se il processo muore, systemd lo rilancia lui).
 
@@ -73,7 +76,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 **Endpoint principali** (11 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
 
-- Numeri: **26 test** (unit sui repository + end-to-end con TestClient su DB in-memory).
+- Numeri: **31 test** (unit sui repository + end-to-end con TestClient su DB in-memory).
 - Decisioni chiave: **SQLite anche in produzione** (D4 — un file, zero amministrazione, carico di lettura minuscolo: perfetto per l'MVP), **Wikidata-only senza TMDB** (D1 — niente API key, niente limiti commerciali).
 
 📂 Dettaglio: [backend/architecture.md](backend/architecture.md) · [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna) · [backend/api.md](backend/api.md) (contratto API completo per l'app)
@@ -87,7 +90,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 - Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (OpenFreeMap). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app.
 - Codice in JavaScript (`.js`); la migrazione a TypeScript resta rimandata (decisione D5).
 
-📂 Dettaglio: [app/overview.md](app/overview.md) · [app/integrazione-e-fix.md](app/integrazione-e-fix.md)
+📂 Dettaglio: [app/overview.md](app/overview.md)
 
 ## 5. Deploy
 
@@ -102,12 +105,12 @@ Su VM Linux: lo scraper gira con un systemd timer (file in `scraper/deploy/`), i
 | L5 | Scope congelato dal 07/07 | ultima settimana solo fix e polish, zero feature nuove |
 | D1 | Wikidata-only per i metadati film | gratuito, senza API key, licenza aperta |
 | D3 | PK Film intera + UNIQUE naturale; PK Cinema = slug | titoli fragili come chiavi; slug stabili e parlanti |
-| D4 | SQLite anche in produzione | 3 cinema e letture leggere: un DB server sarebbe sovradimensionato |
+| D4 | SQLite anche in produzione | 8 sale e letture leggere: un DB server sarebbe sovradimensionato |
 | D5 | App in JavaScript (`.js`), TS rimandato | priorità alla consegna; migrazione post-MVP |
 
 ## 7. Qualità
 
-- **101 test automatici** totali (75 scraper + 26 backend), lint ruff pulito su entrambi, CI a 2 job.
+- **172 test automatici** totali (141 scraper + 31 backend), lint ruff pulito su entrambi, CI a 2 job.
 - Seed **idempotente**: importare gli stessi JSON N volte produce sempre lo stesso DB.
 - Docstring complete su tutto il codice di produzione (backend, scraper, connettori).
 

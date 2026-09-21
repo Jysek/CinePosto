@@ -36,7 +36,6 @@ Nessuna registrazione utente.
 | `backend/schema-mapping.md` | Come ogni campo JSON diventa colonna (autorevole per il seed) | completo |
 | `backend/api.md` | Contratto API completo | completo |
 | `app/overview.md` | Stack, schermate, client API, avvio | completo |
-| `app/integrazione-e-fix.md` | Storia dell'integrazione dell'app nel monorepo | da valutare (Fase 3) |
 | `iss/*`, `presentazione-14-luglio.*`, `esposizione-discorsi.*` | Materiale d'esame del 14 luglio 2026 | archivio, non si aggiorna |
 
 ## Archivio: materiale d'esame (14 luglio 2026)

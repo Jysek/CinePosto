@@ -176,24 +176,37 @@ per ogni record film nel JSON:
 | — | `language`, `screen` | non presenti nel JSON; null al seed |
 | — | `scraped_at` | default `now()` |
 
-**Strategia seed**:
+**Strategia seed — pre-aggregazione obbligatoria**: più sale dello stesso cinema possono
+pubblicare lo stesso film con orari diversi, e il JSON contiene **un record per sala**. Poiché
+la tabella `showings` ha `UNIQUE(film_id, cinema_slug, date)`, un upsert per record farebbe
+vincere l'ultima sala, **perdendo gli orari delle precedenti**. Il seed quindi raggruppa prima
+per `(film_db_id, cinema_slug, date)`, unisce tutti gli orari in un'unica riga (dedup + sort) e
+fa un solo upsert per gruppo.
 
 ```pseudo
+aggregated = {}   # chiave: (film_db_id, cinema_slug, date) → record aggregato
 per ogni record showing nel JSON:
     film_db_id = title_to_id.get(record["film_id"])
     if film_db_id is None:
         log.warning(f"Film '{record['film_id']}' non trovato nel lookup, skip")
         continue
 
-    payload = {
-        "film_id":     film_db_id,
-        "cinema_slug": record["cinema_slug"],
-        "date":        date.fromisoformat(record["date"]),
-        "times":       json.dumps(record["times"]),
-        "buy_url":     record.get("source_url"),
-    }
-    showing_repo.upsert(db, payload)
-        # SELECT by (film_id, cinema_slug, date) → UPDATE times/buy_url, oppure INSERT
+    key = (film_db_id, record["cinema_slug"], date.fromisoformat(record["date"]))
+    agg = aggregated.setdefault(key, {"times": [], "buy_url": None})
+    for t in record["times"]:              # unisce gli orari di tutte le sale
+        if t and t not in agg["times"]:   # dedup
+            agg["times"].append(t)
+    agg["buy_url"] = agg["buy_url"] or record.get("source_url")
+
+per ogni (key, agg) in aggregated:
+    showing_repo.upsert(db, {
+        "film_id":     key[0],
+        "cinema_slug": key[1],
+        "date":        key[2],
+        "times":       json.dumps(sorted(agg["times"])),
+        "buy_url":     agg["buy_url"],
+    })
+    # SELECT by (film_id, cinema_slug, date) → UPDATE times/buy_url, oppure INSERT
 ```
 
 ---

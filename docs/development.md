@@ -108,12 +108,13 @@ Swagger UI: `http://localhost:8000/docs`.
 ### Test
 
 ```bash
-python -m pytest tests/ -q       # 26 test (~0.15s)
+python -m pytest tests/ -q       # 31 test (~0.15s)
 python -m pytest tests/ -v       # verbose
 ```
 
 Setup dei test:
 - `conftest.py` — SQLite in-memory + `StaticPool` + override di `get_db`
+- `test_config.py` — 5 test sulla configurazione (token admin, path, CORS)
 - `test_repositories.py` — 14 unit test sui repository
 - `test_routers.py` — 12 end-to-end via TestClient FastAPI
 

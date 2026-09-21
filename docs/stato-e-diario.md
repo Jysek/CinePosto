@@ -31,3 +31,11 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
 - **2026-09-21** — creata la struttura di memoria della documentazione: questo diario, il registro
   `problemi-aperti.md`, l'indice `docs/index.md` rinnovato e l'intestazione di verifica su tutti i
   documenti vivi. Nessun cambiamento al codice.
+- **2026-09-21** — bonifica dei documenti (Fase 3): allineati al codice il numero di sale (8), i test
+  (141 scraper + 31 backend) e gli endpoint (11); corrette le famiglie di connettori in
+  `panoramica.md` e `scraper/architecture.md`, le percentuali storiche in `api.md` e
+  `scraper/architecture.md`, i comandi canonici in `AGENTS.md`; rimosso `integrazione-e-fix.md`
+  (il contenuto vivo era già in `app/overview.md`; la pre-aggregazione del seed è ora in
+  `schema-mapping.md` §3).
+  Nessun cambiamento al codice. Restano da riscrivere `backend/architecture.md` e
+  `schema-mapping.md` §7 (rinviati a una Fase 3-bis).

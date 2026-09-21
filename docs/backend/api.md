@@ -4,7 +4,7 @@
 
 > **Contratto autorevole degli endpoint**: URL, forma delle risposte, affidabilità
 > dei dati, CORS. L'app è ora costruita e integrata — per il **client reale** vedi
-> [app/overview.md](../app/overview.md) e [app/integrazione-e-fix.md](../app/integrazione-e-fix.md).
+> [app/overview.md](../app/overview.md).
 > Gli snippet lato-app qui sotto (config, client, checklist) restano come **riferimento storico**.
 >
 > ⚠️ **La §9 "Affidabilità dei dati" resta obbligatoria**: molti campi arrivano `null`
@@ -460,7 +460,7 @@ Il dataset è piccolo (~500 record totali) e cambia ogni 24h. Puoi:
 
 ⚠️ **La sorgente dati è fragile**: lo scraper prende i film dai siti dei cinema e li arricchisce con Wikidata. Molti film di nicchia o appena usciti **non sono su Wikidata** → alcuni campi arrivano `null`. Se l'UI dà per scontato che siano sempre presenti, si rompe.
 
-Le percentuali qui sotto sono **misurate al 2026-07-02 sul dataset reale** (19 film, 241 spettacoli, 3 cinema).
+Le percentuali qui sotto sono una **misura storica al 2026-07-02** sul dataset di allora (**19 film, 241 spettacoli, 3 cinema**): da rimisurare man mano che il dataset cambia. Restano valide come ordine di grandezza e per capire quali campi sono fragili.
 
 ### 🟢 SEMPRE presenti (100%) — usa senza `if`
 
@@ -582,4 +582,4 @@ function FilmCard({ film }) {
 
 ## 13. Stato dell'integrazione
 
-L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa OpenFreeMap con MapLibre GL JS. Il dettaglio dei passaggi e dei fix è in [app/integrazione-e-fix.md](../app/integrazione-e-fix.md).
+L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa OpenFreeMap con MapLibre GL JS. Il dettaglio del client è in [app/overview.md](../app/overview.md).

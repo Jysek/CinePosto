@@ -43,6 +43,14 @@ Regola: se la scheda dice "riusa `SchemaOrgExtractor`", la sessione **legge il f
 > Per creare le fixture recupera le pagine **una volta sola** con lo User-Agent del progetto
 > (no scraping live ripetuto). Chiudi con `make lint` e `make test-scraper` verdi.
 
+## Quali sale hanno una scheda qui
+
+Una scheda dedicata serve quando la tecnica **non è banale** o va studiata prima di scrivere il
+codice (markup proprietario, microdata, API da ricostruire). Le sale coperte da connettori
+diretti — **PostModernissimo, The Space Cinema Corciano, UCI Cinemas Perugia** — sono descritte
+in [../architecture.md](../architecture.md). L'elenco completo e aggiornato delle **8 sale
+implementate** sta in [../copertura.md](../copertura.md).
+
 ## Indice
 
 | Cinema | Scheda | Famiglia tecnica | Fonte primaria |

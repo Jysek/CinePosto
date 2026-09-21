@@ -11,6 +11,7 @@
    - [PostModernissimo](#postmodernissimo)
    - [The Space Cinema Corciano](#the-space-cinema-corciano)
    - [UCI Cinemas Perugia](#uci-cinemas-perugia)
+   - [Altre famiglie (schema.org, The Space Terni)](#connettori)
 5. [Helpers condivisi](#helpers-condivisi)
 6. [Modulo normalizer.py](#modulo-normalizerpy)
 7. [Modulo metadata.py — Wikidata enrichment](#modulo-metadatapy--wikidata-enrichment)
@@ -38,9 +39,14 @@ scraper/
 ├── browser.py           # CloakBrowser singleton (Chromium anti-fingerprint)
 └── connectors/
     ├── base.py          # BaseConnector ABC (scrape + fetch_film_detail)
+    ├── schema_org.py    # SchemaOrgExtractor condiviso (JSON-LD + microdata)
     ├── postmodernissimo.py
-    ├── thespace.py
-    └── uci.py
+    ├── thespace.py      # parametrizzato: Corciano + Terni
+    ├── uci.py
+    ├── cinema_zenith.py
+    ├── nuovo_cinema_castello.py
+    ├── cinema_teatro_concordia.py
+    └── cinema_metropolis.py
 ```
 
 **Pattern architetturale:** Strategy + ABC. Ogni cinema è un `BaseConnector` con metodo `scrape(today, dates) -> ScrapeResult`. L'orchestratore (`main.py`) chiama i connettori in sequenza, aggrega i risultati, deduplica, arricchisce con Wikidata e fonde con il run precedente.
@@ -48,7 +54,7 @@ scraper/
 **Flusso dati:**
 
 ```
-Connettori (3x) → all_films: list[Film]
+Connettori (8) → all_films: list[Film]
                 ↓
          _deduplicate_films()    ← fuzzy match Levenshtein
                 ↓
@@ -184,6 +190,12 @@ def scrape(self, today: str, dates: list[str] | None = None) -> ScrapeResult
 def fetch_film_detail(self, film_url: str) -> Optional[dict]
 ```
 
+Questa pagina descrive i **connettori storici** (PostModernissimo, The Space, UCI). Le sale
+basate su **schema.org** (Zenith, Nuovo Cinema Castello, Cinema Teatro Concordia, Cinema
+Metropolis) e The Space Terni usano connettori costruiti sull'estrattore condiviso
+`SchemaOrgExtractor`: schede e contratto stanno in [connettori/](connettori/README.md).
+L'elenco aggiornato delle sale implementate è in [copertura.md](copertura.md).
+
 ### PostModernissimo
 
 **File:** `connectors/postmodernissimo.py`  
@@ -272,7 +284,7 @@ https://myuci---uci-backend-production-nfluwp7wga-oc.a.run.app/api/theatres/uci-
 
 ## Helpers condivisi
 
-Per evitare duplicazione tra i 3 connettori, alcuni helper sono centralizzati:
+Per evitare duplicazione tra i connettori, alcuni helper sono centralizzati:
 
 ### `DEFAULT_USER_AGENT` (in `config.py`)
 
@@ -289,7 +301,7 @@ Centralizzare l'UA in un'unica costante semplifica l'aggiornamento (e.g. quando 
 Factory che costruisce un `CinemaError` riempiendo automaticamente `timestamp` (ISO now nel fuso `SCRAPER_TZ`) ed `exception` (nome della classe dell'eccezione).
 
 ```python
-# Prima (duplicato in 3 connettori):
+# Prima (duplicato in ogni connettore):
 errors.append(CinemaError(
     cinema=self.cinema_name,
     timestamp=datetime.now(SCRAPER_TZ).isoformat(),
@@ -303,7 +315,7 @@ errors.append(CinemaError(
 errors.append(make_error(self.cinema_name, exc, "scrape", url=url, detail=str(exc)))
 ```
 
-Tutti e 3 i connettori (`postmodernissimo.py`, `thespace.py`, `uci.py`) usano `make_error`.
+Tutti i connettori usano `make_error` (7 moduli: i 3 storici + i 4 basati su `SchemaOrgExtractor`).
 
 ### `normalize_genres(raw) -> list[str]` (in `normalizer.py`)
 
@@ -392,7 +404,7 @@ Normalizza qualsiasi formato di durata a `"N min"`:
 
 **Nota:** il campo `"genres"` non viene mai popolato da Wikidata — `_fetch_entity_details` non estrae questo dato. Wikidata arricchisce: poster, descrizione, regista, durata, titolo originale, anno, wikidata_id.
 
-**Copertura effettiva** (misurata al 02/07 su 19 film del dataset attuale):
+**Copertura effettiva** (misura storica al 2026-07-02 su 19 film dei 3 cinema di allora; da rimisurare):
 - `poster`, `description`: 100%
 - `director`: 95%
 - `runtime_minutes` (dopo parsing "X min"): 74%
@@ -493,7 +505,7 @@ Gestisce il file `output/errors.json` in modo accumulativo.
 Flusso principale:
 
 1. Calcola `today` e `week_dates`
-2. Chiama `connector.scrape(today, week_dates)` per i 3 connettori in sequenza
+2. Chiama `connector.scrape(today, week_dates)` per tutti i connettori in sequenza
 3. Per connettori falliti: attende `SCRAPER_RETRY_DELAY` secondi (default 300s) e riprova una volta
 4. Per connettori falliti al retry: carica cache dal file `output/cache/{slug}.json` come fallback
 5. `_deduplicate_films(all_films)` — fuzzy match cross-cinema, merge `present_in`

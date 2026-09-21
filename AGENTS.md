@@ -27,8 +27,8 @@ L'ambiente primario è **Docker** (funziona uguale su Windows e macOS, e non ric
 |---|---|
 | Avvia tutto (Docker + backend + app) | `make dev` |
 | Avvia il backend | `make up` |
-| Test backend (26) | `make test` |
-| Test scraper (75) | `make test-scraper` |
+| Test backend (31) | `make test` |
+| Test scraper (141) | `make test-scraper` |
 | Lint | `make lint` |
 | Seed DB dai JSON | `make seed` |
 | Scraping live (con parsimonia) | `make scrape` |
@@ -42,10 +42,10 @@ Senza Docker (fallback, richiede Python 3.12 locale), dal componente giusto:
 
 | Cosa | Comando |
 |---|---|
-| Test scraper | `python3 -m pytest tests/ -q` (75 test) |
+| Test scraper | `python3 -m pytest tests/ -q` (141 test) |
 | Lint scraper | `python3 -m ruff check scraper/ tests/` |
 | Run scraper (una volta) | `python3 -m scraper.main --once` |
-| Test backend | `python -m pytest tests/ -q` (26 test) |
+| Test backend | `python -m pytest tests/ -q` (31 test) |
 | Seed DB dai JSON | `python -m app.seed_from_json` |
 | Avvio backend | `uvicorn app.main:app --reload --port 8000` |
 | App: web | `npx expo start --web` |

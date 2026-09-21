@@ -20,7 +20,7 @@ cineposto/
 ```
 
 Una pipeline in tre stadi collegati da **contratti espliciti**: file JSON tra scraper e backend,
-API REST tra backend e app. Ogni stadio si testa da solo — **101 test** (75 scraper, 26 backend).
+API REST tra backend e app. Ogni stadio si testa da solo — **172 test** (141 scraper, 31 backend).
 
 | Componente | Tecnologie | Cosa fa |
 |---|---|---|
@@ -57,13 +57,15 @@ EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 
 ## Stato e roadmap
 
-**Funziona end-to-end**: scraping dei 3 cinema coperti, backend, app su web e iOS. La CI testa
+**Funziona end-to-end**: scraping delle 8 sale coperte, backend, app su web, iOS e Android. La CI testa
 backend, scraper e build web a ogni push.
 
 - ✅ Scraper, backend e app completi e collegati
 - ✅ Ricerca in-app, mappa delle sale, orari per data
 - ✅ Docker per sviluppo e produzione, CI, deploy pronto e verificato in locale
-- 🔄 **Estensione a tutte le sale dell'Umbria**: oggi 3 su ~17+. Un connettore alla volta, con
+- 🔄 **Estensione a tutte le sale dell'Umbria**: quelle implementate sono 8 su 30 sale note
+  (21 comuni con almeno una sala), come tracciato in
+  [`docs/scraper/copertura.md`](docs/scraper/copertura.md). Un connettore alla volta, con
   una tabella di copertura che dichiara per ogni sala se ha una fonte leggibile
 - ⏳ Avviso "dati non aggiornati" nell'app
 - ⏳ Deploy sulla VPS (procedura pronta in [`docs/deploy.md`](docs/deploy.md))
