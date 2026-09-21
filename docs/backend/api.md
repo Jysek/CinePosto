@@ -580,4 +580,4 @@ function FilmCard({ film }) {
 
 ## 13. Stato dell'integrazione
 
-L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa Leaflet. Il dettaglio dei passaggi e dei fix è in [app/integrazione-e-fix.md](../app/integrazione-e-fix.md).
+L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa OpenFreeMap con MapLibre GL JS. Il dettaglio dei passaggi e dei fix è in [app/integrazione-e-fix.md](../app/integrazione-e-fix.md).

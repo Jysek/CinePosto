@@ -19,7 +19,7 @@ Stato: **integrata e funzionante su web e smartphone**, agganciata al backend
 | Navigazione | **React Navigation 7** (bottom-tabs + native-stack) — entry classico `App.js`, *non* Expo Router |
 | Linguaggio | JavaScript `.js` |
 | Web | `react-native-web` 0.21 (stessa codebase per il browser) |
-| Mappa | Leaflet dentro `react-native-webview` (nativo) / `<iframe>` (web) |
+| Mappa | OpenFreeMap + MapLibre GL JS dentro `react-native-webview` (nativo) / `<iframe>` (web) |
 | Storage locale | `@react-native-async-storage/async-storage` (preferiti) |
 
 > **NON usare `npx create-expo-app`**: il progetto è già inizializzato, basta
@@ -59,7 +59,7 @@ app/
     │   ├── SplashScreen.js    ← animazione logo all'avvio
     │   ├── CinemaMap.js       ← mappa nativa (WebView)
     │   ├── CinemaMap.web.js   ← mappa web (iframe) — Metro sceglie in automatico
-    │   └── mapHtml.js         ← HTML Leaflet condiviso dalle due mappe
+    │   └── mapHtml.js         ← HTML della mappa condiviso dalle due mappe
     └── screens/
         ├── FilmsTab.js        ← Home "Films"
         ├── SearchTab.js       ← "Cerca"
@@ -98,7 +98,7 @@ SplashScreen
   C'è un filtro per cinema (modal) e il pull-to-refresh.
 - **SearchTab** (Cerca): ricerca per titolo con **debounce 300 ms** e annullamento
   delle risposte obsolete (`requestId`): se digiti in fretta conta solo l'ultima query.
-- **LocationTab** (Località): mappa Leaflet con i cinema (marker con logo) e
+- **LocationTab** (Località): mappa OpenFreeMap con i cinema (marker con logo) e
   l'elenco con indirizzi; il tap apre il cinema in Google Maps. **I dati dei cinema
   arrivano dall'API** (`getCinemas()`, oggi 8 sale): slug, nome, indirizzo e
   coordinate non sono più costanti dell'app. In `constants/cinemas.js` restano solo
@@ -117,7 +117,7 @@ SplashScreen
 - **PosterImage**: se un poster è panoramico (16:9) invece che verticale (2:3), lo
   mostra intero sopra una versione sfocata e scurita di sé stesso, senza deformarlo.
 - **CinemaMap**: usa `react-native-webview` sul telefono e un `<iframe>` sul web (Metro
-  carica `CinemaMap.web.js` da solo). L'HTML Leaflet è condiviso (`mapHtml.js`).
+  carica `CinemaMap.web.js` da solo). L'HTML della mappa è condiviso (`mapHtml.js`).
 
 ---
 
@@ -201,7 +201,7 @@ controllare l'app dopo un upgrade di SDK o una modifica alle schermate.
 
 - **Sfocatura poster**: `blurRadius` (prop React Native) funziona su iOS/Android ma
   **non** su `react-native-web`; sul web la sfocatura è fatta con la CSS `filter: blur()`.
-- **Mappa**: le tile arrivano dal CDN CARTO e Leaflet da unpkg → **la mappa richiede
+- **Mappa**: le tile vettoriali arrivano da OpenFreeMap e MapLibre da unpkg → **la mappa richiede
   internet** (non è offline). Alla demo serve connessione.
 - **Date in ora locale**: `utils/dates.js` evita `toISOString()` (UTC), che tra
   mezzanotte e le 2 avrebbe restituito la data di ieri.

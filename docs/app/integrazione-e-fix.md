@@ -114,5 +114,5 @@ data utile** del film.
 
 ## 7. Limite noto
 
-La **mappa** (Località) carica Leaflet da CDN e le tile da CARTO → **richiede
+La **mappa** (Località) carica MapLibre da CDN e le tile vettoriali da OpenFreeMap → **richiede
 internet**. Alla demo serve connessione di rete.

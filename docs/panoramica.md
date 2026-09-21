@@ -82,7 +82,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 - Stack: React Native + **Expo SDK 57** (nativo via development build, non Expo Go), navigazione con React Navigation — tre tab (Film, Cerca, Località) più uno stack per il dettaglio del film.
 - Legge tutto dal backend via `fetch`: nessun dato finto. L'indirizzo dell'API è configurabile con la variabile `EXPO_PUBLIC_API_BASE`.
-- Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (Leaflet). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app.
+- Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (OpenFreeMap). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app.
 - Codice in JavaScript (`.js`); la migrazione a TypeScript resta rimandata (decisione D5).
 
 📂 Dettaglio: [app/overview.md](app/overview.md) · [app/integrazione-e-fix.md](app/integrazione-e-fix.md)
