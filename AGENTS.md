@@ -15,7 +15,7 @@ scraper e backend, **API REST** tra backend e app):
 ```
 scraper/   pipeline Python 3.12 → JSON in scraper/output/
 backend/   FastAPI + SQLAlchemy + SQLite (seed dai JSON)
-app/       Expo SDK 54 / React Native (web + iOS + Android dalla stessa codebase)
+app/       Expo SDK 57 / React Native 0.86 (web + iOS + Android dalla stessa codebase)
 docs/      documentazione tecnica (in italiano)
 ```
 
@@ -80,16 +80,38 @@ backend e `validate_output.py` nello stesso commit.
 - Niente magic number: soglie, timeout e limiti vanno in `config.py` (o costanti nominate).
 - Codice commentato in italiano **spiegando il perché**, non il cosa.
 
+## Confini — cosa non si tocca mai
+
+Il progetto è interamente mio, quindi non ci sono confini di giurisdizione. Restano i confini di
+sicurezza e di rispetto verso le fonti:
+
+- `.env`, `.env.prod` e ogni loro variante: contengono segreti, si modificano solo a mano e mai
+  da un agente.
+- `data/**` e `backend/data/*`: dati e database di produzione.
+- `docs/iss/**`, `docs/presentazione-14-luglio.*`, `docs/esposizione-discorsi.*`: materiale
+  d'esame del 14 luglio 2026. Archivio storico, non si modifica (al massimo una nota in testa se
+  diverge dalla realtà).
+- `NOTICE`: dichiara i vincoli etici dello scraping. Si modifica solo su richiesta esplicita.
+- `.github/workflows/ci.yml`: si modifica solo se fa parte del task in corso.
+- **Scraping live** (`make scrape`): si esegue solo su richiesta esplicita, mai "per controllare",
+  mai in loop. È una promessa fatta ai cinema.
+
 ## Definition of done
 
 Una modifica non è finita finché:
 
-1. `ruff check` passa su scraper e backend;
-2. i test del componente passano (`pytest`), e i test nuovi **descrivono il comportamento**
-   (`test_returns_empty_list_when_no_showings`, non `test1`);
-3. la CI (`.github/workflows/ci.yml`) resta verde;
-4. se cambia un contratto (JSON o API), sono aggiornati anche il consumatore e i documenti;
-5. nessun segreto, nessun `.env`, nessun `.db`, nessun output di cache finisce nel commit.
+1. `ruff check` passa su scraper e backend (`make lint`);
+2. i test del componente passano (`make test` / `make test-scraper`), e i test nuovi
+   **descrivono il comportamento** (`test_returns_empty_list_when_no_showings`, non `test1`);
+3. per l'app passano `npx expo-doctor` e l'export web (`make check-app-web`);
+4. la CI (`.github/workflows/ci.yml`) resta verde;
+5. se cambia un contratto (JSON o API), sono aggiornati **nello stesso commit** il consumatore,
+   `validate_output.py` e i documenti;
+6. **`docs/` è aggiornato**: un lettore che apre solo `docs/index.md` capisce cosa fa oggi il
+   progetto, e in coda a `docs/stato-e-diario.md` c'è la riga di questa sessione;
+7. nessun segreto, nessun `.env`, nessun `.db`, nessuna cache finisce nel commit.
+
+Un lavoro con i documenti disallineati **non è finito**, anche se test e CI sono verdi.
 
 ## Scraper: vincoli non negoziabili
 
@@ -114,10 +136,67 @@ fixture e lascia il live a run esplicite e motivate.
 
 ## Documentazione
 
-`docs/iss/**`, `docs/presentazione-14-luglio.*`, `docs/esposizione-discorsi.*` sono il
-**materiale d'esame del 14 luglio 2026**: archivio storico, non si modifica (al massimo una
-nota in testa se diverge dalla realtà). La documentazione viva è `docs/panoramica.md` +
-`docs/<area>/architecture.md`, più `docs/development-windows.md` per il setup locale.
+La documentazione sta in `docs/` ed è **la fonte di verità di cosa il progetto è oggi**.
+È versionata nel repository: si aggiorna con un commit, come il codice. `docs/index.md` è
+l'unico ingresso.
+
+Ruoli, senza duplicazioni:
+
+- `AGENTS.md` (questo file) = regole e vincoli. Non ripete il contenuto tecnico.
+- `docs/` = documentazione completa del progetto. Racconta lo stato di oggi, non la storia.
+- `README.md` = vetrina breve per chi arriva: cosa fa il progetto e come si avvia. Non è la
+  documentazione.
+
+Regole di manutenzione:
+
+1. **Stesso commit**: chi cambia il comportamento aggiorna `docs/` nello stesso commit. Codice e
+   documento viaggiano insieme.
+2. **Refactor interno senza cambio di comportamento**: non riscrive i capitoli, aggiunge solo la
+   riga di diario.
+3. **Un problema risolto si cancella** da `docs/problemi-aperti.md`. Non si annota "risolto il…",
+   non si lascia la voce barrata: la riga sparisce.
+4. **Codice o feature rimossi**: il capitolo che li descrive si riscrive o si elimina. Mai
+   documentazione che descrive codice inesistente.
+5. **Niente cronologia dentro i capitoli**: nessun "prima era così". Lo stato è quello di oggi; la
+   storia sta solo in `docs/stato-e-diario.md`.
+6. **Intestazione di verifica**: ogni documento vivo dichiara in testa
+   `> Verificato su <commit> (<data>).` Se un capitolo è vecchio rispetto a `main`, va riletto
+   prima di fidarsene.
+
+| Cosa hai toccato | Dove aggiorni in `docs/` |
+|---|---|
+| Connettore scraper, normalizzazione titoli, `config.py` | `scraper/architecture.md` + `scraper/copertura.md` + `scraper/connettori/<sala>.md` |
+| Forma dei JSON prodotti dallo scraper | `backend/schema-mapping.md` + seed del backend + `validate_output.py` (stesso commit) |
+| `routers/`, `services/`, `repositories/`, `models/` | `backend/architecture.md` + `backend/api.md` |
+| Endpoint nuovo, cambiato o rimosso | `backend/api.md` (+ `panoramica.md` se cambia il flusso dei dati) |
+| Tabella o modello del DB | `backend/schema-mapping.md` + `backend/architecture.md` |
+| Schermata, navigazione o client API dell'app | `app/overview.md` |
+| Comandi `make`, Docker, variabili d'ambiente | `development.md` + `development-windows.md` + §Comandi canonici di questo file |
+| Deploy, Caddy, timer systemd, backup | `deploy.md` |
+| Problema nuovo trovato | voce in `problemi-aperti.md` con prova (`file:riga`, comando, esito) e data |
+| Problema risolto | **cancella** la voce da `problemi-aperti.md` |
+| Feature conclusa, blocco, decisione presa | una riga in coda a `stato-e-diario.md` (append-only) |
+| Nuovo file o cartella dentro `docs/` | `docs/index.md` |
+| Qualsiasi sessione che tocca codice | **obbligatoria** la riga in `stato-e-diario.md` |
+
+Il materiale d'esame (`docs/iss/**`, `docs/presentazione-14-luglio.*`,
+`docs/esposizione-discorsi.*`) è archivio: non si aggiorna e non entra nella tabella qui sopra.
+
+**La doc segue il codice, non il contrario.** Se una pagina di `docs/` contraddice il codice, vince
+il codice e la pagina si corregge. Non piegare mai l'implementazione per far tornare i conti con
+una pagina vecchia.
+
+## Consegna — git
+
+- **Trunk**: `main`. I branch di lavoro sono brevi, con nome `<tipo>/<scope>-<slug>`
+  (esempio: `chore/app-sdk-57`), e confluiscono in `main` appena pronti.
+- **Commit**: atomici, una modifica logica per commit, messaggio in italiano
+  `<tipo>: <descrizione>` con scope `scraper` / `backend` / `app` / `docs` / `ci`.
+- **Push**: consentito su `origin` (repository personale). Sul remote `upstream` (repository di
+  gruppo di origine) **non si pusha mai**.
+- **CI**: deve essere verde prima del push. È una rete di sicurezza, non un passaggio formale.
+- **Pull request**: facoltative. Progetto personale: il merge diretto in `main` è sufficiente.
+- **Mai `--force`**, mai `amend` su un commit già pubblicato.
 
 ## Cosa non fare
 
