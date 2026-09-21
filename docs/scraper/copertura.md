@@ -1,5 +1,7 @@
 # Cinema in Umbria — registro di copertura e progresso
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Documento di lavoro.** Serve a sapere *tutte* le sale dell'Umbria prima di scrivere i
 > connettori, e a tracciare cosa è implementato e cosa no. Va aggiornato **nello stesso commit**
 > in cui si aggiunge o si toglie una sala (regola di `AGENTS.md`).

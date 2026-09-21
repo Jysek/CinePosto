@@ -1,5 +1,7 @@
 # Sviluppo su Windows
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 Guida pratica per far girare CinePosto su Windows. Tutti i comandi qui sono stati eseguiti
 e verificati su questo ambiente (Windows 11, Git Bash, Docker Desktop).
 

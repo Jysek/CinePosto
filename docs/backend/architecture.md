@@ -1,5 +1,7 @@
 # Backend — Architettura tecnica
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).
 Per il mapping JSON scraper → DB vedi [schema-mapping.md](schema-mapping.md).

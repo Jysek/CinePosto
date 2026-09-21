@@ -1,5 +1,7 @@
 # Nuovo Cinema Castello — scheda connettore
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Stato**: 🟢 fonte verificata, pronta per il connettore · **Ondata 1** (famiglia schema.org,
 > gemello di Zenith) · Ricognizione **19 settembre 2026**.
 >

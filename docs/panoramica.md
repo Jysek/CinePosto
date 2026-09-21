@@ -1,5 +1,7 @@
 # CinePosto — Panoramica del sistema
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 
 **Cos'è**: aggregatore della programmazione dei cinema dell'Umbria. L'utente apre l'app e vede in un posto solo cosa danno stasera in 3 cinema (PostModernissimo, The Space Corciano, UCI Perugia), con orari, scheda film e link per comprare il biglietto. Nessuna registrazione.

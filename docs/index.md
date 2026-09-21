@@ -1,52 +1,57 @@
 # Documentazione CinePosto
 
-Aggregatore cinema Umbria: scraper Python, backend FastAPI, app React Native. Tutta la documentazione tecnica vive qui, divisa per componente; nelle cartelle del codice c'è solo un README breve con i comandi essenziali.
+Aggregatore della programmazione dei cinema dell'Umbria: uno scraper Python raccoglie i palinsesti,
+un backend FastAPI li serve via REST, un'app React Native (Expo) li mostra su web, iOS e Android.
+Nessuna registrazione utente.
 
-## Da dove partire
+> Questa cartella racconta **cosa il progetto è oggi**, non la sua storia. Se un capitolo
+> contraddice il codice, vince il codice e il capitolo si corregge. Ogni documento vivo dichiara in
+> testa su quale commit è stato verificato; gli archivi sono esclusi da questa regola.
 
-- [panoramica.md](panoramica.md) — il sistema da cima a fondo: flusso dei dati, componenti, decisioni di design. Il primo da leggere.
-- [development.md](development.md) — setup locale, test, lint e variabili d'ambiente di ogni componente (comandi nativi, venv + npm).
-- [development-windows.md](development-windows.md) — setup su Windows con Docker, app sul telefono, firewall e problemi già incontrati.
-- [deploy.md](deploy.md) — come va in produzione: VPS, Caddy, scraping notturno, backup.
+## Da dove cominciare
+
+| Se sei… | Leggi in quest'ordine |
+|---|---|
+| L'agente che deve fare una modifica | `stato-e-diario.md` (dove siamo) → `problemi-aperti.md` (cosa è rotto) → il capitolo dell'area che tocchi |
+| Nuovo nel progetto | `panoramica.md` → `development-windows.md` (oppure `development.md`) |
+| Devi lavorare sullo scraper | `scraper/architecture.md` → `scraper/copertura.md` → `scraper/connettori/README.md` |
+| Devi lavorare sul backend | `backend/architecture.md` → `backend/schema-mapping.md` → `backend/api.md` |
+| Devi lavorare sull'app | `app/overview.md` |
+| Devi mettere in produzione | `deploy.md` |
+
+## Indice
+
+| File | Cosa trovi | Stato |
+|---|---|---|
+| `stato-e-diario.md` | Dove siamo oggi e la storia delle sessioni | si aggiorna a ogni sessione |
+| `problemi-aperti.md` | Cosa non funziona oggi, con la prova | si accorcia quando si risolve |
+| `panoramica.md` | Il sistema da cima a fondo: flusso dei dati, componenti, decisioni | completo |
+| `development.md` | Setup nativo (venv + npm), test, lint, variabili d'ambiente | completo |
+| `development-windows.md` | Setup su Windows con Docker, app sul telefono, firewall | completo |
+| `deploy.md` | Produzione: VPS, Caddy, scraping notturno, backup | completo |
+| `scraper/architecture.md` | Connettori, normalizzazione, Wikidata, delta, deploy systemd | completo |
+| `scraper/copertura.md` | Registro delle sale dell'Umbria: cosa è coperto e cosa no | si aggiorna a ogni sala |
+| `scraper/connettori/README.md` | Come si scrive un connettore e quali esistono | completo |
+| `backend/architecture.md` | Layering, modelli, endpoint | completo |
+| `backend/schema-mapping.md` | Come ogni campo JSON diventa colonna (autorevole per il seed) | completo |
+| `backend/api.md` | Contratto API completo | completo |
+| `app/overview.md` | Stack, schermate, client API, avvio | completo |
+| `app/integrazione-e-fix.md` | Storia dell'integrazione dell'app nel monorepo | da valutare (Fase 3) |
+| `iss/*`, `presentazione-14-luglio.*`, `esposizione-discorsi.*` | Materiale d'esame del 14 luglio 2026 | archivio, non si aggiorna |
 
 ## Archivio: materiale d'esame (14 luglio 2026)
 
-Questi documenti raccontano il progetto **così com'era all'esposizione**: restano come archivio
-storico e non vanno aggiornati (lo stato attuale è in [panoramica.md](panoramica.md) e nei README).
+Questi documenti raccontano il progetto **così com'era all'esposizione**. Restano come archivio
+storico e **non si aggiornano**: `iss/analisi-requisiti.md`, `iss/sprint-plan.md`,
+`iss/progettazione-uml.md`, `presentazione-14-luglio.md` (+ `.pdf`, `.pptx`),
+`esposizione-discorsi.md` (+ `.pdf`).
 
-- [presentazione-14-luglio.md](presentazione-14-luglio.md) — scaletta, script della demo, piano B per la rete, domande probabili del prof.
-- [esposizione-discorsi.md](esposizione-discorsi.md) — divisione delle slide per persona, i discorsi e la spiegazione test per test.
+## Convenzioni di questa documentazione
 
-## Aree tecniche
-
-- **Scraper** — [scraper/architecture.md](scraper/architecture.md): connettori, normalizzazione, Wikidata, delta, deploy systemd. Stato delle sale coperte: [scraper/copertura.md](scraper/copertura.md).
-- **Backend** — [backend/architecture.md](backend/architecture.md) (layer, modelli, endpoint), [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna, autorevole per il seed), [backend/api.md](backend/api.md) (contratto API completo).
-- **App** — [app/overview.md](app/overview.md) (stack, schermate, client API, avvio), [app/integrazione-e-fix.md](app/integrazione-e-fix.md) (integrazione del frontend e fix applicati).
-
-## Documenti del corso (ISS)
-
-Ingegneria del Software, ITS Umbria Academy a.a. 2025/2026 (team RepCode).
-
-- [iss/analisi-requisiti.md](iss/analisi-requisiti.md) — requisiti funzionali e non, stakeholder, matrice importanza-difficoltà, risk assessment.
-- [iss/sprint-plan.md](iss/sprint-plan.md) — user story, cinque sprint, piano di rilascio Alpha → 1.0 → 1.1.
-- [iss/progettazione-uml.md](iss/progettazione-uml.md) — use case, class diagram, ER, sequence, deployment e design pattern.
-
-## Come è organizzata
-
-```
-docs/
-├── index.md                     questo indice
-├── panoramica.md                il sistema end-to-end
-├── development.md               setup nativo, test, lint
-├── development-windows.md       setup su Windows con Docker + telefono
-├── deploy.md                    procedura di produzione
-├── assets/screenshot-web.png
-├── presentazione-14-luglio.md   ARCHIVIO: guida all'esposizione
-├── esposizione-discorsi.md      ARCHIVIO: divisione, discorsi, test
-├── scraper/{architecture,copertura}.md
-├── backend/{architecture,schema-mapping,api}.md
-├── app/{overview,integrazione-e-fix}.md
-└── iss/{analisi-requisiti,sprint-plan,progettazione-uml}.md   ARCHIVIO del corso
-```
-
-Convenzione: la documentazione tecnica sta in `docs/`, nell'area del suo componente; i README nel codice contengono solo i comandi rapidi; i documenti del corso stanno in `iss/`.
+1. **Ingresso unico**: si arriva da questo indice.
+2. **Intestazione di verifica** in ogni documento vivo: `> Verificato su <commit> (<data>).`
+3. **Diagrammi in Mermaid**, così restano testo modificabile.
+4. **Prosa** in italiano, frasi dirette, niente riempitivi. Si spiega il *perché* dove conta.
+5. **Niente cronologia dentro i capitoli**: la storia sta solo in `stato-e-diario.md`.
+6. **Riferimenti al codice** come `scraper/scraper/config.py`; il numero di riga solo dove serve
+   come prova (problemi aperti).

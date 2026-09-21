@@ -1,5 +1,7 @@
 # Cinema Zenith — scheda connettore
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Stato**: 🟢 fonte verificata, pronta per il connettore · **Ondata 0** (pilota della famiglia
 > schema.org) · Ricognizione **19 settembre 2026**.
 >

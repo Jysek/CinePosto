@@ -1,5 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 ## Indice
 
 1. [Architettura generale](#architettura-generale)

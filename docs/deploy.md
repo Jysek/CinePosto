@@ -1,5 +1,7 @@
 # Deploy
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 Come CinePosto va in produzione. La configurazione **è già nel repo e verificata in locale**
 (`make prod-test`): sulla VPS resta da eseguire, non da progettare.
 

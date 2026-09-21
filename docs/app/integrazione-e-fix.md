@@ -1,5 +1,7 @@
 # App — Integrazione nel monorepo e fix applicati
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 Racconta come l'app (sviluppata a parte da un membro del team come progetto Expo
 autonomo) è stata **integrata nel monorepo** e agganciata al backend, e quali
 problemi sono stati risolti per renderla funzionante su web e smartphone.

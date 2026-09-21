@@ -1,5 +1,7 @@
 # CinePosto — Contratto API (v1)
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Contratto autorevole degli endpoint**: URL, forma delle risposte, affidabilità
 > dei dati, CORS. L'app è ora costruita e integrata — per il **client reale** vedi
 > [app/overview.md](../app/overview.md) e [app/integrazione-e-fix.md](../app/integrazione-e-fix.md).

@@ -1,5 +1,7 @@
 # Guida allo sviluppo
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in
 > [development-windows.md](development-windows.md).

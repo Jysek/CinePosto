@@ -1,5 +1,7 @@
 # Schema mapping — JSON scraper → DB backend
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Aggiornato: 2026-06-30. Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).
 

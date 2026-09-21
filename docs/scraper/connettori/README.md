@@ -1,5 +1,7 @@
 # Connettori — schede di implementazione
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 Schede pronte per essere passate a una **sessione nuova**: contengono lo studio fatto sul
 sito (piattaforma, markup reale, URL, insidie) e la specifica di implementazione per il
 connettore CinePosto.

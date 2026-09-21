@@ -1,5 +1,7 @@
 # App — React Native + Expo
 
+> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+
 App mobile/web di CinePosto: mostra i film in programmazione nei cinema dell'Umbria,
 con orari per data e cinema, ricerca, dettaglio film e mappa. Consuma il backend
 FastAPI del monorepo.
