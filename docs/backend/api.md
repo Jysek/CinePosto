@@ -309,7 +309,7 @@ Uguale a `oggi` ma range più ampio (oggi → +6 giorni).
   "synopsis": "Un giovane uomo si ritrova coinvolto in una lotta...",
   "wikidata_id": "Q97154362",
   "showings": [
-    { "id": 128, "date": "2026-07-02", "times": ["18:30"], "..." : "..."}
+    { "id": 128, "date": "2026-07-02", "times": ["18:30"], "language": "ITA", "screen": "Sala 1", "buy_url": "https://..." }
   ]
 }
 ```

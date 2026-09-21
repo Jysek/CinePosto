@@ -22,3 +22,15 @@ Se lo scraping notturno fallisce, l'app mostra la programmazione vecchia senza d
 La data dell'ultimo aggiornamento esiste solo in `GET /api/v1/admin/dataset-info`
 (`backend/app/routers/admin.py:53`), protetto da token admin e non consumato dall'app: serve un
 dato pubblico (o un endpoint) su cui costruire l'avviso.
+
+### Il healthcheck copre solo 3 fonti su 8
+**Dove**: `scraper/healthcheck.py:69-71` · **Prova**: `grep -nE "_get\(|_post\(" scraper/healthcheck.py` → 3 chiamate · **Data**: `2026-09-21`
+Il healthcheck controlla PostModernissimo, The Space (auth) e UCI. Le 5 sale aggiunte dopo
+(Zenith, Nuovo Cinema Castello, Metropolis, Concordia, The Space Terni) non hanno endpoint
+monitorato: se una di quelle fonti si rompe, il healthcheck resta verde.
+
+### Il commento del lifespan cita Alembic, non configurato
+**Dove**: `backend/app/main.py:20` · **Prova**: `find . -iname "alembic*"` → nessun risultato · **Data**: `2026-09-21`
+Il docstring del `lifespan` dice «in prod si usa Alembic con `alembic upgrade head`», ma non
+esiste alcuna migrazione e `AGENTS.md` dice di non introdurre Alembic finché il DB è ricreabile
+dal seed: il commento è fuorviante.

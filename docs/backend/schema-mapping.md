@@ -1,9 +1,9 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `0c56a7e` (`2026-09-21`).
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
-> Aggiornato: 2026-06-30. Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).
+> Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).
 
 ---
 
@@ -112,7 +112,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 per ogni record film nel JSON:
     title_norm = normalize_title(record["title"])      # NON usare title_normalized del JSON
     year = record.get("year")
-    runtime = parse_minutes(record.get("duration"))    # "95 min" → 95
+    runtime = _parse_duration(record.get("duration"))  # "95 min" → 95 (seed_from_json.py)
     record_norm = {
         "title": record["title"],
         "title_normalized": title_norm,
@@ -173,7 +173,8 @@ per ogni record film nel JSON:
 | `date` (ISO string) | `date` (date) | `date.fromisoformat(...)` |
 | `times` (array di "HH:MM") | `times` (string JSON) | `json.dumps(times, separators=(",",":"))` |
 | `source_url` | `buy_url` | |
-| — | `language`, `screen` | non presenti nel JSON; null al seed |
+| `language` | `language` | nullable; presente per The Space, assente altrove |
+| `screen` | `screen` | nullable; conservato solo se proviene da un'unica sala (vedi sotto) |
 | — | `scraped_at` | default `now()` |
 
 **Strategia seed — pre-aggregazione obbligatoria**: più sale dello stesso cinema possono
@@ -192,10 +193,14 @@ per ogni record showing nel JSON:
         continue
 
     key = (film_db_id, record["cinema_slug"], date.fromisoformat(record["date"]))
-    agg = aggregated.setdefault(key, {"times": [], "buy_url": None})
+    agg = aggregated.setdefault(key, {"times": [], "screens": set(), "language": None, "buy_url": None})
     for t in record["times"]:              # unisce gli orari di tutte le sale
         if t and t not in agg["times"]:   # dedup
             agg["times"].append(t)
+    if record.get("screen"):               # raccoglie le sale distinte
+        agg["screens"].add(record["screen"])
+    if not agg["language"] and record.get("language"):
+        agg["language"] = record["language"]
     agg["buy_url"] = agg["buy_url"] or record.get("source_url")
 
 per ogni (key, agg) in aggregated:
@@ -204,9 +209,12 @@ per ogni (key, agg) in aggregated:
         "cinema_slug": key[1],
         "date":        key[2],
         "times":       json.dumps(sorted(agg["times"])),
+        "language":    agg["language"],
+        # screen ambiguo se lo stesso film è in più sale → None
+        "screen":      next(iter(agg["screens"])) if len(agg["screens"]) == 1 else None,
         "buy_url":     agg["buy_url"],
     })
-    # SELECT by (film_id, cinema_slug, date) → UPDATE times/buy_url, oppure INSERT
+    # SELECT by (film_id, cinema_slug, date) → UPDATE times/language/screen/buy_url, oppure INSERT
 ```
 
 ---
@@ -267,7 +275,7 @@ SELECT * FROM showings WHERE film_id = 42 AND date = '2026-06-30';
 -- id=789, film_id=42, cinema_slug='uci-perugia', times='["18:00","21:30"]'
 ```
 
-**Risposta endpoint `GET /api/v1/films/42`**:
+**Risposta endpoint `GET /api/v1/film/42`** (schema `FilmDetail` — gli `showings` sono `ShowingOut`, piatti; per gli oggetti `cinema`/`film` annidati vedi `GET /showings` in [api.md](api.md)):
 
 ```json
 {
@@ -277,19 +285,18 @@ SELECT * FROM showings WHERE film_id = 42 AND date = '2026-06-30';
   "runtime_minutes": 166,
   "director": "Denis Villeneuve",
   "showings": [
-    { "id": 789, "date": "2026-06-30", "times": ["18:00", "21:30"], "cinema_slug": "uci-perugia" }
+    { "id": 789, "date": "2026-06-30", "times": ["18:00", "21:30"], "language": "ITA", "screen": null, "buy_url": null }
   ]
 }
 ```
 
 ---
 
-## 7. Checklist prima di scrivere `seed.py`
+## 7. Verifica del seed
 
-- [ ] Tutti e 3 i JSON disponibili in `SCRAPER_OUTPUT_DIR` (config).
-- [ ] Funzione `normalize_title(s: str) -> str` definita in `film_service.py` (vedi TODO lì).
-- [ ] Helper `parse_minutes(s: str | None) -> int | None` (es. `"95 min"` → `95`).
-- [ ] Repository `upsert(...)` per tutti e 3 i modelli.
-- [ ] Logger configurato per warning/error con record context.
-- [ ] Idempotenza: rieseguire il seed N volte sullo stesso JSON deve produrre lo stesso DB.
-- [ ] Smoke test: dopo seed verifica `SELECT COUNT(*) FROM cinemas/films/showings` con i numeri attesi (oggi: 3 cinema, ~22 film, ~310 showings).
+Cosa controllare **dopo** aver lanciato `python -m app.seed_from_json`:
+
+- I tre JSON (`cinemas.json`, `films.json`, `showings.json`) sono presenti in `SCRAPER_OUTPUT_DIR`.
+- **Idempotenza**: rieseguire il seed sullo stesso JSON non cambia i conteggi (upsert per chiave naturale).
+- **Conteggi reali**: li dà `GET /api/v1/admin/dataset-info` (numero di cinema, film e showings, ultima `scraped_at`). Non fissare numeri attesi nel documento: cambiano a ogni run.
+- **Nessuno showing orfano**: nei log del seed non compaiono `warning` di film non risolvibili dal lookup (vedi §5).

@@ -39,3 +39,10 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   `schema-mapping.md` §3).
   Nessun cambiamento al codice. Restano da riscrivere `backend/architecture.md` e
   `schema-mapping.md` §7 (rinviati a una Fase 3-bis).
+- **2026-09-21** — chiusi i residui della bonifica documentale (Fase 3-bis): riscritti gli endpoint
+  reali e lo stato in `backend/architecture.md`, ripulite la checklist e l'esempio di
+  `schema-mapping.md` (path `/film/42` e `showings` piatti, `language`/`screen` presenti nel JSON),
+  ridotti a vetrina `backend/README.md` e `scraper/README.md`; corretti l'esempio JSON dell'API e il
+  numero di test nel `Makefile`. Aperti in `problemi-aperti.md` il healthcheck a 3 fonti su 8 e il
+  commento Alembic fuorviante nel lifespan.
+  Nessun cambiamento al codice.

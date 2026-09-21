@@ -62,7 +62,7 @@ build: ## Ricostruisce le immagini  →  docker compose build
 shell: ## Shell nel container backend  →  docker compose run --rm backend bash
 	$(BACKEND) bash
 
-test: ## Test del backend (26)  →  docker compose run --rm backend python -m pytest tests/ -q
+test: ## Test del backend (31)  →  docker compose run --rm backend python -m pytest tests/ -q
 	$(BACKEND) python -m pytest tests/ -q
 
 test-scraper: ## Test dello scraper  →  docker compose run --rm scraper python -m pytest tests/ -q

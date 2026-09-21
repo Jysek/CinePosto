@@ -1,14 +1,20 @@
 # CinePosto — Scraper
 
-Scraper Python che raccoglie la programmazione di 3 cinema di Perugia e produce JSON statici aggiornati ogni 24 ore. Componente del monorepo CinePosto.
+Scraper Python che raccoglie la programmazione di 8 sale dell'Umbria e produce JSON statici aggiornati ogni 24 ore. Componente del monorepo CinePosto.
 
-## Cinema supportati
+## Sale supportate
 
-| Cinema | Metodo accesso | Note |
+**8 sale** dell'Umbria, su famiglie tecniche diverse:
+
+| Famiglia | Sale | Tecnica |
 |---|---|---|
-| PostModernissimo | HTML + parser RSC (Next.js) | Nessun anti-bot |
-| The Space Cinema Corciano | API REST OAuth2 | Fallback CloakBrowser se API giù |
-| UCI Cinemas Perugia | API Cloud Run (non documentata) | Il sito principale è bloccato da Cloudflare |
+| HTML / payload RSC | PostModernissimo | parsing del payload RSC (Next.js) |
+| API proprietaria | The Space (Corciano, Terni), UCI Perugia | REST OAuth2 / microservice / Cloud Run |
+| schema.org | Zenith, Nuovo Cinema Castello, Metropolis, Concordia | estrattore condiviso `SchemaOrgExtractor` (JSON-LD + microdata) |
+
+L'elenco completo, con stato e fonte di ogni sala, sta in
+[`docs/scraper/copertura.md`](../docs/scraper/copertura.md); le schede di implementazione in
+[`docs/scraper/connettori/README.md`](../docs/scraper/connettori/README.md).
 
 ## Installazione
 
@@ -44,11 +50,11 @@ python3 -m scraper.main --schedule
 # Test offline (non richiede rete)
 python3 -m pytest tests/ -v
 
-# Healthcheck endpoint dei 3 cinema (no scraping completo)
+# Healthcheck delle fonti (3 su 8, no scraping completo)
 python3 healthcheck.py
 ```
 
-`healthcheck.py` esegue una ping rapida ai 3 endpoint (PostModernissimo home, The Space auth, UCI programming API) e ritorna exit code 0 se tutti rispondono, 1 in caso contrario. Utile per monitoring esterno (cron, Uptime Kuma, ecc.).
+`healthcheck.py` esegue una ping rapida alle 3 fonti con endpoint diretto (PostModernissimo home, The Space auth, UCI programming API) e ritorna exit code 0 se tutte rispondono, 1 in caso contrario. **Copre 3 fonti su 8**: le 5 sale schema.org (Zenith, Nuovo Cinema Castello, Metropolis, Concordia, The Space Terni) non sono ancora monitorate. Utile per monitoring esterno (cron, Uptime Kuma, ecc.).
 
 ## Output
 
@@ -107,7 +113,7 @@ python3 healthcheck.py
 - `year` (int) — estratto da Wikidata P577 (data pubblicazione)
 - `wikidata_id` (string) — entity_id Wikidata (es. `"Q97154362"`), utile per future re-importazioni di metadati e come UNIQUE nel DB backend
 
-Copertura misurata su 19 film del dataset attuale: `poster` 100%, `description` 100%, `director` 95%, `duration` 74%, `genres` 69%, `year`/`wikidata_id` 37% (film di nicchia non su Wikidata).
+Copertura **misurata al 2026-07-02** su 19 film del dataset di allora: `poster` 100%, `description` 100%, `director` 95%, `duration` 74%, `genres` 69%, `year`/`wikidata_id` 37% (film di nicchia non su Wikidata). È una misura storica, da rimisurare (vedi `docs/backend/api.md` §9).
 
 **Campi non presenti per scelta:** `rating` (API commerciali non usate), `price` (richiederebbe scraping aggiuntivo fragile su ogni cinema).
 
@@ -124,10 +130,15 @@ scraper/
 ├── normalizer.py        # Normalizzazione titoli, fuzzy match, Levenshtein
 ├── browser.py           # CloakBrowser fallback (Chromium anti-fingerprint)
 └── connectors/
-    ├── base.py          # BaseConnector ABC
+    ├── base.py                 # BaseConnector ABC
+    ├── schema_org.py           # estrattore condiviso JSON-LD + microdata
     ├── postmodernissimo.py
-    ├── thespace.py
-    └── uci.py
+    ├── thespace.py             # parametrizzato: Corciano + Terni
+    ├── uci.py
+    ├── cinema_zenith.py
+    ├── nuovo_cinema_castello.py
+    ├── cinema_metropolis.py
+    └── cinema_teatro_concordia.py
 ```
 
 ## Finestra temporale

@@ -1,6 +1,6 @@
 # Backend — Architettura tecnica
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `0c56a7e` (`2026-09-21`).
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).
@@ -82,24 +82,24 @@ INDEX  ix_showings_date, ix_showings_film, ix_showings_cinema
 
 ---
 
-## Endpoint previsti
+## Endpoint
 
 | Metodo | Path | Descrizione |
 |--------|------|-------------|
-| `GET`  | `/health` | Liveness probe |
-| `GET`  | `/api/v1/cinemas` | Lista cinema |
-| `GET`  | `/api/v1/cinemas/nearby?lat&lon&radius_km` | Cinema in un raggio (Haversine) |
-| `GET`  | `/api/v1/cinemas/{slug}` | Dettaglio cinema + conteggio showings |
-| `GET`  | `/api/v1/cinemas/{slug}/showings?date_from&date_to` | Programmazione del cinema |
-| `GET`  | `/api/v1/films/today` | Films con almeno uno showing oggi |
-| `GET`  | `/api/v1/films/search?q=...` | Ricerca per titolo (substring su `title_normalized`) |
-| `GET`  | `/api/v1/films/{id}` | Dettaglio film + prossimi showings |
-| `GET`  | `/api/v1/showings?date&cinema_slug&film_id` | Programmazione filtrata |
-| `GET`  | `/api/v1/showings/today` | Scorciatoia per oggi |
+| `GET`  | `/health` | Liveness probe (fuori dal prefisso `/api/v1`) |
+| `GET`  | `/api/v1/cinema` | Lista cinema |
+| `GET`  | `/api/v1/cinema/{slug}` | Dettaglio cinema + conteggio showings |
+| `GET`  | `/api/v1/cinema/{slug}/showings?date_from&date_to` | Programmazione del cinema |
+| `GET`  | `/api/v1/film/oggi` | Film con almeno uno showing oggi |
+| `GET`  | `/api/v1/film/settimana` | Film in programmazione oggi → +7 giorni |
+| `GET`  | `/api/v1/film/search?q=...&limit=...` | Ricerca per titolo (min 2 caratteri) |
+| `GET`  | `/api/v1/film/{film_id}` | Dettaglio film + prossimi showings |
+| `GET`  | `/api/v1/showings?date=YYYY-MM-DD` | Spettacoli di una data (default: oggi) |
 | `POST` | `/api/v1/admin/reimport` | Rilegge JSON scraper (header `X-Admin-Token` richiesto) |
 | `GET`  | `/api/v1/admin/dataset-info` | Conteggi e ultima data dataset (protetto) |
 
 Tutti gli endpoint sono **sola lettura** salvo `/admin/reimport`. I dati arrivano dallo scraper, non da utenti.
+Il contratto autorevole (URL, query params, forma delle risposte, codici HTTP) è [api.md](api.md).
 
 ---
 
@@ -121,7 +121,7 @@ scraper/output/showings.json → tabella showings
 Specifica completa in [schema-mapping.md](schema-mapping.md).
 
 **Trigger del seed**:
-- **Manualmente**: script `python -m app.seed` (al primo deploy / fix locale).
+- **Manualmente**: script `python -m app.seed_from_json` (al primo deploy / fix locale).
 - **Periodicamente**: `cron` esterno o `systemd timer` invoca `POST /api/v1/admin/reimport` dopo che lo scraper ha aggiornato i JSON.
 
 Nessuno scheduler interno al backend (decisione D2): lo scraper vive nel suo processo via systemd timer separato (vedi `scraper/deploy/cineposto-scraper.timer`).
@@ -135,31 +135,10 @@ Nessuno scheduler interno al backend (decisione D2): lo scraper vive nel suo pro
 | Framework | FastAPI | Async, Pydantic integrato, Swagger auto |
 | ORM | SQLAlchemy 2.0 sync | Sufficiente per la scala, più semplice di async |
 | DB dev + prod | **SQLite** (D4) | Bassa concorrenza, lettura-pesante, zero ops |
-| Migrations | Alembic | Standard de facto SQLAlchemy |
+| Migrations | **nessuna configurata** | Le tabelle nascono con `Base.metadata.create_all` nel lifespan; il DB è ricreabile dal seed. Alembic va introdotto solo quando non lo sarà più (regola di `AGENTS.md`) |
 | Arricchimento dati | **Wikidata via scraper** (D1) | Già fatto a monte, gratis, niente API key |
 | Scheduling | **Esterno** (systemd timer + `--once`) (D2/L3) | Backend resta stateless rispetto allo scraping |
 | Identità Cinema | **PK slug stringa** (D3) | Allineato JSON, URL parlanti |
 | Identità Film | **PK intera + UNIQUE(title_normalized, year)** (D3) | Robusto a remake e encoding fragile |
 | Lingua codice/schema | **Inglese** (L1+L2) | Allineato JSON scraper, niente traduzione runtime |
 | Sicurezza endpoint admin | Header `X-Admin-Token` | Sufficiente per MVP locale; in prod aggiungere HTTPS + IP allowlist |
-
----
-
-## Status (2026-07-02)
-
-- ✅ Struttura cartelle e file pronta
-- ✅ `requirements.txt`, `.env.example`, `.gitignore` allineati
-- ✅ Tutti i TODO nei file Python riflettono le decisioni D1-D5 + L1-L5 (lingua inglese)
-- ✅ `schema-mapping.md` autorevole con nomi inglesi
-- ✅ Scraper rebrandizzato + systemd timer pronto
-- ✅ **`config.py`** implementato (Settings + `get_settings` con `lru_cache`)
-- ✅ **`database.py`** implementato (Base, engine, SessionLocal, `get_db`, PRAGMA FK)
-- ✅ **3 modelli SQLAlchemy** implementati (Cinema/Film/Showing con vincoli e indici)
-- ✅ **Schemas Pydantic** implementati (CinemaOut/WithCount, FilmOut/Detail, ShowingOut/Detail; forward reference + `field_validator` su `times`)
-- ✅ **Repositories** implementati (SQLAlchemy 2.0 `select()`, `joinedload` anti-N+1, `upsert_from_scraper`, `normalize_title` per dedup)
-- 🔜 services (`get_films_today`, `get_cinema_with_count`, `search_films`)
-- 🔜 routers (endpoint REST + Swagger auto)
-- 🔜 `main.py` (`create_app` factory + CORS + lifespan)
-- 🔜 `seed_from_json.py` (bootstrap DB da `scraper/output/*.json`)
-- 🔜 tests (`conftest.py` + smoke test endpoint chiave)
-- 🔜 Alembic init + migration iniziale
