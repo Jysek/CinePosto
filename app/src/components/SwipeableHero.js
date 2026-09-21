@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import Colors from '../constants/colors';
 
 const { width: windowWidth, height } = Dimensions.get('window');

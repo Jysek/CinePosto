@@ -14,7 +14,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import SwipeableHero from '../components/SwipeableHero';
 import DateBar from '../components/DateBar';
 import MovieGrid from '../components/MovieGrid';

@@ -14,7 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import PosterImage from '../components/PosterImage';
 import Colors from '../constants/colors';
 import { CINEMA_LOGOS, cinemaColor, cinemaInitials } from '../constants/cinemas';

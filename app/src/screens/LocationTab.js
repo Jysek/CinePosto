@@ -2,7 +2,7 @@
 // ognuno apribile in Google Maps. I cinema arrivano dall'API.
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, Linking, TouchableOpacity, Platform, ActivityIndicator, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import { Asset } from 'expo-asset';
 import CinemaMap from '../components/CinemaMap';
 import Colors from '../constants/colors';

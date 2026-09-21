@@ -14,7 +14,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import PosterImage from '../components/PosterImage';
 import Colors from '../constants/colors';
 import { searchFilms, getCinemas, getCinemaShowings } from '../api/api';
