@@ -68,9 +68,7 @@ def test_maps_screening_to_movie_via_work_presented_id():
     # Director/durata/poster vivono solo sul nodo `Movie`, raggiunto via `workPresented.@id`.
     assert film.director == "Cal Brunker"
     assert film.duration == "82 min"
-    assert film.source_poster == (
-        "https://www.nuovocinemacastello.it/wp-content/uploads/2026/09/Paw-locandinapg1.jpg"
-    )
+    assert film.source_poster == ("https://www.nuovocinemacastello.it/wp-content/uploads/2026/09/Paw-locandinapg1.jpg")
     assert film.present_in[0].source_url == "https://www.nuovocinemacastello.it/film/paw-patrol-missione-dinosauri/"
 
 

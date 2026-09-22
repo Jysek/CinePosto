@@ -48,9 +48,7 @@ def test_maps_work_presented_id_to_movie_metadata():
 
     assert film.duration == "102 min"
     assert film.director == "Niccolò Gentili"
-    assert film.source_poster == (
-        "https://cinemazenith.it/wp-content/uploads/2026/09/DLEF_1080X1920-3piccolo.jpg"
-    )
+    assert film.source_poster == ("https://cinemazenith.it/wp-content/uploads/2026/09/DLEF_1080X1920-3piccolo.jpg")
     assert film.present_in[0].source_url == "https://cinemazenith.it/film/dove-la-fiesta/"
 
 
@@ -120,9 +118,7 @@ def test_maps_microdata_movie_metadata_and_year():
     assert film.duration == "120 min"
     assert film.director == "Giorgio Testi"
     assert film.year == 2026
-    assert film.present_in[0].source_url == (
-        "https://www.cineconcordia.it/films/ultimo-tutto-live-a-tor-vergata/"
-    )
+    assert film.present_in[0].source_url == ("https://www.cineconcordia.it/films/ultimo-tutto-live-a-tor-vergata/")
 
 
 def test_decodes_html_entities_in_title():
@@ -217,11 +213,7 @@ def test_skips_microdata_event_without_start_date():
 
 
 def test_skips_jsonld_event_without_start_date():
-    html = (
-        '<script type="application/ld+json">'
-        '{"@graph":[{"@type":"ScreeningEvent","name":"Senza data"}]}'
-        "</script>"
-    )
+    html = '<script type="application/ld+json">{"@graph":[{"@type":"ScreeningEvent","name":"Senza data"}]}</script>'
     assert extract_screening_events(html, "https://example.org/") == []
 
 
