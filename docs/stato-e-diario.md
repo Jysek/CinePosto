@@ -46,3 +46,9 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   numero di test nel `Makefile`. Aperti in `problemi-aperti.md` il healthcheck a 3 fonti su 8 e il
   commento Alembic fuorviante nel lifespan.
   Nessun cambiamento al codice.
+- **2026-09-22** — repository allineato e pubblicato: `origin/main` portato a `0e81e3c` (23 commit,
+  cioè `b90e5c0` più la formattazione `ruff format` dei test dei connettori schema.org: la CI
+  sarebbe altrimenti nata rossa sul job scraper). Controlli locali tutti verdi (31 test backend,
+  141 scraper, coverage 75%, export web + `expo-doctor` 21/21, config di produzione valida). CI
+  verde su entrambi i job:
+  https://github.com/Jysek/CinePosto/actions/runs/35786979140. Il trunk di lavoro è `main`.
