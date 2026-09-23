@@ -45,7 +45,8 @@ app/
 ├── babel.config.js        ← babel-preset-expo
 ├── metro.config.js        ← shim web per react-native-webview
 ├── shims/                 ← codegenNativeComponent.web.js (compat web WebView)
-├── assets/                ← logo, icone, loghi cinema (post.jpg, uci.png, the-space.jpg)
+├── assets/                ← logo, icone, loghi cinema (post.jpg, uci.png, the-space.jpg,
+│                            zenith.png, castello.png, concordia.png, metropolis.png)
 └── src/
     ├── api/api.js         ← client HTTP verso il backend + preferiti locali
     ├── constants/
@@ -133,9 +134,16 @@ Chiama il backend via `fetch`; l'indirizzo base è in `constants/config.js`.
 | `searchFilms(q)` | `GET /film/search?q=` |
 | `getFilmById(id)` | `GET /film/{id}` |
 | `getCinemas()` | `GET /cinema` |
+| `getCinemaBySlug(slug)` | `GET /cinema/{slug}` |
 | `getCinemaShowings(slug, from, to)` | `GET /cinema/{slug}/showings?date_from=&date_to=` |
+| `getShowingsToday()` | `GET /showings` |
+| `getShowings(filters)` | `GET /showings?date=YYYY-MM-DD` |
 
-I preferiti (`addFavorite`, `getFavorites`, …) sono **locali**, salvati in AsyncStorage.
+Le funzioni `getFilmsToday`, `getCinemaBySlug`, `getShowingsToday` e `getShowings` sono
+esposte ma non ancora usate dalle schermate: le quattro che leggono i dati sono
+`getCinemas`, `getCinemaShowings` (Home, Cerca e dettaglio) e `getFilmById` (dettaglio)
+più `searchFilms`. I preferiti (`addFavorite`, `getFavorites`, …) sono **locali**, salvati
+in AsyncStorage.
 
 > **Forma dei dati**: gli spettacoli del backend (`ShowingDetail`) hanno il film e il
 > cinema **annidati** → si leggono `s.film.id` e `s.cinema.slug` (non campi piatti).
