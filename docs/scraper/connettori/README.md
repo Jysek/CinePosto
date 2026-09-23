@@ -81,10 +81,12 @@ dice solo *dove* prendere l'HTML. Vive in `scraper/scraper/connectors/schema_org
 ### API pubblica (funzioni pure, testabili senza rete)
 
 ```python
-def extract_screening_events(html: str, base_url: str) -> list[Film]:
+def extract_screening_events(html: str, base_url: str,
+                             cinema: str = "", cinema_slug: str = "") -> list[Film]:
     """Estrae Film con present_in da una pagina che contiene Movie+ScreeningEvent
     in JSON-LD e/o microdata. NON filtra per data: restituisce tutto ciò che la
-    pagina espone. Non fa I/O: riceve l'HTML già scaricato."""
+    pagina espone. Non fa I/O: riceve l'HTML già scaricato. `cinema` e
+    `cinema_slug` etichettano gli spettacoli estratti."""
 
 def filter_films_to_dates(films: list[Film], dates: list[str] | None) -> list[Film]:
     """Tiene solo gli spettacoli nelle date richieste; scarta i Film senza spettacoli
@@ -145,13 +147,20 @@ curl -s -A "$UA" "https://cinemazenith.it/" -o scraper/tests/fixtures/zenith_hom
 
 ### Test dell'estrattore (senza rete)
 
-Fixtures HTML committate in `scraper/tests/fixtures/`, una per forma di markup:
+Fixtures HTML committate in `scraper/tests/fixtures/`, una per sito/forma di markup
+(questi sono i nomi reali nel repo):
 
-- `schema_org_jsonld_zenith.html` → atteso: N film, M screening, date attese;
-- `schema_org_microdata_concordia.html` → idem con `content=`;
-- `schema_org_microdata_zen25_detail.html` → idem con `<time datetime>`;
-- casi limite: JSON-LD malformato → fallback microdata; pagina senza eventi → `[]`;
-  entità HTML nel titolo; evento senza `startDate` → scartato.
+- `zenith_home.html` → homepage Zenith, JSON-LD `@graph`;
+- `zenith_week.html` → pagina `programmazione-settimana`, microdata `<time datetime>`
+  e `workPresented` come stringa;
+- `concordia_home.html` → microdata con `content=`;
+- `castello_home.html` → JSON-LD, tema `zen25` come Zenith;
+- `metropolis_home.html` + `metropolis_film_serpenti.html` → microdata su homepage
+  (solo titoli) e pagina di dettaglio (spettacoli).
+
+I test dell'estrattore (`test_schema_org.py`) e dei connettori coprono i casi limite:
+JSON-LD malformato → fallback microdata; pagina senza eventi → `[]`; entità HTML nel
+titolo; evento senza `startDate` → scartato.
 
 I connettori per cinema sono **sottili**: scaricano l'HTML e delegano all'estrattore.
 Questo è il punto in cui i test a fixture fanno da regressione quando il sito fa restyling.
