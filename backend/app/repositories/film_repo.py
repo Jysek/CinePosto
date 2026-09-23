@@ -15,6 +15,8 @@ def normalize_title(title: str) -> str:
     """Trasforma un titolo in forma normalizzata per dedup.
     Es: 'Ricchi…da morire – Delitti in famiglia' → 'ricchi da morire delitti in famiglia'
     Regole:
+    - `&` → `e`: UCI scrive "AMORI & INCANTESIMI 2", The Space "Amori e incantesimi 2":
+      senza questa regola sono due film diversi per la chiave naturale del DB.
     - lowercase
     - accenti rimossi (NFKD + drop combining chars)
     - punteggiatura → spazio
@@ -22,6 +24,9 @@ def normalize_title(title: str) -> str:
     """
     nfkd = unicodedata.normalize("NFKD", title)
     ascii_only = "".join(c for c in nfkd if not unicodedata.combining(c))
+    # `&` = "e" in italiano. Va fatto PRIMA di sostituire la punteggiatura con spazi,
+    # altrimenti la congiunzione sparisce e le due forme non si incontrano mai.
+    ascii_only = ascii_only.replace("&", " e ")
     no_punct = re.sub(r"[^\w\s]", " ", ascii_only.lower(), flags=re.UNICODE)
     collapsed = re.sub(r"\s+", " ", no_punct).strip()
     return collapsed
@@ -33,12 +38,25 @@ def get_by_id(db: Session, film_id: int) -> Film | None:
 
 
 def get_by_natural_key(db: Session, title_normalized: str, year: int | None) -> Film | None:
-    """Cerca per la UNIQUE key (title_normalized, year). Usato dal seed."""
-    stmt = select(Film).where(
-        Film.title_normalized == title_normalized,
-        Film.year == year,
-    )
-    return db.scalars(stmt).one_or_none()
+    """Cerca per la chiave naturale (title_normalized, year). Usato dal seed.
+
+    Regole:
+    - match esatto su (title_normalized, year);
+    - un anno NULL è **jolly solo se il candidato è unico**: "non so ancora che film è"
+      incontra l'anno valorizzato, ma se i candidati sono più di uno (remake omonimi)
+      non si inventa nulla e si ritorna None.
+    """
+    stmt = select(Film).where(Film.title_normalized == title_normalized)
+    rows = list(db.scalars(stmt))
+
+    for film in rows:
+        if film.year == year:
+            return film
+
+    compatible = [f for f in rows if f.year is None or year is None]
+    if len(compatible) == 1:
+        return compatible[0]
+    return None
 
 
 def search_by_title(db: Session, query: str, limit: int = 20) -> list[Film]:
@@ -95,6 +113,10 @@ def upsert_from_scraper(db: Session, data: dict) -> Film:
         for key in ("original_title", "runtime_minutes", "genres", "director", "poster_url", "synopsis", "wikidata_id"):
             if data.get(key) is not None:
                 setattr(film, key, data[key])
+        # L'anno NULL della riga esistente viene adottato: la riga esiste già,
+        # il JSON di questa run sa che anno è → la chiave si completa, non si duplica.
+        if film.year is None and year is not None:
+            film.year = year
 
     db.flush()  # forza l'assegnazione dell'id (serve al seed di showings)
     return film
