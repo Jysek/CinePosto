@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime
 import json
 import logging
@@ -248,6 +249,9 @@ def run_scraper() -> None:
         except Exception as exc:
             logger.warning("Wikidata enrichment failed for '%s': %s", film.title, exc)
 
+    # Seconda fusione: dopo Wikidata, perché prima l'identità non esisteva ancora.
+    all_films = _merge_films_by_wikidata_id(all_films)
+
     logger.info("Merging with previous data ...")
     previous_data = load_previous_movies()
     merged_films = merge_films(all_films, previous_data, today)
@@ -291,34 +295,106 @@ def run_scraper() -> None:
     )
 
 
+# Metadati che un film fuso adotta dagli altri membri del gruppo quando gli mancano.
+_MERGE_FILL_FIELDS = (
+    "poster",
+    "source_poster",
+    "description",
+    "genres",
+    "director",
+    "duration",
+    "original_title",
+    "year",
+)
+
+
+def _choose_master_title(titles: list[str]) -> str:
+    """Titolo del film fuso: la prima forma non "urlata", altrimenti la prima.
+
+    La scelta non dipende dall'ordine dei connettori (che cambia quando si
+    aggiunge una sala): «Amori e incantesimi 2» è più presentabile di
+    «AMORI & INCANTESIMI 2» nella scheda dell'app.
+    """
+    candidates = [t for t in titles if t]
+    for title in candidates:
+        if not title.isupper():
+            return title
+    return candidates[0] if candidates else ""
+
+
+def _fuse_group(group: list[Film]) -> Film:
+    """Fonde un gruppo di Film già riconosciuti come lo stesso film.
+
+    Il primo fa da base, gli altri cedono `present_in`, `history` e i metadati
+    che gli mancano. Restituisce un Film NUOVO: l'input non viene modificato.
+    """
+    master = group[0]
+    filled = {
+        field: next(
+            (getattr(f, field) for f in group if getattr(f, field)),
+            getattr(master, field),
+        )
+        for field in _MERGE_FILL_FIELDS
+    }
+    return replace(
+        master,
+        title=_choose_master_title([f.title for f in group]),
+        present_in=[s for f in group for s in f.present_in],
+        history=[h for f in group for h in f.history],
+        **filled,
+    )
+
+
+def _merge_films_by_wikidata_id(films: list[Film]) -> list[Film]:
+    """Fonde i film che Wikidata ha identificato come la stessa entità.
+
+    Gira DOPO l'arricchimento (prima `wikidata_id` non esiste ancora): due
+    varianti di titolo dello stesso film non vengono più sfiorate dal
+    fuzzy_match, ma qui sono la stessa identità e si uniscono — e si toglie
+    alla radice il rischio di `IntegrityError` su `UNIQUE(wikidata_id)` al seed.
+    Nessuna sorpresa: si usa SOLO l'uguaglianza di `wikidata_id`, mai fuzzy_match.
+    I film senza `wikidata_id` restano separati. Idempotente: l'input non viene
+    modificato, si restituisce una lista nuova.
+    """
+    groups: dict[str, list[Film]] = {}
+    for film in films:
+        if film.wikidata_id:
+            groups.setdefault(film.wikidata_id, []).append(film)
+
+    result: list[Film] = []
+    fused: set[str] = set()
+    for film in films:
+        wid = film.wikidata_id
+        if not wid or len(groups[wid]) == 1:
+            result.append(film)
+            continue
+        if wid in fused:
+            continue
+        fused.add(wid)
+        group = groups[wid]
+        for other in group[1:]:
+            logger.info("Fusi per wikidata_id %s: %s + %s", wid, group[0].title, other.title)
+        result.append(_fuse_group(group))
+
+    return result
+
+
 def _deduplicate_films(films: list[Film]) -> list[Film]:
     """Fonde in un unico Film le copie dello stesso titolo arrivate da cinema diversi.
 
-    Match via fuzzy_match (tollera refusi e varianti). Il primo Film incontrato
-    fa da master: accumula gli showings degli altri e i metadati che gli mancano.
-    O(n²) ma n è dell'ordine delle decine: irrilevante.
+    Match via fuzzy_match (tollera refusi e varianti). Il primo match fa da
+    base per il fuso, di cui `_fuse_group` sceglie anche il titolo (regola
+    deterministica, vedi `_choose_master_title`). O(n²) ma n è dell'ordine
+    delle decine: irrilevante.
     """
     result: list[Film] = []
 
     for film in films:
-        found = False
-        for existing in result:
+        for i, existing in enumerate(result):
             if fuzzy_match(existing.title_normalized, film.title_normalized):
-                existing.present_in.extend(film.present_in)
-                if not existing.poster and film.poster:
-                    existing.poster = film.poster
-                if not existing.description and film.description:
-                    existing.description = film.description
-                if not existing.genres and film.genres:
-                    existing.genres = film.genres
-                if not existing.director and film.director:
-                    existing.director = film.director
-                if not existing.duration and film.duration:
-                    existing.duration = film.duration
-                found = True
+                result[i] = _fuse_group([existing, film])
                 break
-
-        if not found:
+        else:
             result.append(film)
 
     return result
