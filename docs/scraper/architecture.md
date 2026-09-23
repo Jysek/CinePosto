@@ -703,10 +703,10 @@ main.run_scraper()
 
 ## Deploy e systemd
 
-Il deploy è gestito da `deploy/setup.sh` che installa:
+Il deploy è gestito da `scraper/deploy/setup.sh` che installa:
 - Un **systemd timer** (`cineposto-scraper.timer`) con trigger giornaliero alle 03:00 + `Persistent=true` + `RandomizedDelaySec=10min`
 - Un **systemd service** (`cineposto-scraper.service`, `Type=oneshot`) che lancia `python -m scraper.main --once`
-- Un **logrotate** per `scraper.log` (config in `deploy/cineposto-scraper-logrotate`)
+- Un **logrotate** per `scraper.log` (config in `scraper/deploy/cineposto-scraper-logrotate`)
 
 > Scelta architetturale (decisione L3): timer esterno + `--once` invece di `--schedule` interno con APScheduler.
 > Vantaggi: ogni run è un processo isolato (no memory leak nel daemon), `systemctl status` mostra l'ultima esecuzione, log distinti per run, restart granulare con `Restart=on-failure` su una singola esecuzione invece che sull'intero scheduler.
