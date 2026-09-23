@@ -16,8 +16,12 @@ from app.routers import admin, cinema, film, showings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup / shutdown hook. In dev creiamo le tabelle al volo;
-    in prod si usa Alembic con `alembic upgrade head`.
+    """Startup / shutdown hook: crea le tabelle se mancano, poi cede il controllo.
+
+    Non esistono migrazioni (`AGENTS.md`: Alembic solo quando il DB non sarà più
+    ricreabile dal seed). Lo schema evolve con `Base.metadata.create_all`, che non
+    modifica tabelle già esistenti: un cambio di colonna richiede il rebuild del DB
+    o un mini-script di migrazione a mano (vedi docs/backend/architecture.md).
     """
     Base.metadata.create_all(bind=engine)
     yield

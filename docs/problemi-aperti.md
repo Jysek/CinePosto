@@ -1,6 +1,6 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `9ea041b` (`2026-09-23`).
+> Verificato su `e69385f` (`2026-09-23`).
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
@@ -38,9 +38,3 @@ dato pubblico (o un endpoint) su cui costruire l'avviso.
 Il healthcheck controlla PostModernissimo, The Space (auth) e UCI. Le 5 sale aggiunte dopo
 (Zenith, Nuovo Cinema Castello, Metropolis, Concordia, The Space Terni) non hanno endpoint
 monitorato: se una di quelle fonti si rompe, il healthcheck resta verde.
-
-### Il commento del lifespan cita Alembic, non configurato
-**Dove**: `backend/app/main.py:20` · **Prova**: `find . -iname "alembic*"` → nessun risultato · **Data**: `2026-09-21`
-Il docstring del `lifespan` dice «in prod si usa Alembic con `alembic upgrade head`», ma non
-esiste alcuna migrazione e `AGENTS.md` dice di non introdurre Alembic finché il DB è ricreabile
-dal seed: il commento è fuorviante.

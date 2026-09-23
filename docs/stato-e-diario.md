@@ -71,3 +71,7 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   occhio su web: ombra e animazione invariate (screenshot prima/dopo identici, anche sull'export di
   produzione). Resta un warning equivalente dalla tab bar di React Navigation (voce in
   `problemi-aperti.md`); il messaggio su React DevTools è informativo e resta.
+- **2026-09-23** — corretti i commenti che descrivevano codice inesistente: il docstring del
+  `lifespan` non cita più Alembic (non configurato, e `create_all` non migra lo schema esistente) e
+  dice il limite reale; sweep dei commenti "in prod / MVP / TODO" su backend e scraper con verdetti
+  riportati in chat. Voce chiusa in `problemi-aperti.md`.
