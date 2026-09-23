@@ -1,6 +1,7 @@
 # The Space Cinema Terni — scheda connettore
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): costanti, connettore e test confrontati col codice;
+> le chiamate API osservate il 19/09/2026 non sono state ri-verificate.
 
 > **Stato**: 🟢 fonte verificata, pronta per il connettore · **Ondata 1** (riuso del
 > connettore API di Corciano) · Ricognizione **19 settembre 2026**.

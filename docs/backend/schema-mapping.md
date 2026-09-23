@@ -1,6 +1,8 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `dfff524` (`2026-09-21`).
+> Verificato su `dfff524` (`2026-09-21`); esempio cinemas.json allineato a
+> `scraper/output/cinemas.json` su `857c68b` (`2026-09-24`). Il resto del capitolo non è
+> stato ricontrollato in quella sessione.
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).

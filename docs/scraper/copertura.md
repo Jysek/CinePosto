@@ -1,6 +1,7 @@
 # Cinema in Umbria — registro di copertura e progresso
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): tabella sale e contatori confrontati col codice
+> (connettori in `main.py`); la ricognizione sui siti (19/09/2026) non è stata rieseguita.
 
 > **Documento di lavoro.** Serve a sapere *tutte* le sale dell'Umbria prima di scrivere i
 > connettori, e a tracciare cosa è implementato e cosa no. Va aggiornato **nello stesso commit**

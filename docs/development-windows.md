@@ -1,6 +1,8 @@
 # Sviluppo su Windows
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): §1–4 e §6–9 ricontrollate (comandi, file, numeri di
+> test 149, dataset). §5 (Expo Go, rete e firewall su telefono reale) non rieseguita in quella
+> sessione.
 
 Guida pratica per far girare CinePosto su Windows. Tutti i comandi qui sono stati eseguiti
 e verificati su questo ambiente (Windows 11, Git Bash, Docker Desktop).

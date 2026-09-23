@@ -1,6 +1,8 @@
 # Connettori — schede di implementazione
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): schede e contratto tecnico confrontati col codice
+> (costanti in `config.py`, estrattore, fixture, test); il markup dei siti osservato il
+> 19/09/2026 non è stato ri-verificato (nessuno scraping live).
 
 Schede pronte per essere passate a una **sessione nuova**: contengono lo studio fatto sul
 sito (piattaforma, markup reale, URL, insidie) e la specifica di implementazione per il

@@ -1,6 +1,7 @@
 # Nuovo Cinema Castello — scheda connettore
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): costanti, connettore e test confrontati col codice;
+> il markup del sito osservato il 19/09/2026 non è stato ri-verificato.
 
 > **Stato**: 🟢 fonte verificata, pronta per il connettore · **Ondata 1** (famiglia schema.org,
 > gemello di Zenith) · Ricognizione **19 settembre 2026**.

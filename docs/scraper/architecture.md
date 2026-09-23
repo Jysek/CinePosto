@@ -1,6 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): costanti, modelli, connettori e orchestrazione
+> confrontati col codice.
 
 ## Indice
 

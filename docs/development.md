@@ -1,6 +1,7 @@
 # Guida allo sviluppo
 
-> Verificato su `0c56a7e` (`2026-09-21`): intestazione aggiunta, contenuto non ancora ricontrollato.
+> Verificato su `857c68b` (`2026-09-24`): comandi, costanti, numeri di test (31 backend) e
+> variabili d'ambiente confrontati col codice.
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in
