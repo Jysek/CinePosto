@@ -84,3 +84,16 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   (`REQUEST_TIMEOUT`) e retry per errori di rete (`REQUEST_RETRY`/`RETRY_BACKOFF`, solo su
   eccezioni, mai su status HTTP) alle condizioni degli stessi connettori. Giro reale: 8/8 OK,
   exit 0.
+- **2026-09-24** — ricontrollo del contenuto dei documenti vivi (16 file dichiaravano
+  `Verificato su 0c56a7e` senza essere stati riletti): corretti i path inesistenti in
+  `backend/api.md` (`app/api/client.js` → `app/src/api/api.js`, `app/api/schemas.js` inesistente)
+  e l'esempio di PostModernissimo in `api.md`/`schema-mapping.md` (indirizzo e coordinate non
+  allineati a `config.py`); allineati anche la tabella "Quando caricare cosa" e i default CORS di
+  `api.md`, la tabella del client e i loghi in `app/overview.md`, i nomi delle fixture nel README
+  dei connettori, i percorsi del deploy in `scraper/architecture.md`. Numeri aggiornati a 149 test
+  scraper e 180 totali (panoramica, development-windows, README, AGENTS.md). Eseguito davvero
+  `make prod-test` (Caddy + TLS self-signed, 8443 OK); emerso che `make prod-down` fallisce senza
+  le variabili d'ambiente: nuova voce in `problemi-aperti.md` (proposto fix nel Makefile, non
+  toccato in questa fase). Intestazioni aggiornate ai commit di correzione; per
+  `development-windows.md` §5 e per le schede connettori resta dichiarata esplicitamente la parte
+  non rieseguita (markup dei siti non ri-verificato, nessuno scraping live).
