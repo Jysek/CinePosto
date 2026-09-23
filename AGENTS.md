@@ -30,6 +30,7 @@ L'ambiente primario è **Docker** (funziona uguale su Windows e macOS, e non ric
 | Test backend (31) | `make test` |
 | Test scraper (141) | `make test-scraper` |
 | Lint | `make lint` |
+| Messaggi di console ASCII | `make check-console` |
 | Seed DB dai JSON | `make seed` |
 | Scraping live (con parsimonia) | `make scrape` |
 | Aiuto completo | `make help` |

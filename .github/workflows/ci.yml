@@ -24,6 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Messaggi di console ASCII (make check-console)
+        # La console di Windows (CP850) non decodifica l'UTF-8: i messaggi di `make` e degli
+        # script devono restare ASCII, altrimenti l'em dash esce come "â€”". Controllo da un secondo.
+        run: make check-console
+
       - uses: docker/setup-buildx-action@v3
 
       - name: Build delle immagini
