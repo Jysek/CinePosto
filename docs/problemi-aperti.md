@@ -1,6 +1,6 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `e69385f` (`2026-09-23`).
+> Verificato su `ca631cc` (`2026-09-23`).
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
@@ -32,9 +32,3 @@ Se lo scraping notturno fallisce, l'app mostra la programmazione vecchia senza d
 La data dell'ultimo aggiornamento esiste solo in `GET /api/v1/admin/dataset-info`
 (`backend/app/routers/admin.py:53`), protetto da token admin e non consumato dall'app: serve un
 dato pubblico (o un endpoint) su cui costruire l'avviso.
-
-### Il healthcheck copre solo 3 fonti su 8
-**Dove**: `scraper/healthcheck.py:69-71` · **Prova**: `grep -nE "_get\(|_post\(" scraper/healthcheck.py` → 3 chiamate · **Data**: `2026-09-21`
-Il healthcheck controlla PostModernissimo, The Space (auth) e UCI. Le 5 sale aggiunte dopo
-(Zenith, Nuovo Cinema Castello, Metropolis, Concordia, The Space Terni) non hanno endpoint
-monitorato: se una di quelle fonti si rompe, il healthcheck resta verde.

@@ -75,3 +75,12 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   `lifespan` non cita più Alembic (non configurato, e `create_all` non migra lo schema esistente) e
   dice il limite reale; sweep dei commenti "in prod / MVP / TODO" su backend e scraper con verdetti
   riportati in chat. Voce chiusa in `problemi-aperti.md`.
+- **2026-09-23** — healthcheck esteso da 3 a 8 fonti: aggiunti i controlli per Zenith, Nuovo
+  Cinema Castello, Concordia, Metropolis e la risoluzione del venue di The Space Terni; estratta
+  `has_failures()` e creato `scraper/tests/test_healthcheck.py` (prima il file non aveva test, ed è
+  la ragione per cui i 5 connettori nuovi non erano stati monitorati). Rimossa la voce da
+  `problemi-aperti.md`. In più, a run reale erano emersi due falsi positivi (Concordia risponde
+  in ~11s ma il check aveva timeout 10s; Castello con SSL transitorio): allineati timeout
+  (`REQUEST_TIMEOUT`) e retry per errori di rete (`REQUEST_RETRY`/`RETRY_BACKOFF`, solo su
+  eccezioni, mai su status HTTP) alle condizioni degli stessi connettori. Giro reale: 8/8 OK,
+  exit 0.

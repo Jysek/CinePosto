@@ -47,7 +47,7 @@ python3 -m pytest tests/ --cov --cov-report=term-missing
 ```bash
 python3 -m scraper.main --once      # run singolo (è quello che usa systemd in produzione — L3)
 python3 -m scraper.main --schedule  # SOLO DEV: loop APScheduler ogni 24h (richiede extra [dev])
-python3 healthcheck.py              # ping ai 3 endpoint
+python3 healthcheck.py              # ping alle 8 fonti
 ```
 
 ### Modifiche ai metadati o alle costanti cinema

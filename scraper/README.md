@@ -50,11 +50,11 @@ python3 -m scraper.main --schedule
 # Test offline (non richiede rete)
 python3 -m pytest tests/ -v
 
-# Healthcheck delle fonti (3 su 8, no scraping completo)
+# Healthcheck delle fonti (8 su 8, no scraping completo)
 python3 healthcheck.py
 ```
 
-`healthcheck.py` esegue una ping rapida alle 3 fonti con endpoint diretto (PostModernissimo home, The Space auth, UCI programming API) e ritorna exit code 0 se tutte rispondono, 1 in caso contrario. **Copre 3 fonti su 8**: le 5 sale schema.org (Zenith, Nuovo Cinema Castello, Metropolis, Concordia, The Space Terni) non sono ancora monitorate. Utile per monitoring esterno (cron, Uptime Kuma, ecc.).
+`healthcheck.py` esegue un ping alle 8 fonti primarie dei connettori (una per sala: homepage schema.org di Zenith, Nuovo Cinema Castello, Metropolis e Concordia; auth e venue di The Space; PostModernissimo home; UCI programming API) con lo stesso timeout e la stessa tolleranza ai transienti di rete degli scrapers, e ritorna exit code 0 se tutte rispondono, 1 in caso contrario. **Copre tutte le 8 fonti**: se si aggiunge un connettore nuovo, `tests/test_healthcheck.py` fallisce finché non si aggiunge anche il suo check. Utile per monitoring esterno (cron, Uptime Kuma, ecc.).
 
 ## Output
 
