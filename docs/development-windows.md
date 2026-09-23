@@ -97,6 +97,7 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Test backend (31) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
 | Test scraper (141) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
+| Messaggi di console ASCII | `make check-console` | controlla che `Makefile`, `dev.cmd` e `scripts/*.sh` stampino solo ASCII (vedi §9) |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |
 | Scraping **live** | `make scrape` | `docker compose run --rm scraper python -m scraper.main --once` |
 | Shell nel container | `make shell` | `docker compose run --rm backend bash` |
@@ -261,4 +262,5 @@ rifiuta di partire senza).
 | Fine riga strani nei diff | `core.autocrlf=true` su Windows | già gestito da `.gitattributes` (LF forzato) |
 | Expo si ferma con "Port 8081 is being used" | un altro progetto Expo è avviato | `make dev` usa la 8090; per avviare a mano aggiungi `--port 8090` |
 | Il browser blocca le chiamate API (CORS) | origin non in `CORS_ORIGINS` | aggiungila in `backend/.env` e `docker compose up -d backend` |
+| Il terminale mostra `â€”` invece di `—` | la console non è UTF-8 (codepage 850) | i messaggi di `make` e degli script sono in ASCII proprio per questo: se vedi caratteri rotti esegui `chcp 65001` prima di `make`, o usa Windows Terminal. La regola è *ciò che `make` e gli script stampano deve essere ASCII; i file restano UTF-8*, e `make check-console` la fa rispettare |
 | `python` apre il Microsoft Store | alias di Windows App Execution | usa `py -3.12` o il container |

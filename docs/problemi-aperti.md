@@ -1,6 +1,6 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `0c56a7e` (`2026-09-21`).
+> Verificato su `c5970a4` (`2026-09-23`).
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:

@@ -7,6 +7,12 @@
 > [development-windows.md](development-windows.md).
 >
 > Questa pagina descrive i comandi **nativi** (venv + npm), utili come fallback e su macOS.
+>
+> **Messaggi di console ASCII.** Ciò che `make` e gli script stampano resta ASCII: la console di
+> Windows (CP850) non decodifica l'UTF-8 e i caratteri tipografici (`—`, `→`) uscirebbero corrotti
+> (`â€”`). Il controllo è `make check-console`, che fallisce se una riga non-commento di `Makefile`,
+> `dev.cmd` o `scripts/*.sh` contiene caratteri non ASCII. I file restano UTF-8: la regola riguarda
+> solo ciò che finisce a schermo.
 
 ## Prerequisiti
 

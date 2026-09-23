@@ -58,3 +58,8 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   `AGENTS.md` (§Definition of done) e `docs/development.md`, `development-windows.md`,
   `scraper/architecture.md`. Cancellato il branch locale residuo `chore/app-sdk-57` (già contenuto
   in `main`).
+- **2026-09-23** — risolto il mojibake della console Windows (`make scrape` stampava
+  `JSON aggiornati in scraper/output/ â€” ora: make seed`): i messaggi di `make` e degli script sono
+  ora ASCII (era un problema di codifica console, non di battitura), con il nuovo target
+  `make check-console` che impedisce regressioni e gira anche in CI; nota di troubleshooting in
+  `development-windows.md` §9.
