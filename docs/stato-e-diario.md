@@ -112,3 +112,17 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   (`/film/oggi` e `/film/search` → una voce sola) e home dell'app (una scheda). Restano aperti i
   duplicati da varianti di titolo fra fonti diverse (coppie 29/68 `CARS` e 42/53 `Talking Tom
   Heroes`) e i residui delle run passate.
+- **2026-09-23** — lo scraper non pubblica più due volte lo stesso film: nuova fusione per
+  `wikidata_id` **dopo** l'arricchimento (prima non era possibile: la dedup girava prima di
+  Wikidata e due varianti arricchite avrebbero violato `UNIQUE(wikidata_id)` facendo fallire il
+  seed), più una tabella di alias curata (`scraper/scraper/title_aliases.py`, prima voce: le due
+  forme del titolo di *Cars* fra The Space/UCI e Metropolis); il titolo del master è scelto in
+  modo deterministico (preferisce la forma non urlata). Corretto anche `normalize_title`: non
+  taglia più le cifre finali e `fuzzy_match` non fonde un sequel numerato col primo film (effetto
+  sui JSON di oggi: 1 film cambia `id`, `Amori e incantesimi` → `Amori e incantesimi 2`, più i suoi
+  4 `film_id` in `showings.json` e la voce di stato di `movies.json`: 3 file, 7 righe). Fusa la
+  coppia CARS nel DB con `dedup_films --merge 29:68 --apply` (2 showings ri-assegnati, `year=2006`
+  adottato, 1 riga rimossa): `GET /api/v1/film/oggi` → 23 film con una sola scheda CARS. Test 149 →
+  162. Nuove voci in `problemi-aperti.md`: sequel con numeri romani (ancora fondono) e arricchimento
+  Wikidata che non aggancia i titoli urlati (radice degli alias). I JSON restano quelli del
+  2026-09-20: la run di rigenerazione va fatta solo su autorizzazione esplicita.

@@ -57,13 +57,15 @@ scraper/
 ```
 Connettori (8) → all_films: list[Film]
                 ↓
-         _deduplicate_films()    ← fuzzy match Levenshtein
+         _deduplicate_films()         ← fuzzy match + tabella di alias (titoli canonici)
                 ↓
-         enrich_film()           ← Wikidata per ogni film
+         enrich_film()                ← Wikidata per ogni film
                 ↓
-         merge_films()           ← delta con movies.json precedente
+         _merge_films_by_wikidata_id() ← stessa identità Wikidata → stesso film
                 ↓
-         output_to_json()        → output/movies.json (scrittura atomica)
+         merge_films()                ← delta con movies.json precedente
+                ↓
+         output_to_json()             → output/movies.json (scrittura atomica)
 ```
 
 ---
@@ -350,9 +352,10 @@ Pipeline di normalizzazione applicata ai titoli per il confronto cross-cinema:
 8. Rimozione prefissi franchise: `STAR WARS:`, `MARVEL'S`, `DC`, `PIXAR`, `Disney`, `THE`, `IL`, `LA`
 9. Collasso spazi multipli
 10. Strip di punteggiatura finale
-11. Rimozione cifre finali (se non seguite da `)`, `]`, `}`)
 
-> Nota: `_ROMAN_NUM_SUFFIX` è compilato ma **non applicato** — bug noto, da implementare.
+Le cifre finali **restano**: un numero finale è parte del titolo — «Amori e incantesimi 2» non è «Amori e incantesimi», è il suo sequel (l'`id` nei JSON cambia di conseguenza). Gli anni li toglie il punto 5.
+
+> Nota: `_ROMAN_NUM_SUFFIX` è compilato ma **non applicato**. Il caso aperto che ne deriva (un sequel con numero romano può ancora fondersi col primo film) è in [`problemi-aperti.md`](../problemi-aperti.md).
 
 ### `title_key(title: str) -> str`
 
@@ -361,8 +364,9 @@ Pipeline di normalizzazione applicata ai titoli per il confronto cross-cinema:
 ### `fuzzy_match(a: str, b: str) -> bool`
 
 1. Se `title_key(a) == title_key(b)` → True
-2. Se uno è sottostringa dell'altro → True
-3. Se distanza di Levenshtein ≤ max(2, len(ka)//4) → True
+2. Se una chiave è l'altra più le cifre finali («Amori e incantesimi 2» vs «Amori e incantesimi») → **False**: è il sequel numerato, non un refuso
+3. Se uno è sottostringa dell'altro → True
+4. Se distanza di Levenshtein ≤ max(2, len(ka)//4) → True
 
 ### `normalize_duration(duration: str | None) -> str | None`
 
@@ -509,21 +513,30 @@ Flusso principale:
 2. Chiama `connector.scrape(today, week_dates)` per tutti i connettori in sequenza
 3. Per connettori falliti: attende `SCRAPER_RETRY_DELAY` secondi (default 300s) e riprova una volta
 4. Per connettori falliti al retry: carica cache dal file `output/cache/{slug}.json` come fallback
-5. `_deduplicate_films(all_films)` — fuzzy match cross-cinema, merge `present_in`
+5. `_deduplicate_films(all_films)` — fuzzy match cross-cinema sui titoli canonici (le varianti note in `title_aliases.py` contano come il loro titolo canonico), merge `present_in`
 6. `enrich_film(film)` per ogni film — Wikidata (con try/except per continuare in caso di errore)
-7. `merge_films(all_films, previous_data, today)` — delta con run precedente
-8. Scrittura atomica (4 file):
+7. `_merge_films_by_wikidata_id(all_films)` — seconda fusione, per identità Wikidata (dopo l'arricchimento: prima `wikidata_id` non esiste ancora)
+8. `merge_films(all_films, previous_data, today)` — delta con run precedente
+9. Scrittura atomica (4 file):
    - `movies.json` — stato interno completo con `history[]` e `present_in[]`
    - `films.json` — tabella `films` DB-ready (solo film `in_programmazione`)
    - `showings.json` — tabella `showings` DB-ready
    - `cinemas.json` — tabella `cinemas` DB-ready
-9. `save_snapshot(today)` — snapshot giornaliero
-10. `write_errors(all_errors, today)` — aggiorna errors.json
-11. `close_browser()` — cleanup CloakBrowser
+10. `save_snapshot(today)` — snapshot giornaliero
+11. `write_errors(all_errors, today)` — aggiorna errors.json
+12. `close_browser()` — cleanup CloakBrowser
 
 ### `_deduplicate_films(films) -> list[Film]`
 
-Raggruppa film con lo stesso titolo (fuzzy match) provenienti da cinema diversi. Merge di `present_in`, poster, description, genres, director, duration (prende il primo non-None).
+**Prima fusione** (dentro la run, prima di Wikidata): raggruppa i film con lo stesso titolo provenienti da cinema diversi. Il confronto è `fuzzy_match` sui **titoli canonici** (`canonical_title` di `title_aliases.py`): due forme dello stesso titolo noto si uniscono anche quando nessuna regola di stringa le avvicinerebbe. Il fuso si costruisce con `_fuse_group`.
+
+### `_merge_films_by_wikidata_id(films) -> list[Film]`
+
+**Seconda fusione** (dopo l'arricchimento): unisce i film con lo stesso `wikidata_id` **non nullo**. Solo uguaglianza di identità, mai fuzzy_match (nessuna sorpresa); i film senza `wikidata_id` restano separati; ogni fusione è loggata (`Fusi per wikidata_id …`). È la fusione per identità, non per somiglianza: due varianti di titolo dello stesso film che Wikidata riconosce sono un solo film. Elimina alla radice anche il rischio di `IntegrityError` su `UNIQUE(wikidata_id)` al seed del backend. Idempotente, non modifica l'input.
+
+### `_choose_master_title(titles) -> str` e `_fuse_group(group) -> Film`
+
+Il titolo del film fuso è la **prima forma non "urlata"** del gruppo (se sono tutte maiuscole, il primo incontrato): la scelta non dipende dall'ordine dei connettori, e per un alias noto vale il titolo canonico. `_fuse_group` fonde un gruppo già riconosciuto in un **Film nuovo** (primo da base, gli altri cedono `present_in`, `history` e i metadati mancanti): l'input non viene modificato.
 
 ### Cache per-cinema
 
@@ -686,11 +699,13 @@ main.run_scraper()
 │
 ├── [retry dopo 300s per connettori falliti]
 │
-├── _deduplicate_films(all_films)                  [fuzzy match]
+├── _deduplicate_films(all_films)                  [fuzzy match + alias]
 │
 ├── per ogni film: enrich_film(film)               [Wikidata API]
 │   ├── _search_wikidata(title)                    [cache → wbsearchentities]
 │   └── _fetch_entity_details(entity_id)           [EntityData JSON]
+│
+├── _merge_films_by_wikidata_id(all_films)         [stessa identità Wikidata]
 │
 ├── merge_films(all_films, previous_data, today)   [delta]
 │

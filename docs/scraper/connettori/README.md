@@ -199,6 +199,26 @@ va sostituito con lo UA del progetto in un commit dedicato.
 - A fine lavoro: aggiornare la riga del cinema in `docs/scraper/copertura.md`
   (🟢 → ✅) **nello stesso commit**, e `make lint` + `make test-scraper` verdi.
 
+### Varianti di titolo fra fonti diverse → `title_aliases.py`
+
+Due sale possono annunciare **lo stesso film** con due titoli italiani diversi (la riedizione
+di *Cars*: The Space/UCI «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO», Metropolis «Cars –
+20esimo anniversario»). Nessuna regola di stringa li unirà mai: servono **conoscenza**, non
+distanza di edit. I casi verificati stanno nella tabella `scraper/scraper/title_aliases.py`.
+
+Quando aggiungi un connettore e scopri una variante del genere:
+
+1. **prima verifica** che siano davvero lo stesso film (scheda ufficiale, titolo originale,
+   anno) — la data della verifica va nel commento della voce;
+2. mai un alias "probabile": se è probabile, non si aggiunge (meglio due schede che un film
+   sbagliato);
+3. il secondo elemento della coppia è il titolo **canonico**, quello mostrato all'utente
+   (la forma corretta, non quella urlata in maiuscolo);
+4. un caso in più nel test `test_title_aliases.py` (il test di conteggio lo fa rispettare).
+
+La tabella è manutenzione manuale: se i casi si ripetono, la strada giusta è far trovare
+l'entità Wikidata a entrambe le forme (`enrich_film`), non allungare la lista.
+
 ## Definizione di "fonte verificata" (perché queste 5)
 
 Nella ricognizione del 19/09/2026 questi siti hanno: sito raggiungibile, `robots.txt`

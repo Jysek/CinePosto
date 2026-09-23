@@ -16,19 +16,34 @@ Una o due righe: cosa dovrebbe succedere e cosa succede invece.
 
 ## Voci aperte
 
-### Lo stesso film compare due volte nell'app (varianti di titolo fra fonti, residui di run)
-**Dove**: `backend/app/maintenance/dedup_films.py` (regole di fusione) · **Prova**:
-`docker compose run --rm backend python -m app.maintenance.dedup_films` → candidato
-#53 «Talking Tom Heroes - Super amici» ↔ #42 «TALKING TOM HEROES SUPER AMICI AL CINEMA» (una è
-l'altra più un suffisso di parole); inoltre `films` id 29 `CARS - MOTORI RUGGENTI - 20MO
-ANNIVERSARIO` (anno NULL, 26 showings) e id 68 `Cars – 20esimo anniversario` (`year=2006`, 2
-showings) sono lo stesso film · **Data**: `2026-09-23`
-La classe `&`/`e` + maiuscole + anno NULL è **chiusa**: la chiave naturale del backend fonde `&`
-in `e` e adotta l'anno NULL, e lo script di manutenzione ha fuso le righe già accumulate (40/52).
-Restano due classi che nessuna regola sulle stringhe unisce in sicurezza: (2) **varianti di titolo
-italiano fra fonti diverse** (29/68, 42/53) — si approvano a mano con `--merge` o si chiudono con
-un merge cross-fonte nello scraper; (3) **residui di run passate** non più nei JSON — servono
-guardie proprie, non la fusione.
+### I residui di run passate restano nel DB: «Talking Tom Heroes» compare in due schede
+**Dove**: `backend/app/seed_from_json.py` (nessuna riga non più nei JSON viene rimossa) · **Prova**:
+`curl -s http://localhost:8000/api/v1/film/oggi` → 23 film, fra cui #42 «TALKING TOM HEROES SUPER
+AMICI AL CINEMA» e #53 «Talking Tom Heroes - Super amici» (stesso film) · **Data**: `2026-09-23`
+Nei JSON la coppia non esiste (una sola forma: `grep -c '"id": "Talking' scraper/output/films.json` → 1), ma
+il seed non rimuove le righe accumulate dalle run passate: i residui hanno ancora showings nella
+finestra e nell'app tornano schede doppie. Le varianti di titolo fra fonti della run corrente si
+uniscono ora nello scraper (alias + fusione per `wikidata_id`); qui resta la pulizia del DB: serve
+il purge del seed, oppure `python -m app.maintenance.dedup_films --merge 42:53 --apply`.
+
+### Un sequel con numero romano può essere fuso con il primo film
+**Dove**: `scraper/scraper/normalizer.py` (`fuzzy_match`, ramo di contenimento) · **Prova**:
+`fuzzy_match("Rocky II", "Rocky")` → `True` (le chiavi `rockyii`/`rocky`, la prima contiene la
+seconda) · **Data**: `2026-09-23`
+La guardia sulle cifre finali protegge «Amori e incantesimi 2» dai numeri arabi, non i numeri
+romani («Rocky II») né i titoli che contengono l'altro («Dune»/«Dune Part Two», caso voluto dal
+test di contenimento). `_ROMAN_NUM_SUFFIX` (`normalizer.py`) è compilato ma mai applicato:
+decidere se usarlo (con un test che «Rocky II» resta «Rocky II») o eliminarlo.
+
+### L'arricchimento Wikidata non aggancia i titoli "urlati" o delle riedizioni
+**Dove**: `scraper/scraper/metadata.py` (`_search_fuzzy` / `enrich_film`) · **Prova**:
+`scraper/.wikidata_cache.json` → `"cars - 20esimo anniversario" → "__NOT_FOUND__"`; in
+`scraper/output/films.json` la forma «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO» ha
+`wikidata_id: null` · **Data**: `2026-09-23`
+Entrambe le forme della riedizione del 20° anniversario di *Cars* restano senza entità: se la
+trovassero, la fusione per `wikidata_id` le unirebbe senza bisogno di alias. È il motivo per cui
+`title_aliases.py` esiste (soluzione ripiegata, non quella giusta): migliorare la ricerca
+dell'entità (titolo originale, anno), poi la voce di alias potrà sparire.
 
 ### La tab bar di React Navigation usa la prop pointerEvents deprecata su web
 **Dove**: `node_modules/@react-navigation/bottom-tabs/src/views/BottomTabBar.tsx:385` e

@@ -94,7 +94,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 
 | JSON | DB column | Note |
 |------|-----------|------|
-| `"id"` (stringa) | ❌ NON usato come PK | Serve solo come **chiave di join** con `showings.json` |
+| `"id"` (stringa) | ❌ NON usato come PK | Serve solo come **chiave di join** con `showings.json`. È il titolo normalizzato dello scraper (`title_normalized`) e **conserva le cifre finali**: «Amori e incantesimi 2» ha id «Amori e incantesimi 2», che è un altro film rispetto a «Amori e incantesimi». |
 | `title` | `title` | |
 | `title_normalized` | `title_normalized` | ⚠️ **rinormalizzare nel backend** — la normalizzazione dello scraper può differire (em-dash). Meglio NON fidarsi del campo del JSON e ricalcolare via `normalize_title()`, che fonde anche **`&` → `e`** (UCI `AMORI & INCANTESIMI 2` = The Space `Amori e incantesimi 2`). |
 | `original_title` | `original_title` | nullable |
