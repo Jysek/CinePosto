@@ -31,11 +31,11 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
     {
       "slug": "postmodernissimo",
       "name": "PostModernissimo",
-      "address": "Via del Milite Ignoto 1, 06121 Perugia PG",
+      "address": "Via del Carmine 4, 06121 Perugia PG",
       "city": "Perugia",
       "region": "Umbria",
-      "lat": 43.1107,
-      "lon": 12.3882,
+      "lat": 43.1129,
+      "lon": 12.3933,
       "website": "https://www.postmodernissimo.com"
     },
     ...

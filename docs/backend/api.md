@@ -22,13 +22,12 @@
 | **Dev su VM Linux del team** | `http://<vm-ip>:8000/api/v1` | Yonas condivide l'IP nel canale team |
 | **Prod (dopo deploy)** | `https://api.cineposto.it/api/v1` | placeholder — da definire prima della consegna |
 
-Nell'app RN, metti la base URL in un file di config:
+Nell'app RN, la base URL sta in `app/src/constants/config.js`:
 
 ```js
-// app/config.js
-export const API_BASE_URL = __DEV__
-  ? 'http://localhost:8000/api/v1'
-  : 'https://api.cineposto.it/api/v1';
+// app/src/constants/config.js
+export const API_BASE =
+  process.env.EXPO_PUBLIC_API_BASE || 'http://localhost:8000/api/v1';
 ```
 
 Su Android, se il backend gira sul PC (non sull'emulatore), invece di `localhost` usa `10.0.2.2` (Android emulator) o l'IP LAN del Mac (iOS device fisico).
@@ -50,13 +49,16 @@ Su Android, se il backend gira sul PC (non sull'emulatore), invece di `localhost
 
 ---
 
-## 3. Shape delle risposte (JSDoc — copia in `app/api/schemas.js`)
+## 3. Shape delle risposte (JSDoc)
 
 Il progetto è **JavaScript** (`.js`), non TypeScript. Per avere comunque **autocomplete** e **type-checking** nell'editor (VS Code), si usano commenti JSDoc, che VS Code interpreta come tipi.
 
+> Nel progetto **non esiste un file di schemi dedicato** (tipo `app/api/schemas.js`): i tipi qui
+> sotto sono un **riferimento** da usare dove serve. Il client reale sta in
+> `app/src/api/api.js` (vedi [app/overview.md](../app/overview.md)).
+
 ```js
-// app/api/schemas.js
-// Documentazione degli oggetti restituiti dall'API — solo commenti JSDoc,
+// Tipi JSDoc delle risposte dell'API — solo commenti per l'IDE,
 // niente runtime overhead. VS Code offre autocomplete su tutti questi tipi.
 
 /**
@@ -127,11 +129,11 @@ export {};
 **Come usare i tipi nei file dell'app** (`.js`):
 
 ```jsx
-// app/src/screens/FilmsTab.js
-import { apiGet } from '../api/api';
+// Esempio illustrativo di come si usano i tipi nei file dell'app
+// (il progetto non ha un file `schemas.js`: qui si finge per l'IDE).
 
 /**
- * @param {import('../api/schemas').Film[]} films
+ * @param {Film[]} films
  */
 function FilmList({ films }) {
   return films.map(f => (
@@ -142,7 +144,7 @@ function FilmList({ films }) {
 }
 
 // Dentro il componente
-/** @type {import('../api/schemas').Film[]} */
+/** @type {Film[]} */
 const films = await apiGet('/film/oggi');
 ```
 
@@ -170,10 +172,10 @@ curl http://localhost:8000/api/v1/cinema
     "slug": "postmodernissimo",
     "name": "PostModernissimo",
     "city": "Perugia",
-    "address": "Via del Milite Ignoto 1, 06121 Perugia PG",
+    "address": "Via del Carmine 4, 06121 Perugia PG",
     "region": "Umbria",
-    "lat": 43.1107,
-    "lon": 12.3882,
+    "lat": 43.1129,
+    "lon": 12.3933,
     "website": "https://www.postmodernissimo.com",
     "phone": null
   },
@@ -182,7 +184,7 @@ curl http://localhost:8000/api/v1/cinema
 ]
 ```
 
-**Snippet fetch** (RN/Expo):
+**Snippet illustrativo** (RN/Expo — il client reale usa le funzioni di `app/src/api/api.js`):
 ```js
 /**
  * @returns {Promise<import('./schemas').Cinema[]>}
@@ -208,10 +210,10 @@ async function fetchCinemas() {
   "slug": "postmodernissimo",
   "name": "PostModernissimo",
   "city": "Perugia",
-  "address": "...",
+  "address": "Via del Carmine 4, 06121 Perugia PG",
   "region": "Umbria",
-  "lat": 43.1107,
-  "lon": 12.3882,
+  "lat": 43.1129,
+  "lon": 12.3933,
   "website": "...",
   "phone": null,
   "showings_count": 42
@@ -262,7 +264,9 @@ curl "http://localhost:8000/api/v1/cinema/postmodernissimo/showings?date_from=20
 **URL**: `GET /api/v1/film/oggi`
 **Response**: `Film[]` (versione "card", senza sinossi/regista)
 
-Uso principale: **schermata Home**, l'app la chiama al mount.
+Uso principale previsto: **schermata Home**. Oggi la Home costruisce il cartellone dagli
+**spettacoli** (`GET /cinema/{slug}/showings`, vedi §8): l'endpoint resta disponibile
+per un caricamento leggero della sola lista film.
 
 **Esempio risposta**:
 ```json
@@ -367,21 +371,28 @@ Usato da UptimeRobot / monitoring. L'app **non** lo chiama.
 
 ## 6. CORS (per l'app web build)
 
-Il backend accetta richieste da questi origin (lista in `.env`, variabile `CORS_ORIGINS`):
+Il backend accetta richieste da questi origin (default dev in `app/config.py`; lista
+sovrascrivibile in `.env`, variabile `CORS_ORIGINS`, formato JSON array):
 - `http://localhost:8081` (Metro bundler)
-- `http://localhost:8090` (Metro, quando la 8081 è occupata da un altro progetto)
+- `http://localhost:8090` (Metro, `make dev` / quando la 8081 è occupata)
 - `http://localhost:19006` (Expo web)
+- `http://localhost:3000` (test web occasionale)
 
 In produzione l'origin dell'app web va aggiunto a `CORS_ORIGINS` nel `.env` del server (vedi
 [docs/deploy.md](../deploy.md) quando il deploy sarà fatto).
 
 ---
 
-## 7. Client HTTP consigliato
+## 7. Client HTTP
 
 **Nella v1**: nativo `fetch` va benissimo. Non serve axios.
 
-Client centralizzato consigliato (`app/api/client.js`):
+**Il client reale sta in [`app/src/api/api.js`](../../app/src/api/api.js)**: espone una
+funzione per endpoint (`getFilmsToday`, `getCinemas`, `getCinemaShowings`, …) e gestisce
+anche i preferiti locali. Dettagli in [app/overview.md](../app/overview.md).
+
+Lo snippet qui sotto è il **punto di partenza storico** (prima dell'integrazione),
+conservato come riferimento per il pattern di gestione errori:
 
 ```js
 import { API_BASE_URL } from '../config';
@@ -415,29 +426,31 @@ export async function apiGet(path) {
 }
 ```
 
-Uso:
-```jsx
-import { apiGet } from './api/client';
+Uso reale (client integrato):
 
-/** @type {import('./api/schemas').Film[]} */
-const films = await apiGet('/film/oggi');
+```jsx
+import { getFilmsToday } from '../api/api';
+
+const films = await getFilmsToday();
 ```
 
 ---
 
 ## 8. Suggerimenti operativi per l'app
 
-### Quando caricare cosa
+### Quando caricare cosa (uso reale dell'app integrata)
 
 | Schermata | Endpoint |
 |---|---|
-| Home "Film oggi" | `GET /film/oggi` al mount |
-| Home filtro "settimana" | `GET /film/settimana` al cambio filtro |
-| Lista cinema | `GET /cinema` al mount |
+| Home "Films" (cartellone del giorno) | `GET /cinema` al mount + `GET /cinema/{slug}/showings?date_from=X&date_to=X` per ogni cinema |
+| Lista cinema / Mappa | `GET /cinema` (lat/lon per i marker) |
 | Dettaglio cinema | `GET /cinema/{slug}` + `GET /cinema/{slug}/showings` |
-| Dettaglio film | `GET /film/{id}` (contiene già `showings[]`) |
+| Dettaglio film | `GET /film/{id}` (contiene già `showings[]`) + showings per cinema e data |
 | Ricerca | `GET /film/search?q=...` con debounce 300ms |
-| Mappa | `GET /cinema` (usa lat/lon di ogni cinema per i marker) |
+
+`GET /film/oggi` e `GET /film/settimana` restano disponibili, ma l'app integrata non li chiama:
+la Home ricava il cartellone dagli spettacoli della data (ogni `ShowingDetail` porta il film
+annidato, quindi un'unica richiesta per cinema basta).
 
 ### Cache lato client
 
