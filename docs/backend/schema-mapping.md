@@ -96,9 +96,9 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 |------|-----------|------|
 | `"id"` (stringa) | ❌ NON usato come PK | Serve solo come **chiave di join** con `showings.json` |
 | `title` | `title` | |
-| `title_normalized` | `title_normalized` | ⚠️ **rinormalizzare nel backend** — la normalizzazione dello scraper può differire (em-dash). Meglio NON fidarsi del campo del JSON e ricalcolare via `normalize_title()`. |
+| `title_normalized` | `title_normalized` | ⚠️ **rinormalizzare nel backend** — la normalizzazione dello scraper può differire (em-dash). Meglio NON fidarsi del campo del JSON e ricalcolare via `normalize_title()`, che fonde anche **`&` → `e`** (UCI `AMORI & INCANTESIMI 2` = The Space `Amori e incantesimi 2`). |
 | `original_title` | `original_title` | nullable |
-| `year` | `year` | int, nullable. ⚠️ In SQL `NULL ≠ NULL`: con `year` NULL la `UNIQUE(title_normalized, year)` **non blocca duplicati a livello DB** — la dedup è garantita dal lookup applicativo in `get_by_natural_key` (che usa `IS NULL`). Limite noto e accettato per l'MVP. |
+| `year` | `year` | int, nullable. ⚠️ In SQL `NULL ≠ NULL`: con `year` NULL la `UNIQUE(title_normalized, year)` **non blocca duplicati a livello DB** — la dedup è garantita dal lookup applicativo in `get_by_natural_key`: un anno NULL è **jolly solo se il candidato è unico** e viene **adottato** (completato) quando incontra l'anno valorizzato. Con più candidati omonimi (remake) non si unisce nulla. |
 | `duration` (stringa "X min") | `runtime_minutes` | parsing: estrai int da `"95 min"` → `95` |
 | `genres` (array) | `genres` (string CSV) | `",".join(genres)` |
 | `director` | `director` | nullable |

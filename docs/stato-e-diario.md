@@ -14,7 +14,7 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 11 endpoint REST, 31 test | `backend/api.md` |
+| Backend | 11 endpoint REST, 48 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
@@ -103,3 +103,12 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   usate in `prod-test` e `prod-down` (stessi valori di prima per `prod-test`). Verificato:
   `make prod-test` → 8443 OK, `make prod-down` → exit 0. Voce cancellata da
   `problemi-aperti.md`; nota obsoleta rimossa da `deploy.md`.
+- **2026-09-23** — fusi i doppioni di film già nel DB: la chiave naturale del backend ora unisce
+  `&`/`e` e adotta l'anno nullo, e un nuovo script di manutenzione
+  (`python -m app.maintenance.dedup_films`, dry-run di default) ricalcola le chiavi e fonde i gruppi
+  certi (nel DB: le due righe di `AMORI & INCANTESIMI 2` / `Amori e incantesimi 2` → una sola, con
+  gli orari della run più recente 16:00: 4 showings ri-assegnati, 4 scartati, 1 riga rimossa) con
+  report di ciò che scarta e dei candidati da approvare a mano con `--merge`. Verificato su API
+  (`/film/oggi` e `/film/search` → una voce sola) e home dell'app (una scheda). Restano aperti i
+  duplicati da varianti di titolo fra fonti diverse (coppie 29/68 `CARS` e 42/53 `Talking Tom
+  Heroes`) e i residui delle run passate.

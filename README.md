@@ -40,7 +40,7 @@ git clone https://github.com/Jysek/CinePosto.git && cd CinePosto
 make dev     # accende Docker se serve, avvia backend e app (browser + telefono)
 make scrape  # scarica la programmazione aggiornata dai siti dei cinema
 make seed    # carica i dati nel database
-make test    # 31 test backend dentro il container
+make test    # 48 test backend dentro il container
 make help    # tutti i comandi
 ```
 

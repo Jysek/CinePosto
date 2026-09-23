@@ -62,6 +62,16 @@ INDEX  ix_film_title_normalized
 
 > **Perché PK intera invece di stringa**: il titolo è fragile (em-dash, apostrofi, encoding) e può essere riutilizzato per remake (`Dune 1984` vs `Dune 2021`). PK artificiale + chiave naturale UNIQUE è il pattern standard.
 
+> **Come si incontra la chiave naturale** (`get_by_natural_key` in `film_repo.py`): il titolo si
+> normalizza con `normalize_title()` — lowercase, accenti rimossi, punteggiatura → spazio e
+> **`&` → `e`** (UCI scrive `AMORI & INCANTESIMI 2`, The Space `Amori e incantesimi 2`: senza
+> questa regola la stessa opera cade su due righe). Un `year` NULL è **jolly solo se il candidato
+> è unico**: incontra l'anno valorizzato e lo adotta (la riga si completa, non si duplica); se i
+> candidati con lo stesso titolo sono più di uno — remake omonimi — non si inventa nulla.
+> ⚠️ In SQL `NULL ≠ NULL`: la UNIQUE da sola non blocca i duplicati con anno NULL, è il lookup
+> applicativo a garantire la dedup. I doppioni creati prima di queste regole si fondono con lo
+> script di manutenzione (vedi «Manutenzione» qui sotto).
+
 ### Showing (`showings`)
 FK su `Film` (intera) e `Cinema` (slug stringa).
 
@@ -128,6 +138,38 @@ Nessuno scheduler interno al backend (decisione D2): lo scraper vive nel suo pro
 
 ---
 
+## Manutenzione: fusione dei doppioni
+
+Il seed non cancella: con le run accumulate possono restare **due righe per lo stesso film**
+(titolo scritto diversamente, anno NULL). Lo script di manutenzione le fonde in modo controllato:
+
+```bash
+docker compose run --rm backend python -m app.maintenance.dedup_films               # DRY-RUN + report
+docker compose run --rm backend python -m app.maintenance.dedup_films --apply       # applica
+docker compose run --rm backend python -m app.maintenance.dedup_films --merge 40:52 # fusione approvata a mano
+```
+
+Regole (tutte esplicite, mai «assomiglia un po'»):
+
+- **dry-run di default**: senza `--apply` stampa solo il piano, non scrive nulla;
+- **gruppi certi**: stessa chiave ricalcolata (anno uguale, oppure NULL che adotta l'anno
+  valorizzato), stesso `wikidata_id`, coppia indicata con `--merge`. Conflitti evidenti (es.
+  `wikidata_id` diversi) → gruppo **«da decidere»**, nessuna fusione;
+- **superstite deterministico**: più showings → anno valorizzato → `wikidata_id` → più metadati →
+  id più basso. I campi NULL del superstite si completano da ciò che si fonde;
+- **collisioni di showings**: per `(cinema_slug, date)` vince la run con `scraped_at` più recente,
+  l'altra riga viene scartata e il report elenca gli orari persi;
+- **candidati solo segnalati**: titoli simili (edit distance ≤ 2, o uno è l'altro più un suffisso di
+  parole) compaiono nel report ma **non si fondono**: servono `--merge`, uno per volta;
+- **una transazione sola** con `--apply`, rollback su eccezione, idempotente (seconda passata =
+  0 gruppi).
+
+I titoli italiani completamente diversi per lo stesso film (es. `CARS - MOTORI RUGGENTI - 20MO
+ANNIVERSARIO` vs `Cars – 20esimo anniversario`) non ricadono in nessuna regola: restano da unire a
+valle, con `--merge` manuale o con un merge cross-fonte nello scraper.
+
+---
+
 ## Tecnologie
 
 | Cosa | Scelta | Motivo |
@@ -139,6 +181,6 @@ Nessuno scheduler interno al backend (decisione D2): lo scraper vive nel suo pro
 | Arricchimento dati | **Wikidata via scraper** (D1) | Già fatto a monte, gratis, niente API key |
 | Scheduling | **Esterno** (systemd timer + `--once`) (D2/L3) | Backend resta stateless rispetto allo scraping |
 | Identità Cinema | **PK slug stringa** (D3) | Allineato JSON, URL parlanti |
-| Identità Film | **PK intera + UNIQUE(title_normalized, year)** (D3) | Robusto a remake e encoding fragile |
+| Identità Film | **PK intera + UNIQUE(title_normalized, year)** (D3) | Robusto a remake e encoding fragile; il match applicativo fonde `&`/`e` e adotta l'anno NULL |
 | Lingua codice/schema | **Inglese** (L1+L2) | Allineato JSON scraper, niente traduzione runtime |
 | Sicurezza endpoint admin | Header `X-Admin-Token` | Sufficiente per MVP locale; in prod aggiungere HTTPS + IP allowlist |

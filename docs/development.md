@@ -104,6 +104,22 @@ python -m app.seed_from_json
 Da rilanciare **ogni volta che lo scraper aggiorna i JSON** (o via endpoint
 admin `POST /api/v1/admin/reimport` col token in `X-Admin-Token`).
 
+### Manutenzione: fondere i film duplicati
+
+Quando le run accumulate lasciano due righe per lo stesso film (titolo scritto diversamente,
+anno NULL), si usa lo script di manutenzione — **dry-run di default**, `--apply` per scrivere,
+`--merge A:B` per una fusione approvata a mano:
+
+```bash
+docker compose run --rm backend python -m app.maintenance.dedup_films               # DRY-RUN + report
+docker compose run --rm backend python -m app.maintenance.dedup_films --apply       # applica
+docker compose run --rm backend python -m app.maintenance.dedup_films --merge 40:52 # fusione esplicita
+```
+
+Si usa **dopo** aver notato doppioni nell'app o nel DB, mai a orari fissi: le regole di fusione,
+il report e le garanzie (una transazione, rollback, idempotenza) sono in
+[backend/architecture.md](backend/architecture.md) § Manutenzione.
+
 ### Avvio server
 
 ```bash
@@ -115,15 +131,16 @@ Swagger UI: `http://localhost:8000/docs`.
 ### Test
 
 ```bash
-python -m pytest tests/ -q       # 31 test (~0.15s)
+python -m pytest tests/ -q       # 48 test (~0.2s)
 python -m pytest tests/ -v       # verbose
 ```
 
 Setup dei test:
 - `conftest.py` — SQLite in-memory + `StaticPool` + override di `get_db`
 - `test_config.py` — 5 test sulla configurazione (token admin, path, CORS)
-- `test_repositories.py` — 14 unit test sui repository
+- `test_repositories.py` — 21 unit test sui repository (normalizzazione titoli, upsert, search)
 - `test_routers.py` — 12 end-to-end via TestClient FastAPI
+- `test_maintenance_dedup.py` — 10 test sullo script di fusione dei film duplicati
 
 ### Variabili d'ambiente (`.env`)
 

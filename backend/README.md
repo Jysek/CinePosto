@@ -15,7 +15,7 @@ Swagger UI all'avvio: `http://localhost:8000/docs`.
 ```bash
 make up       # avvia backend + DB (Docker)
 make seed     # popola il DB dai JSON committati
-make test     # 31 test (pytest)
+make test     # 48 test (pytest)
 make lint     # ruff
 ```
 
@@ -38,5 +38,5 @@ I dati dei cinema arrivano dallo scraper: il backend non fa re-scraping.
 
 ## Test
 
-`make test` → **31 test**: `test_config` 5, `test_repositories` 14, `test_routers` 12.
+`make test` → **48 test**: `test_config` 5, `test_repositories` 21, `test_routers` 12, `test_maintenance_dedup` 10.
 Girano su SQLite in-memory con `dependency_overrides` di `get_db`.
