@@ -12,6 +12,12 @@ BACKEND      := $(COMPOSE) run --rm backend
 SCRAPER      := $(COMPOSE) run --rm scraper
 API          := http://localhost:8000
 
+# compose.prod.yaml pretende ADMIN_TOKEN e CORS_ORIGINS con `:?`, e il controllo scatta
+# gia' quando Docker Compose interpreta il file: senza queste variabili non funziona
+# nemmeno un `down`. I valori qui sotto servono solo a soddisfare l'interpolazione
+# (in produzione i veri segreti arrivano da .env.prod, vedi prod-up).
+PROD_DUMMY_ENV := DOMAIN=localhost ADMIN_TOKEN=test-locale CORS_ORIGINS='["https://localhost:8443"]'
+
 # ── Shell delle ricette ───────────────────────────────────────────────────────
 # Su Windows `bash` preso dal PATH può risolversi in quello di WSL, la cui distro
 # di default (`docker-desktop`) non ha /bin/bash: da PowerShell `make dev` falliva
@@ -85,8 +91,7 @@ health: ## Verifica che il backend risponda
 	@curl -s -o /dev/null -w "GET /health -> HTTP %{http_code}\n" $(API)/health
 
 prod-test: ## Prova la configurazione di produzione in locale (Caddy + TLS self-signed su 8443)
-	DOMAIN=localhost TLS_DIRECTIVE="tls internal" HTTP_PORT=8080 HTTPS_PORT=8443 \
-	ADMIN_TOKEN=test-locale CORS_ORIGINS='["https://localhost:8443"]' \
+	$(PROD_DUMMY_ENV) TLS_DIRECTIVE="tls internal" HTTP_PORT=8080 HTTPS_PORT=8443 \
 	$(COMPOSE_PROD) up -d --build
 	@echo "Attendi qualche secondo, poi: curl -k https://localhost:8443/health"
 	@echo "Per fermarla: make prod-down"
@@ -101,7 +106,7 @@ prod-seed: ## Popola il DB di produzione dai JSON in ./data/output
 	$(COMPOSE_PROD) --env-file .env.prod run --rm backend python -m app.seed_from_json
 
 prod-down: ## Ferma la produzione
-	$(COMPOSE_PROD) down
+	$(PROD_DUMMY_ENV) $(COMPOSE_PROD) down
 
 clean: ## Ferma tutto e cancella DB locale e volumi  ->  docker compose down -v
 	$(COMPOSE) down -v --remove-orphans
