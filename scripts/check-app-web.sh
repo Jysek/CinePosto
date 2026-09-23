@@ -19,9 +19,9 @@ API_BASE="${EXPO_PUBLIC_API_BASE:-http://localhost:8000/api/v1}"
 OUT_DIR="${OUT_DIR:-$REPO_DIR/app/dist}"
 HEALTH_URL="${API_BASE%/api/v1}/health"
 
-info() { printf '\033[36m▸\033[0m %s\n' "$1"; }
+info() { printf '\033[36m>\033[0m %s\n' "$1"; }
 warn() { printf '\033[33m!\033[0m %s\n' "$1"; }
-fail() { printf '\033[31m✗\033[0m %s\n' "$1" >&2; exit 1; }
+fail() { printf '\033[31mx\033[0m %s\n' "$1" >&2; exit 1; }
 
 command -v node >/dev/null 2>&1 || fail "Node non trovato nel PATH."
 
@@ -29,14 +29,14 @@ command -v node >/dev/null 2>&1 || fail "Node non trovato nel PATH."
 if curl -sf "$HEALTH_URL" >/dev/null 2>&1; then
   info "Backend raggiungibile su $HEALTH_URL"
 else
-  fail "Backend non raggiungibile su $HEALTH_URL — avvia: make up && make seed"
+  fail "Backend non raggiungibile su $HEALTH_URL - avvia: make up && make seed"
 fi
 
 if curl -sf -o /dev/null "$API_BASE/cinema"; then
   CINEMAS=$(curl -s "$API_BASE/cinema" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>console.log(JSON.parse(d).length))')
   info "L'API espone $CINEMAS cinema"
 else
-  warn "GET $API_BASE/cinema non risponde: il seed è stato eseguito?"
+  warn "GET $API_BASE/cinema non risponde: il seed e stato eseguito?"
 fi
 
 info "Export web in $OUT_DIR (API_BASE=$API_BASE)..."
@@ -45,17 +45,17 @@ rm -rf "$OUT_DIR"
 
 cat <<CHECKLIST
 
-────────────────────────────────────────────────────────────────────────────
-Checklist di accettazione — da ripassare nel browser su
+----------------------------------------------------------------------------
+Checklist di accettazione - da ripassare nel browser su
 http://localhost:$PORT   (oppure con Playwright)
-────────────────────────────────────────────────────────────────────────────
+----------------------------------------------------------------------------
   [ ] Home "Film": la lista si carica, nessuno stato di errore
   [ ] Filtro: elenca 8 cinema; selezionandone uno i film cambiano
-  [ ] Località: 8 righe e 8 marker sulla mappa, nessun pin rotto
+  [ ] Localita: 8 righe e 8 marker sulla mappa, nessun pin rotto
   [ ] Dettaglio film: nomi leggibili (non slug), ordine alfabetico,
       badge/logo coerenti
   [ ] Aspetto invariato: stessi stili e colori di prima dell'upgrade
-────────────────────────────────────────────────────────────────────────────
+----------------------------------------------------------------------------
 
 CHECKLIST
 

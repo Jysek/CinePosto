@@ -13,13 +13,13 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 EXPO_PORT="${EXPO_PORT:-8090}"
 BACKEND_URL="http://localhost:8000"
 
-info() { printf '\033[36m▸\033[0m %s\n' "$1"; }
+info() { printf '\033[36m>\033[0m %s\n' "$1"; }
 warn() { printf '\033[33m!\033[0m %s\n' "$1"; }
-fail() { printf '\033[31m✗\033[0m %s\n' "$1" >&2; exit 1; }
+fail() { printf '\033[31mx\033[0m %s\n' "$1" >&2; exit 1; }
 
 # ─── 1. Docker ────────────────────────────────────────────────────────────────
 if ! docker info >/dev/null 2>&1; then
-  info "Docker non è in esecuzione: lo avvio (ci mette un minuto)."
+  info "Docker non e in esecuzione: lo avvio (ci mette un minuto)."
   case "$(uname -s)" in
     MINGW* | MSYS* | CYGWIN*)
       DESKTOP="${LOCALAPPDATA:-}/Programs/DockerDesktop/Docker Desktop.exe"
@@ -31,7 +31,7 @@ if ! docker info >/dev/null 2>&1; then
       open -a Docker || fail "Docker Desktop non installato."
       ;;
     *)
-      fail "Docker non è attivo. Avvialo (sudo systemctl start docker) e riprova."
+      fail "Docker non e attivo. Avvialo (sudo systemctl start docker) e riprova."
       ;;
   esac
 
@@ -41,7 +41,7 @@ if ! docker info >/dev/null 2>&1; then
     sleep 3
   done
   docker info >/dev/null 2>&1 ||
-    fail "Docker non si è avviato. Apri Docker Desktop, guarda se chiede qualcosa (aggiornamenti, termini) e riprova."
+    fail "Docker non si e avviato. Apri Docker Desktop, guarda se chiede qualcosa (aggiornamenti, termini) e riprova."
 fi
 
 # ─── 2. Backend ───────────────────────────────────────────────────────────────
@@ -58,7 +58,7 @@ detect_ip() {
 }
 IP="$(detect_ip || true)"
 if [ -z "${IP:-}" ]; then
-  warn "Non riesco a determinare l'IP di rete: il telefono non potrà connettersi (il browser sì)."
+  warn "Non riesco a determinare l'IP di rete: il telefono non potra connettersi (il browser si)."
   IP="localhost"
 fi
 
@@ -71,8 +71,8 @@ curl -s -o /dev/null "$BACKEND_URL/health" ||
   fail "Il backend non risponde su $BACKEND_URL. Guarda gli errori con: docker compose logs backend"
 
 info "Backend pronto: $BACKEND_URL  (Swagger: $BACKEND_URL/docs)"
-info "Dal telefono il backend è: http://$IP:8000"
-info "Le tabelle sono già popolate? Se l'app mostra 'nessun film': make seed"
+info "Dal telefono il backend e: http://$IP:8000"
+info "Le tabelle sono gia popolate? Se l'app mostra 'nessun film': make seed"
 
 # ─── 5. App ───────────────────────────────────────────────────────────────────
 cd "$REPO_DIR/app"
@@ -83,8 +83,8 @@ fi
 
 info "Avvio l'app Expo sulla porta $EXPO_PORT"
 echo
-echo "   Per vederla:  premi  w  →  si apre nel browser"
-echo "   Sul telefono:  Expo Go  →  'Enter URL manually'  →  exp://$IP:$EXPO_PORT"
+echo "   Per vederla:  premi  w  ->  si apre nel browser"
+echo "   Sul telefono:  Expo Go  ->  'Enter URL manually'  ->  exp://$IP:$EXPO_PORT"
 echo "   (oppure inquadra il QR code che compare qui sotto)"
 echo
 echo "   Per fermare tutto: Ctrl+C"
