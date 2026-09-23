@@ -1,7 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `857c68b` (`2026-09-24`): costanti, modelli, connettori e orchestrazione
-> confrontati col codice.
+> Verificato su `5c53fd5` (`2026-09-23`): costanti, modelli, connettori, orchestrazione
+> e fusioni confrontati col codice.
 
 ## Indice
 

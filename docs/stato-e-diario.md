@@ -1,6 +1,6 @@
 # CinePosto — Stato attuale e diario
 
-> Verificato su `9dc8fc1` (`2026-09-23`).
+> Verificato su `5c53fd5` (`2026-09-23`).
 
 **Come si usa questo file.** La sezione «Stato attuale» è una fotografia di oggi e si **riscrive**
 quando cambia. La sezione «Diario» è **append-only**: si aggiunge in coda, non si riscrive mai il
