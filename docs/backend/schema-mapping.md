@@ -1,6 +1,6 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `dfff524` (`2026-09-21`); esempio cinemas.json allineato a
+> Verificato su `9dc8fc1` (`2026-09-23`); esempio cinemas.json allineato a
 > `scraper/output/cinemas.json` su `857c68b` (`2026-09-24`). Il resto del capitolo non è
 > stato ricontrollato in quella sessione.
 

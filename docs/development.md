@@ -1,6 +1,6 @@
 # Guida allo sviluppo
 
-> Verificato su `857c68b` (`2026-09-24`): comandi, costanti, numeri di test (31 backend) e
+> Verificato su `9dc8fc1` (`2026-09-23`): comandi, costanti, numeri di test (48 backend) e
 > variabili d'ambiente confrontati col codice.
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.

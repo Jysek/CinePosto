@@ -1,6 +1,6 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su `857c68b` (`2026-09-24`).
+> Verificato su `9dc8fc1` (`2026-09-23`).
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 

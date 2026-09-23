@@ -1,6 +1,6 @@
 # Sviluppo su Windows
 
-> Verificato su `857c68b` (`2026-09-24`): §1–4 e §6–9 ricontrollate (comandi, file, numeri di
+> Verificato su `9dc8fc1` (`2026-09-23`): §1–4 e §6–9 ricontrollate (comandi, file, numeri di
 > test 149, dataset). §5 (Expo Go, rete e firewall su telefono reale) non rieseguita in quella
 > sessione.
 

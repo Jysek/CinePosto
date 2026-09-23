@@ -1,6 +1,6 @@
 # Backend — Architettura tecnica
 
-> Verificato su `dfff524` (`2026-09-21`).
+> Verificato su `9dc8fc1` (`2026-09-23`).
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).
