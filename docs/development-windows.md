@@ -79,8 +79,8 @@ curl http://localhost:8000/health       # → {"status":"ok"}
 - Il seed legge i JSON in `scraper/output/` e popola `backend/data/cineposto.db`.
   È idempotente: rilanciarlo non duplica nulla.
 
-> I JSON committati sono un **dataset storico** (ultimo aggiornamento: 14 luglio 2026).
-> Per questo `/api/v1/film/oggi` può rispondere `[]`: non ci sono spettacoli nella data odierna
+> I JSON committati sono un **dataset storico** (l'ultimo aggiornamento è nel `git log` di
+> `scraper/output/`). Per questo `/api/v1/film/oggi` può rispondere `[]`: non ci sono spettacoli nella data odierna
 > finché non si fa uno scraping vero (`docker compose run --rm scraper`).
 
 ---
@@ -95,7 +95,7 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Log del backend | `make logs` | `docker compose logs -f backend` |
 | Stato container | `make ps` | `docker compose ps` |
 | Test backend (31) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
-| Test scraper (141) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
+| Test scraper (149) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
 | Messaggi di console ASCII | `make check-console` | controlla che `Makefile`, `dev.cmd` e `scripts/*.sh` stampino solo ASCII (vedi §9) |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |
@@ -257,7 +257,7 @@ rifiuta di partire senza).
 |---|---|---|
 | `failed to connect to the docker API` | Docker Desktop non avviato | avvia Docker Desktop, aspetta l'icona ferma |
 | `port is already allocated` su 8000 | un backend già in ascolto | `make down`, oppure `netstat -ano \| findstr :8000` per trovare il processo |
-| `/api/v1/film/oggi` → `[]` | dataset storico (luglio 2026) | `make scrape` + `make seed` |
+| `/api/v1/film/oggi` → `[]` | dataset storico (i JSON committati in `scraper/output/`) | `make scrape` + `make seed` |
 | Il telefono non vede il backend | firewall / rete pubblica / IP cambiato | §4 |
 | Fine riga strani nei diff | `core.autocrlf=true` su Windows | già gestito da `.gitattributes` (LF forzato) |
 | Expo si ferma con "Port 8081 is being used" | un altro progetto Expo è avviato | `make dev` usa la 8090; per avviare a mano aggiungi `--port 8090` |
