@@ -63,3 +63,11 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   ora ASCII (era un problema di codifica console, non di battitura), con il nuovo target
   `make check-console` che impedisce regressioni e gira anche in CI; nota di troubleshooting in
   `development-windows.md` §9.
+- **2026-09-23** — console dell'app pulita dai warning del nostro codice: il titolo dell'hero usa la
+  shorthand `textShadow` al posto delle prop `textShadowColor/Offset/Radius` (deprecate in RN 0.86),
+  lo splash usa `Platform.OS !== 'web'` per `useNativeDriver` (su web faceva ripiegare l'animazione
+  sul thread JS con un warning) e la View di `FilmsTab` usa `style.pointerEvents` invece della prop
+  deprecata. Verificato con Playwright sul dev server (i tre warning nostri non compaiono più) e a
+  occhio su web: ombra e animazione invariate (screenshot prima/dopo identici, anche sull'export di
+  produzione). Resta un warning equivalente dalla tab bar di React Navigation (voce in
+  `problemi-aperti.md`); il messaggio su React DevTools è informativo e resta.

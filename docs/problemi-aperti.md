@@ -1,6 +1,6 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `c5970a4` (`2026-09-23`).
+> Verificato su `9ea041b` (`2026-09-23`).
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
@@ -15,6 +15,16 @@ non è una roadmap: le cose da fare che non sono difetti stanno in `README.md` (
 Una o due righe: cosa dovrebbe succedere e cosa succede invece.
 
 ## Voci aperte
+
+### La tab bar di React Navigation usa la prop pointerEvents deprecata su web
+**Dove**: `node_modules/@react-navigation/bottom-tabs/src/views/BottomTabBar.tsx:385` e
+`BottomTabView.tsx:326` · **Prova**: avvio del dev server (`npx expo start --web`) + console del
+client web → `props.pointerEvents is deprecated. Use style.pointerEvents` · **Data**: `2026-09-23`
+react-native-web 0.21 depreca la prop `pointerEvents` delle View in favore di `style.pointerEvents`.
+La tab bar di React Navigation 7 la passa ancora come prop (`pointerEvents={isTabBarHidden ? 'none' :
+'auto'}`), quindi la console web del dev server mostra un warning che non viene dal nostro codice:
+l'istanza nostra (`app/src/screens/FilmsTab.js`) è stata corretta nella stessa data. Si risolve con un
+upgrade di react-navigation che converta la prop in stile; non si patcha `node_modules`.
 
 ### L'app non avverte quando i dati sono vecchi
 **Dove**: `app/src/api/api.js` · **Prova**: `grep -rn "latest_scraped\|dati non aggiornati" app/src` → nessun risultato · **Data**: `2026-09-21`
