@@ -749,7 +749,7 @@ sudo systemctl status cineposto-scraper.service               # ultima run
 sudo systemctl start cineposto-scraper.service                # forza run subito (one-shot)
 sudo journalctl -u cineposto-scraper.service -f --since "1 hour ago"
 python3 -m scraper.main --once     # run manuale immediato (no systemd)
-python3 -m ruff check scraper/ tests/ && python3 -m pytest tests/ -q   # lint + test
+python3 -m ruff check scraper/ tests/ && python3 -m ruff format --check scraper/ tests/ && python3 -m pytest tests/ -q   # lint + test
 ```
 
 **Variabili d'ambiente:**

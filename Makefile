@@ -68,9 +68,11 @@ test: ## Test del backend (31)  →  docker compose run --rm backend python -m p
 test-scraper: ## Test dello scraper  →  docker compose run --rm scraper python -m pytest tests/ -q
 	$(SCRAPER) python -m pytest tests/ -q
 
-lint: ## Ruff su backend e scraper
+lint: ## Ruff (check + format) su backend e scraper
 	$(COMPOSE) run --rm backend python -m ruff check app/ tests/
+	$(COMPOSE) run --rm backend python -m ruff format --check app/ tests/
 	$(SCRAPER) python -m ruff check scraper/ tests/
+	$(SCRAPER) python -m ruff format --check scraper/ tests/
 
 seed: ## Popola il DB dai JSON committati  →  docker compose run --rm backend python -m app.seed_from_json
 	$(BACKEND) python -m app.seed_from_json

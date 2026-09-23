@@ -27,7 +27,7 @@ pip install -e ".[dev]"    # installa scraper + dipendenze dev (pytest, ruff, re
 ### Lint + test (comando canonico)
 
 ```bash
-python3 -m ruff check scraper/ tests/ && python3 -m pytest tests/ -q
+python3 -m ruff check scraper/ tests/ && python3 -m ruff format --check scraper/ tests/ && python3 -m pytest tests/ -q
 ```
 
 ### Test con coverage

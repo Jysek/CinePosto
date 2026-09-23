@@ -96,7 +96,7 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Stato container | `make ps` | `docker compose ps` |
 | Test backend (31) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
 | Test scraper (141) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
-| Lint (ruff) | `make lint` | `docker compose run --rm backend python -m ruff check app/ tests/` |
+| Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |
 | Scraping **live** | `make scrape` | `docker compose run --rm scraper python -m scraper.main --once` |
 | Shell nel container | `make shell` | `docker compose run --rm backend bash` |

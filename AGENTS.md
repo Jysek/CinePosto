@@ -43,7 +43,7 @@ Senza Docker (fallback, richiede Python 3.12 locale), dal componente giusto:
 | Cosa | Comando |
 |---|---|
 | Test scraper | `python3 -m pytest tests/ -q` (141 test) |
-| Lint scraper | `python3 -m ruff check scraper/ tests/` |
+| Lint scraper | `python3 -m ruff check scraper/ tests/` e `python3 -m ruff format --check scraper/ tests/` |
 | Run scraper (una volta) | `python3 -m scraper.main --once` |
 | Test backend | `python -m pytest tests/ -q` (31 test) |
 | Seed DB dai JSON | `python -m app.seed_from_json` |
@@ -100,7 +100,7 @@ sicurezza e di rispetto verso le fonti:
 
 Una modifica non è finita finché:
 
-1. `ruff check` passa su scraper e backend (`make lint`);
+1. `ruff check` e `ruff format --check` passano su scraper e backend (`make lint`);
 2. i test del componente passano (`make test` / `make test-scraper`), e i test nuovi
    **descrivono il comportamento** (`test_returns_empty_list_when_no_showings`, non `test1`);
 3. per l'app passano `npx expo-doctor` e l'export web (`make check-app-web`);
