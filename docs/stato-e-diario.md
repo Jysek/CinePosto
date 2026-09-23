@@ -52,3 +52,9 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   141 scraper, coverage 75%, export web + `expo-doctor` 21/21, config di produzione valida). CI
   verde su entrambi i job:
   https://github.com/Jysek/CinePosto/actions/runs/35786979140. Il trunk di lavoro è `main`.
+- **2026-09-22** — chiuso il buco tra `make lint` e la CI: il target ora esegue anche
+  `ruff format --check` (backend e scraper), cioè la stessa cosa del job Docker della CI; era la
+  causa per cui il 22 settembre il lint locale risultava verde e la CI sarebbe nata rossa. Allineati
+  `AGENTS.md` (§Definition of done) e `docs/development.md`, `development-windows.md`,
+  `scraper/architecture.md`. Cancellato il branch locale residuo `chore/app-sdk-57` (già contenuto
+  in `main`).
