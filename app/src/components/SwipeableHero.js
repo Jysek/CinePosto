@@ -227,9 +227,9 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 4,
-    textShadowColor: 'rgba(0,0,0,0.8)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
+    // RN 0.86: la shorthand sostituisce textShadowColor/Offset/Radius (deprecate).
+    // Valori identici a prima: offset 0/1, blur 4.
+    textShadow: '0 1px 4px rgba(0, 0, 0, 0.8)',
   },
   genres: {
     color: Colors.primary,
