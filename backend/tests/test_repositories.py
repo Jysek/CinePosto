@@ -7,8 +7,10 @@ senza far girare FastAPI. Test veloci e mirati.
 from datetime import date, timedelta
 
 import pytest
+from sqlalchemy import select
 
 from app.models.cinema import Cinema
+from app.models.film import Film
 from app.models.showing import Showing
 from app.repositories import cinema_repo, film_repo, showing_repo
 
@@ -85,6 +87,34 @@ def test_normalize_title(input_title, expected):
     assert film_repo.normalize_title(input_title) == expected
 
 
+def test_normalize_title_folds_ampersand_to_e():
+    """La congiunzione '&' e la parola 'e' producono la stessa chiave naturale.
+
+    UCI scrive "AMORI & INCANTESIMI 2", The Space "Amori e incantesimi 2":
+    senza questa regola il backend li considera due film diversi.
+    """
+    assert film_repo.normalize_title("AMORI & INCANTESIMI 2") == film_repo.normalize_title("Amori e incantesimi 2")
+
+
+def test_normalize_title_is_case_insensitive():
+    """Maiuscole e minuscole non producono due chiavi diverse."""
+    assert film_repo.normalize_title("MATRIX") == film_repo.normalize_title("Matrix")
+
+
+def test_normalize_title_strips_accents_and_punctuation():
+    """Accenti e punteggiatura spariscono, le parole restano."""
+    assert film_repo.normalize_title("Maigret, l'amore e la morte") == "maigret l amore e la morte"
+
+
+def test_normalize_title_keeps_trailing_numbers():
+    """Le cifre finali restano: un sequel non è il primo film.
+
+    Il taglio delle cifre esiste nello scraper e va verificato in fase 13,
+    non replicato qui.
+    """
+    assert film_repo.normalize_title("Amori e incantesimi 2") != film_repo.normalize_title("Amori e incantesimi")
+
+
 # ============ FilmRepository — CRUD + search ============
 
 
@@ -129,6 +159,50 @@ def test_upsert_from_scraper_updates_only_non_null(session):
     found = film_repo.get_by_natural_key(session, "dune", 2021)
     assert found.synopsis == "Sinossi vera"  # preservata
     assert found.director == "Villeneuve"  # aggiornata
+
+
+def test_upsert_does_not_duplicate_when_only_the_year_is_null(session):
+    """Un anno NULL nel JSON non crea una seconda riga se il film esiste già con l'anno.
+
+    È la classe di doppioni `AMORI & INCANTESIMI 2`: Wikidata non riconosce il film
+    in una run (`year=None`) e lo riconosce in quella dopo (`year=2026`).
+    """
+    film_repo.upsert_from_scraper(session, {"title": "Amori e incantesimi 2", "year": 2026})
+    session.commit()
+
+    film_repo.upsert_from_scraper(session, {"title": "AMORI & INCANTESIMI 2", "year": None})
+    session.commit()
+
+    films = list(session.scalars(select(Film)))
+    assert len(films) == 1
+    assert films[0].year == 2026  # l'anno valorizzato sopravvive, il NULL lo adotta
+
+
+def test_upsert_fills_missing_year_of_existing_row(session):
+    """Se la riga esistente ha l'anno NULL, l'upsert con anno valorizzato lo adotta."""
+    film_repo.upsert_from_scraper(session, {"title": "Amori e incantesimi 2", "year": None})
+    session.commit()
+
+    film_repo.upsert_from_scraper(session, {"title": "Amori e incantesimi 2", "year": 2026})
+    session.commit()
+
+    films = list(session.scalars(select(Film)))
+    assert len(films) == 1
+    assert films[0].year == 2026
+
+
+def test_upsert_keeps_remakes_apart_when_the_year_is_unknown(session):
+    """Due remake omonimi non si fondono per un anno NULL: il candidato è ambiguo."""
+    film_repo.upsert_from_scraper(session, {"title": "Dune", "year": 1984})
+    film_repo.upsert_from_scraper(session, {"title": "Dune", "year": 2021})
+    session.commit()
+
+    result = film_repo.upsert_from_scraper(session, {"title": "Dune", "year": None})
+    session.commit()
+
+    films = list(session.scalars(select(Film)))
+    assert len(films) == 3  # nessuna invenzione: l'anno sconosciuto resta una riga a sé
+    assert result.year is None
 
 
 def test_search_by_title_ignora_accenti(session):
