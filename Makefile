@@ -29,7 +29,7 @@ else
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: help dev check-app-web up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
+.PHONY: help dev check-app-web check-console up down restart logs ps build shell test test-scraper lint seed scrape health prod-test prod-up prod-scrape prod-seed prod-down clean
 
 help: ## Mostra questo aiuto
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -40,32 +40,32 @@ dev: ## AVVIA TUTTO: Docker (se spento), backend e app per browser e telefono
 check-app-web: ## Verifica l'export web: build + server statico su :3000 (richiede: make up && make seed)
 	@"$(BASH)" scripts/check-app-web.sh
 
-up: ## Avvia il backend in background  →  docker compose up -d --build backend
+up: ## Avvia il backend in background  ->  docker compose up -d --build backend
 	$(COMPOSE) up -d --build backend
-	@echo "Backend su $(API) — Swagger: $(API)/docs"
+	@echo "Backend su $(API) - Swagger: $(API)/docs"
 
-down: ## Ferma lo stack  →  docker compose down
+down: ## Ferma lo stack  ->  docker compose down
 	$(COMPOSE) down
 
-restart: ## Riavvia il backend  →  docker compose restart backend
+restart: ## Riavvia il backend  ->  docker compose restart backend
 	$(COMPOSE) restart backend
 
-logs: ## Segue i log del backend  →  docker compose logs -f backend
+logs: ## Segue i log del backend  ->  docker compose logs -f backend
 	$(COMPOSE) logs -f backend
 
-ps: ## Stato dei container  →  docker compose ps
+ps: ## Stato dei container  ->  docker compose ps
 	$(COMPOSE) ps
 
-build: ## Ricostruisce le immagini  →  docker compose build
+build: ## Ricostruisce le immagini  ->  docker compose build
 	$(COMPOSE) build
 
-shell: ## Shell nel container backend  →  docker compose run --rm backend bash
+shell: ## Shell nel container backend  ->  docker compose run --rm backend bash
 	$(BACKEND) bash
 
-test: ## Test del backend (31)  →  docker compose run --rm backend python -m pytest tests/ -q
+test: ## Test del backend (31)  ->  docker compose run --rm backend python -m pytest tests/ -q
 	$(BACKEND) python -m pytest tests/ -q
 
-test-scraper: ## Test dello scraper  →  docker compose run --rm scraper python -m pytest tests/ -q
+test-scraper: ## Test dello scraper  ->  docker compose run --rm scraper python -m pytest tests/ -q
 	$(SCRAPER) python -m pytest tests/ -q
 
 lint: ## Ruff (check + format) su backend e scraper
@@ -74,15 +74,15 @@ lint: ## Ruff (check + format) su backend e scraper
 	$(SCRAPER) python -m ruff check scraper/ tests/
 	$(SCRAPER) python -m ruff format --check scraper/ tests/
 
-seed: ## Popola il DB dai JSON committati  →  docker compose run --rm backend python -m app.seed_from_json
+seed: ## Popola il DB dai JSON committati  ->  docker compose run --rm backend python -m app.seed_from_json
 	$(BACKEND) python -m app.seed_from_json
 
 scrape: ## Scraping LIVE di tutti i cinema (etichetta: pochi giri al giorno)
 	$(SCRAPER) python -m scraper.main --once
-	@echo "JSON aggiornati in scraper/output/ — ora: make seed"
+	@echo "JSON aggiornati in scraper/output/ - ora: make seed"
 
 health: ## Verifica che il backend risponda
-	@curl -s -o /dev/null -w "GET /health → HTTP %{http_code}\n" $(API)/health
+	@curl -s -o /dev/null -w "GET /health -> HTTP %{http_code}\n" $(API)/health
 
 prod-test: ## Prova la configurazione di produzione in locale (Caddy + TLS self-signed su 8443)
 	DOMAIN=localhost TLS_DIRECTIVE="tls internal" HTTP_PORT=8080 HTTPS_PORT=8443 \
@@ -94,7 +94,7 @@ prod-test: ## Prova la configurazione di produzione in locale (Caddy + TLS self-
 prod-up: ## Avvia in produzione (legge .env.prod: ADMIN_TOKEN, CORS_ORIGINS, DOMAIN)
 	$(COMPOSE_PROD) --env-file .env.prod up -d --build
 
-prod-scrape: ## Primo scrape reale in produzione  →  crea i JSON in ./data/output
+prod-scrape: ## Primo scrape reale in produzione  ->  crea i JSON in ./data/output
 	$(COMPOSE_PROD) --env-file .env.prod run --rm scraper
 
 prod-seed: ## Popola il DB di produzione dai JSON in ./data/output
@@ -103,6 +103,22 @@ prod-seed: ## Popola il DB di produzione dai JSON in ./data/output
 prod-down: ## Ferma la produzione
 	$(COMPOSE_PROD) down
 
-clean: ## Ferma tutto e cancella DB locale e volumi  →  docker compose down -v
+clean: ## Ferma tutto e cancella DB locale e volumi  ->  docker compose down -v
 	$(COMPOSE) down -v --remove-orphans
 	@rm -f backend/data/cineposto.db && echo "DB locale rimosso"
+
+# Controllo di regressione: i messaggi che finiscono a schermo devono restare ASCII.
+# La console di Windows usa CP850, non decodifica l'UTF-8 e trasforma l'em dash in "â€”".
+# La regola vale per le righe non-commento (i commenti restano UTF-8: li legge un editor).
+check-console: ## Verifica che i messaggi di console siano ASCII (niente mojibake su Windows)
+	@fail=0; \
+	for f in Makefile dev.cmd scripts/*.sh; do \
+	  out=$$(grep -vnE '^[[:space:]]*(#|REM)' "$$f" | grep -P '[\x80-\xFF]'); \
+	  if [ -n "$$out" ]; then \
+	    echo "ERRORE: caratteri non ASCII in $$f (righe non-commento):"; \
+	    echo "$$out"; \
+	    fail=1; \
+	  fi; \
+	done; \
+	[ "$$fail" -eq 0 ] || { echo "I messaggi di console devono essere ASCII: la console di Windows (CP850) non legge UTF-8."; exit 1; }; \
+	echo "Messaggi di console ASCII: OK"
