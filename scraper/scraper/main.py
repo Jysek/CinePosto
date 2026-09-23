@@ -58,6 +58,7 @@ from scraper.models import (
     showings_to_json,
 )
 from scraper.normalizer import fuzzy_match
+from scraper.title_aliases import canonical_title
 
 logger = logging.getLogger("cinema_scraper")
 
@@ -313,9 +314,10 @@ def _choose_master_title(titles: list[str]) -> str:
 
     La scelta non dipende dall'ordine dei connettori (che cambia quando si
     aggiunge una sala): «Amori e incantesimi 2» è più presentabile di
-    «AMORI & INCANTESIMI 2» nella scheda dell'app.
+    «AMORI & INCANTESIMI 2» nella scheda dell'app. Le varianti di un alias noto
+    contano come il loro titolo canonico (la forma che si vuole mostrare).
     """
-    candidates = [t for t in titles if t]
+    candidates = [canonical_title(t) for t in titles if t]
     for title in candidates:
         if not title.isupper():
             return title
@@ -382,16 +384,20 @@ def _merge_films_by_wikidata_id(films: list[Film]) -> list[Film]:
 def _deduplicate_films(films: list[Film]) -> list[Film]:
     """Fonde in un unico Film le copie dello stesso titolo arrivate da cinema diversi.
 
-    Match via fuzzy_match (tollera refusi e varianti). Il primo match fa da
-    base per il fuso, di cui `_fuse_group` sceglie anche il titolo (regola
-    deterministica, vedi `_choose_master_title`). O(n²) ma n è dell'ordine
-    delle decine: irrilevante.
+    Match via fuzzy_match (tollera refusi e varianti) sui titoli canonici: due
+    forme dello stesso titolo note in `title_aliases.py` si uniscono anche se
+    nessuna regola di stringa le avvicinerebbe. Il primo match fa da base per
+    il fuso, di cui `_fuse_group` sceglie anche il titolo (regola deterministica,
+    vedi `_choose_master_title`). O(n²) ma n è dell'ordine delle decine: irrilevante.
     """
     result: list[Film] = []
 
     for film in films:
         for i, existing in enumerate(result):
-            if fuzzy_match(existing.title_normalized, film.title_normalized):
+            if fuzzy_match(
+                canonical_title(existing.title_normalized),
+                canonical_title(film.title_normalized),
+            ):
                 result[i] = _fuse_group([existing, film])
                 break
         else:
