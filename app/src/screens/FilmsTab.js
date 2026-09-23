@@ -181,8 +181,12 @@ export default function FilmsTab({ navigation }) {
         {/* Tutti i film, ognuno una sola volta: i pallini colorati
             indicano in quali cinema è programmato */}
         <View
-          style={[styles.rows, updating && styles.rowsUpdating]}
-          pointerEvents={updating ? 'none' : 'auto'}
+          style={[
+            styles.rows,
+            updating && styles.rowsUpdating,
+            // react-native-web 0.21 depreca la prop `pointerEvents` in favore dello stile.
+            updating && { pointerEvents: 'none' },
+          ]}
         >
           {filteredFilms.length === 0 ? (
             <Text style={styles.noResults}>Nessun film trovato</Text>
