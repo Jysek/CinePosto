@@ -35,6 +35,11 @@ def normalize_title(title: str) -> str:
     (3D, IMAX, VOS...), anno tra parentesi, marcatori di riedizione, prefissi
     di franchise e articoli iniziali. NON fa lowercase: per il confronto
     case-insensitive si usa `title_key()`.
+
+    Le cifre finali NON si tagliano: un numero finale è parte del titolo
+    («Amori e incantesimi 2» non è «Amori e incantesimi», è il suo sequel).
+    Gli anni continuano a essere rimossi da `_YEAR_SUFFIX` (fra parentesi o
+    parentesi quadre: «Dune (2021)»).
     """
     if not title:
         return ""
@@ -64,10 +69,6 @@ def normalize_title(title: str) -> str:
 
     t = t.strip(" .,;:!?-–—")
 
-    # strip trailing digits only when NOT inside brackets (e.g. keep "2001", "Alien³" intact)
-    if t and t[-1] not in (")", "]", "}"):
-        t = t.rstrip("0123456789").strip(" .,;:!?-–—")
-
     return t
 
 
@@ -93,17 +94,36 @@ def fuzzy_match(a: str, b: str) -> bool:
 
     La soglia di edit distance scala con la lunghezza (1 refuso ogni 4 caratteri,
     minimo 2): abbastanza larga da unire "alien"/"alein", abbastanza stretta da
-    non fondere film diversi.
+    non fondere film diversi. Eccezione stretta: se una chiave è l'altra più le
+    cifre finali non si fonde — è il sequel numerato, non un refuso.
     """
     ka = title_key(a)
     kb = title_key(b)
     if ka == kb:
         return True
+    if _is_numbered_sequel(ka, kb):
+        return False
     if ka in kb or kb in ka:
         return True
     if _edit_distance(ka, kb) <= max(2, len(ka) // 4):  # 1 typo per 4 chars: "alien"~"alein" ok, not "avatar"~"avsdar"
         return True
     return False
+
+
+def _is_numbered_sequel(ka: str, kb: str) -> bool:
+    """True se una chiave è l'altra più le cifre finali ("x2" vs "x").
+
+    Un numero finale è parte del titolo: «Amori e incantesimi 2» non è un
+    refuso di «Amori e incantesimi», è un altro film. Toglie solo le cifre
+    finali (maiuscole, punteggiatura e spazi sono già fuori da `title_key`),
+    così la regola non tocca le altre differenze, che restano gestite dal
+    contenimento e dalla distanza di edit.
+    """
+    if not ka or not kb:
+        return False
+    sa = ka.rstrip("0123456789")
+    sb = kb.rstrip("0123456789")
+    return sa == sb and (sa != ka or sb != kb)
 
 
 def _edit_distance(s1: str, s2: str) -> int:
