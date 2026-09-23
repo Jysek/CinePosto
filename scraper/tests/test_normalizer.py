@@ -12,6 +12,22 @@ def test_normalize_title():
     assert normalize_title("") == ""
 
 
+def test_keeps_trailing_number_in_title():
+    # Un numero finale è parte del titolo: «Amori e incantesimi 2» è il sequel
+    # di «Amori e incantesimi», non la stessa scheda
+    assert normalize_title("Amori e incantesimi 2") == "Amori e incantesimi 2"
+    assert normalize_title("Amori e incantesimi 2") != normalize_title("Amori e incantesimi")
+
+
+def test_still_removes_year_in_brackets():
+    assert normalize_title("Dune (2021)") == "Dune"
+    assert not normalize_title("Dune (2021)").endswith("2021")
+
+
+def test_sequel_and_first_film_are_not_matched():
+    assert not fuzzy_match("Amori e incantesimi 2", "Amori e incantesimi")
+
+
 def test_title_key():
     assert title_key("hello world") == "helloworld"
     assert title_key("Hello World") == "helloworld"
