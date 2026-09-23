@@ -97,3 +97,9 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   toccato in questa fase). Intestazioni aggiornate ai commit di correzione; per
   `development-windows.md` §5 e per le schede connettori resta dichiarata esplicitamente la parte
   non rieseguita (markup dei siti non ri-verificato, nessuno scraping live).
+- **2026-09-24** — fix di `make prod-down` (proposto e approvato nella sessione del ricontrollo):
+  `compose.prod.yaml` pretende `ADMIN_TOKEN`/`CORS_ORIGINS` con `:?` gia' all'interpretazione del
+  file, quindi anche un `down` falliva; estratte le variabili fittizie in `PROD_DUMMY_ENV` e
+  usate in `prod-test` e `prod-down` (stessi valori di prima per `prod-test`). Verificato:
+  `make prod-test` → 8443 OK, `make prod-down` → exit 0. Voce cancellata da
+  `problemi-aperti.md`; nota obsoleta rimossa da `deploy.md`.

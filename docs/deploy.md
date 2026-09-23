@@ -1,8 +1,7 @@
 # Deploy
 
 > Verificato su `857c68b` (`2026-09-24`): procedura e target Makefile confrontati col repo;
-> `make prod-test` + `curl -k https://localhost:8443/health` eseguiti davvero. Nota: `make
-> prod-down` oggi richiede a mano le variabili d'ambiente (vedi `problemi-aperti.md`).
+> `make prod-test` + `curl -k https://localhost:8443/health` eseguiti davvero.
 
 Come CinePosto va in produzione. La configurazione **è già nel repo e verificata in locale**
 (`make prod-test`): sulla VPS resta da eseguire, non da progettare.
