@@ -150,3 +150,8 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   autorizzata; i residui del DB restano di competenza `fase-16`. I sequel con numeri romani
   («Rocky II») fondono ancora: test `xfail` che rimanda alla voce di `problemi-aperti.md`, non
   risolti qui. Test scraper 162 → 173 casi (168 funzioni).
+- **2026-09-25** — CI riparata: `expo-doctor` falliva per il drift upstream del patch di `expo`
+  (lockfile 57.0.24 contro `~57.0.25` richiesto dal SDK) e il job App era rosso su qualsiasi push,
+  senza legame con le modifiche in corso. Aggiornato solo `package-lock.json` (`npm update expo`,
+  spec `^57` invariato): `expo-doctor` 21/21 ed export web verdi. Commit `chore(app)` separato
+  dalla fase-15, perché le dipendenze non si mescolano a una feature.
