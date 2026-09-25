@@ -15,12 +15,15 @@ Puo' essere eseguito:
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import date, datetime
+from itertools import combinations
 import json
 import logging
 from pathlib import Path
 import re
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
@@ -120,6 +123,71 @@ def _seed_films(db: Session, data: dict) -> tuple[int, dict[str, int], set[tuple
         keep_keys.add((film.title_normalized, film.year))
         count += 1
     return count, lookup, keep_keys
+
+
+# ============ Guardia di identità: un film = una riga ============
+
+
+def _pairs_by_group(rows: Iterable[tuple[str, int]]) -> list[str]:
+    """Da coppie (chiave di gruppo, id) a coppie "id:id" pronte per `dedup_films --merge`."""
+    groups: dict[str, list[int]] = {}
+    for group_key, row_id in rows:
+        groups.setdefault(group_key, []).append(row_id)
+    pairs = [(a, b) for ids in groups.values() if len(ids) > 1 for a, b in combinations(sorted(ids), 2)]
+    return [f"{a}:{b}" for a, b in sorted(pairs)]
+
+
+def _identity_conflicts(db: Session, films_data: dict, film_lookup: dict[str, int]) -> list[str]:
+    """Coppie (id_N, id_W) di identità discordanti viste durante l'import.
+
+    Per ogni entry JSON con `wikidata_id`, la riga risolta dal lookup (N) deve essere
+    la riga che possiede quel `wikidata_id` nel DB (W). Se sono due righe diverse, il
+    payload dichiara che sono lo stesso film: qui NON si fonde nulla, si segnala —
+    la coppia è nel formato `dedup_films --merge A:B` e la fusione è una decisione
+    umana. Una passata sola: la mappa `wikidata_id -> id` si legge dal DB una volta.
+    """
+    wikidata_rows = db.execute(select(Film.wikidata_id, Film.id).where(Film.wikidata_id.is_not(None)))
+    owners = {row.wikidata_id: row.id for row in wikidata_rows}
+    conflicts: set[tuple[int, int]] = set()
+    for entry in films_data.get("films", []):
+        wikidata_id = entry.get("wikidata_id")
+        if not wikidata_id:
+            continue
+        json_key = entry.get("id") or entry["title"]
+        resolved_id = film_lookup.get(json_key)
+        owner_id = owners.get(wikidata_id)
+        if resolved_id is None or owner_id is None or resolved_id == owner_id:
+            continue
+        conflicts.add((resolved_id, owner_id))
+        logger.warning(
+            "Conflitto di identità: '%s' (film #%d) porta %s, già del film #%d — nessuna scrittura, coppia segnalata",
+            entry["title"],
+            resolved_id,
+            wikidata_id,
+            owner_id,
+        )
+    return [f"{a}:{b}" for a, b in sorted(conflicts)]
+
+
+def _duplicate_titles(db: Session) -> list[str]:
+    """Coppie di righe ATTIVE con lo stesso `title_normalized` ed entrambi `year` NULL.
+
+    È l'unico buco residuo della UNIQUE (in SQL `NULL ≠ NULL`): le due righe possono
+    essere un doppione o due remake con anno ignoto, quindi NON si fonde nulla —
+    la segnalazione è il lavoro.
+    """
+    rows = db.execute(select(Film.title_normalized, Film.id).where(Film.removed_at.is_(None), Film.year.is_(None)))
+    return _pairs_by_group(rows)
+
+
+def _shared_wikidata_pairs(db: Session) -> list[str]:
+    """Coppie di righe con lo stesso `wikidata_id`: devono tornare ZERO (invariante).
+
+    `UNIQUE(wikidata_id)` lo garantisce già; la query mette la garanzia nero su
+    bianco a fine seed invece di darla per scontata.
+    """
+    rows = db.execute(select(Film.wikidata_id, Film.id).where(Film.wikidata_id.is_not(None)))
+    return _pairs_by_group(rows)
 
 
 def _seed_showings(
@@ -290,10 +358,11 @@ def seed_from_json(
 
     Returns:
         dict con i conteggi processati ({"cinemas", "films", "showings"}) più il
-        report di archiviazione: {"archived_films", "reactivated_films",
-        "archived_showings", "reactivated_showings", "skipped_cinemas"}.
-        Un archiviazione silenziosa è un archiviazione che spaventa: i numeri escono
-        sempre, anche quando sono zeri.
+        report di archiviazione e di identità: {"archived_films", "reactivated_films",
+        "archived_showings", "reactivated_showings", "skipped_cinemas",
+        "identity_conflicts", "duplicate_titles"}. Un archiviazione silenziosa è
+        un archiviazione che spaventa: i numeri escono sempre, anche quando sono zeri —
+        e vale anche per i conflitti di identità.
     """
     settings = get_settings()
     if archive_enabled is None:
@@ -317,11 +386,14 @@ def seed_from_json(
         "archived_showings": 0,
         "reactivated_showings": 0,
         "skipped_cinemas": [],
+        "identity_conflicts": [],
+        "duplicate_titles": [],
     }
 
     try:
         n_cinemas = _seed_cinemas(db, cinemas_data)
         n_films, film_lookup, film_keys = _seed_films(db, films_data)
+        report["identity_conflicts"] = _identity_conflicts(db, films_data, film_lookup)
         n_showings, showing_keys = _seed_showings(db, showings_data, film_lookup)
         if archive_enabled:
             date_from, date_to = _parse_window(showings_data)
@@ -329,6 +401,9 @@ def seed_from_json(
             report.update(
                 _reconcile_archive(db, film_keys, showing_keys, cinema_slugs, date_from, date_to, archive_min_ratio)
             )
+        report["duplicate_titles"] = _duplicate_titles(db)
+        # Invariante "un film = una riga": nessuna coppia con lo stesso `wikidata_id`.
+        shared_wikidata = _shared_wikidata_pairs(db)
         db.commit()
     except Exception:
         db.rollback()
@@ -344,6 +419,17 @@ def seed_from_json(
         report["reactivated_showings"],
         report["skipped_cinemas"] or "nessuno",
     )
+    logger.info(
+        "Guardia di identità: %d conflitti (%s), %d coppie di titoli con anno NULL (%s)",
+        len(report["identity_conflicts"]),
+        ", ".join(report["identity_conflicts"]) or "nessuno",
+        len(report["duplicate_titles"]),
+        ", ".join(report["duplicate_titles"]) or "nessuna",
+    )
+    if shared_wikidata:
+        logger.error("Invariante VIOLATA: coppie con lo stesso wikidata_id: %s", ", ".join(shared_wikidata))
+    else:
+        logger.info("Invariante certificato: 0 coppie con lo stesso wikidata_id")
 
     return {
         "cinemas": n_cinemas,

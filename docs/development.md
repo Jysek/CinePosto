@@ -104,6 +104,13 @@ python -m app.seed_from_json
 Da rilanciare **ogni volta che lo scraper aggiorna i JSON** (o via endpoint
 admin `POST /api/v1/admin/reimport` col token in `X-Admin-Token`).
 
+Il report stampato da `make seed` (identico al campo `imported` di `POST /api/v1/admin/reimport`)
+è `{cinemas, films, showings, archived_films, reactivated_films, archived_showings,
+reactivated_showings, skipped_cinemas, identity_conflicts, duplicate_titles}`. Le ultime due chiavi
+sono coppie `"A:B"` pronte per `python -m app.maintenance.dedup_films --merge A:B` (conflitti di
+identità fra due righe e titoli duplicati con anno NULL): il seed **segnala**, non fonde mai da
+solo.
+
 ### Manutenzione: fondere i film duplicati
 
 Quando le run accumulate lasciano due righe per lo stesso film (titolo scritto diversamente,
@@ -131,7 +138,7 @@ Swagger UI: `http://localhost:8000/docs`.
 ### Test
 
 ```bash
-python -m pytest tests/ -q       # 60 test (~0.2s)
+python -m pytest tests/ -q       # 68 test (~0.2s)
 python -m pytest tests/ -v       # verbose
 ```
 
@@ -142,6 +149,7 @@ Setup dei test:
 - `test_routers.py` — 12 end-to-end via TestClient FastAPI
 - `test_maintenance_dedup.py` — 10 test sullo script di fusione dei film duplicati
 - `test_seed_archive.py` — 8 test sull'archiviazione dei residui del seed (soft delete)
+- `test_seed_identity.py` — 8 test sulla guardia di identità del seed (un film = una riga: riuso via `wikidata_id`, conflitti segnalati)
 - `test_maintenance_migrate_removed_at.py` — 4 test sulla migrazione idempotente delle colonne `removed_at`
 
 ### Variabili d'ambiente (`.env`)

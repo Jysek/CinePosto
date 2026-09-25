@@ -187,6 +187,8 @@ def test_second_seed_of_the_same_data_changes_nothing(session, tmp_path):
         "archived_showings": 0,
         "reactivated_showings": 0,
         "skipped_cinemas": [],
+        "identity_conflicts": [],
+        "duplicate_titles": [],
     }
 
 

@@ -74,6 +74,14 @@ INDEX  ix_film_title_normalized
 > applicativo a garantire la dedup. I doppioni creati prima di queste regole si fondono con lo
 > script di manutenzione (vedi «Manutenzione» qui sotto).
 
+> **Invariante: un film = una riga.** L'identità si risolve con due segnali, in ordine: la chiave
+> naturale `(title_normalized, year)`, poi `wikidata_id` (che ha la sua `UNIQUE`). Quando i due
+> segnali discordano il seed **non esplode** (`IntegrityError`) e **non duplica**: riusa la riga del
+> segnale vincente e segnala la coppia invece di fondere (vedi «Seed»). La chiave naturale di una
+> riga riusata via `wikidata_id` **non cambia mai** — se cambiasse, la forma vecchia del titolo che
+> ricompare senza wikidata non troverebbe più la riga e ne inserirebbe una seconda. La chiave è
+> interna: la sua stabilità vale più del titolo corrente.
+
 ### Showing (`showings`)
 FK su `Film` (intera) e `Cinema` (slug stringa).
 
@@ -128,7 +136,9 @@ scraper/output/showings.json → tabella showings
 
 **Ordine di esecuzione obbligatorio** (vincoli FK):
 1. cinemas → upsert per slug
-2. films → upsert per (title_normalized, year); costruisci lookup `{titolo_stringa_JSON: id_intera_DB}`
+2. films → upsert per identità a due segnali (chiave naturale, poi `wikidata_id` — tabella dei casi
+   in [schema-mapping.md](schema-mapping.md) §2: mai `IntegrityError`, mai doppione quando i due
+   segnali discordano); costruisci lookup `{titolo_stringa_JSON: id_intera_DB}`
 3. showings → usa lookup per risolvere `film_id` intera; upsert per (film_id, cinema_slug, date)
 4. riconciliazione → le righe non più nei JSON dell'ultima importazione si **archiviano**
    (`removed_at`), quelle che ricompaiono si riattivano. **Mai `DELETE`**: il DB conserva lo storico.
@@ -137,6 +147,14 @@ La riconciliazione (finestra coperta dai JSON, guardia anti-fonte-rotta per cine
 `archived_*`/`reactivated_*`/`skipped_cinemas`) è descritta in [schema-mapping.md](schema-mapping.md)
 §4.1. Le query pubbliche filtrano `removed_at IS NULL`: i film archiviati e i loro spettacoli non
 compaiono nell'API. Interruttori in config: `seed_archive_enabled`, `seed_archive_min_ratio`.
+
+**Guardia di identità a fine seed** (correttezza, non un'opzione): il report si arricchisce di
+`identity_conflicts` — le coppie `(id_N, id_W)` in cui il payload legava allo stesso `wikidata_id`
+due righe diverse — e `duplicate_titles` — le coppie di righe **attive** con lo stesso
+`title_normalized` ed entrambi `year` NULL, l'unico buco residuo della `UNIQUE`. Nessuna fusione
+automatica: le coppie sono già nel formato `dedup_films --merge A:B` e la fusione è una decisione
+umana. A fine seed viene certificata anche l'invariante «zero coppie con lo stesso `wikidata_id`»:
+garantita dal vincolo, verificata con una query.
 
 Specifica completa in [schema-mapping.md](schema-mapping.md).
 
@@ -180,6 +198,11 @@ I titoli italiani completamente diversi per lo stesso film (es. `CARS - MOTORI R
 ANNIVERSARIO` vs `Cars – 20esimo anniversario`) non ricadono in nessuna regola: restano da unire a
 valle, con `--merge` manuale o con un merge cross-fonte nello scraper.
 
+Le coppie da fondere non vanno cercate a mano: il report del seed le consegna già pronte.
+`identity_conflicts` e `duplicate_titles` sono stringhe `"A:B"` passabili direttamente a
+`--merge`; i conflitti di identità (stesso `wikidata_id` su righe diverse) sono la priorità,
+perché sono film che l'app mostra due volte.
+
 ---
 
 ## Tecnologie
@@ -193,6 +216,6 @@ valle, con `--merge` manuale o con un merge cross-fonte nello scraper.
 | Arricchimento dati | **Wikidata via scraper** (D1) | Già fatto a monte, gratis, niente API key |
 | Scheduling | **Esterno** (systemd timer + `--once`) (D2/L3) | Backend resta stateless rispetto allo scraping |
 | Identità Cinema | **PK slug stringa** (D3) | Allineato JSON, URL parlanti |
-| Identità Film | **PK intera + UNIQUE(title_normalized, year)** (D3) | Robusto a remake e encoding fragile; il match applicativo fonde `&`/`e` e adotta l'anno NULL |
+| Identità Film | **PK intera + UNIQUE(title_normalized, year) + UNIQUE(wikidata_id)** (D3) | Robusto a remake e encoding fragile; il match applicativo fonde `&`/`e` e adotta l'anno NULL, con `wikidata_id` come secondo segnale di identità (guardia di identità del seed: mai crash, mai doppione) |
 | Lingua codice/schema | **Inglese** (L1+L2) | Allineato JSON scraper, niente traduzione runtime |
 | Sicurezza endpoint admin | Header `X-Admin-Token` | Sufficiente per MVP locale; in prod aggiungere HTTPS + IP allowlist |

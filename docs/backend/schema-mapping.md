@@ -103,7 +103,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 | `director` | `director` | nullable |
 | `poster` | `poster_url` | |
 | `description` | `synopsis` | |
-| `wikidata_id` | `wikidata_id` | UNIQUE, nullable |
+| `wikidata_id` | `wikidata_id` | UNIQUE, nullable. **Secondo segnale di identità** (dopo la chiave naturale): si scrive solo quando è libero, mai quando è già di un'altra riga — vedi la tabella dei casi sotto |
 | — | `id` (DB) | PK autoincrement, generato dal DB |
 | — | `created_at` | default `now()` |
 | — | `removed_at` | nullable. **Archiviazione** (soft delete), non cancellazione: vedi §4.1 |
@@ -129,15 +129,35 @@ per ogni record film nel JSON:
     }
 
     film = film_repo.upsert_from_scraper(db, record_norm)
-        # internamente:
-        #   exist = SELECT by (title_normalized, year)
-        #   if exist: UPDATE solo campi non-null in record
-        #   else: INSERT
+        # identità a due segnali — un film = una riga (tabella dei casi sotto):
+        #   N = SELECT by (title_normalized, year)   [anno jolly incluso]
+        #   W = SELECT by wikidata_id                [solo se il payload lo porta;
+        #                                             vede anche le righe archiviate]
         #   return film  (con id intera popolata)
 
     # COSTRUISCI lookup per il prossimo step:
     title_to_id[record["id"]] = film.id    # mappa "titolo stringa JSON" → id intera DB
 ```
+
+**Tabella dei casi dell'identità** (N = riga per chiave naturale, W = riga che possiede
+`wikidata_id` nel DB):
+
+| N | W | Cosa si fa |
+|---|---|---|
+| riga | stessa riga oppure W = None | upsert di sempre: campi non-null aggiornati + anno NULL adottato |
+| None | riga | **riuso**: è lo stesso film tornato con un'altra forma di titolo → si aggiorna quella riga, **mai INSERT** |
+| riga | riga **diversa** | **conflitto di identità**: nessun INSERT, nessuna scrittura di `wikidata_id` (non su N, non su W); si aggiornano i soli metadati di N e la coppia finisce in `identity_conflicts` (§4.1) |
+| None | None | INSERT (unico caso in cui si inserisce) |
+
+Regole di dettaglio:
+
+- il riuso via `wikidata_id` **non cambia la chiave naturale** (`title_normalized`, `year`) né
+  `title`: se una run futura ripropone la forma vecchia senza wikidata, il lookup per chiave deve
+  continuare a trovare quella riga — ogni cambio di chiave riapre la porta ai doppioni. La chiave
+  è interna: la sua stabilità vale più del titolo corrente;
+- il conflitto di identità **non è un errore**: il seed continua, logga `WARNING` e conta.
+  Mai `DELETE` nemmeno in conflitto: le due righe restano e la fusione è una decisione umana
+  (`python -m app.maintenance.dedup_films --merge A:B`).
 
 ⚠️ **Punto critico**: la chiave del dict `title_to_id` è la stringa **originale** del JSON (campo `"id"` non normalizzato), perché è esattamente quella che ritroverò come `film_id` dentro `showings.json`. NON normalizzare la chiave del lookup.
 
@@ -249,7 +269,9 @@ anni lo stesso film torna al cinema e voglio riusare/risalire ai dati vecchi»).
 | **Showings** | stessa regola per `(film_id, date)`, ma solo **dentro la finestra** `date_from`/`date_to` di `showings.json` e per i cinema di `cinemas.json`. Fuori finestra non si tocca nulla: è storia |
 | **Guardia anti-fonte-rotta** | se per un cinema gli showings importati sono meno di `seed_archive_min_ratio` (default 0.5) di quelli già attivi nel DB nella stessa finestra → l'archiviazione per quel cinema si **salta** e finisce in `skipped_cinemas`: sembra una fonte andata a metà, non una programmazione cambiata |
 | **Query pubbliche** | `removed_at IS NULL` su film e showings: un film archiviato non compare, e nemmeno i suoi spettacoli. `removed_at` non è esposto dall'API (è un fatto interno del DB) |
-| **Report** | `seed_from_json` ritorna `archived_films`, `reactivated_films`, `archived_showings`, `reactivated_showings`, `skipped_cinemas` e `make seed` li stampa: un'archiviazione silenziosa è un'archiviazione che spaventa |
+| **Report** | `seed_from_json` ritorna `archived_films`, `reactivated_films`, `archived_showings`, `reactivated_showings`, `skipped_cinemas`, `identity_conflicts`, `duplicate_titles` e `make seed` li stampa: un'archiviazione silenziosa è un'archiviazione che spaventa (stesso principio per i conflitti di identità) |
+| **Guardia di identità** | `identity_conflicts` elenca le coppie `(id_N, id_W)` viste durante l'import in cui il payload legava allo stesso `wikidata_id` due righe diverse; `duplicate_titles` le coppie di righe **attive** con lo stesso `title_normalized` ed entrambi `year` NULL (l'unico buco residuo della UNIQUE). Entrambe nel formato `dedup_films --merge A:B`, nessuna fusione automatica |
+| **Invariante** | a fine seed la query «coppie con lo stesso `wikidata_id`» deve tornare **0**: il vincolo `UNIQUE(wikidata_id)` la garantisce e la query la certifica nei log invece di darla per scontata |
 | **Idempotenza** | rieseguire il seed sugli stessi JSON non cambia nulla: tutti i contatori a 0 |
 
 Le colonne arrivano con una migrazione **idempotente**
@@ -323,6 +345,7 @@ SELECT * FROM showings WHERE film_id = 42 AND date = '2026-06-30';
 Cosa controllare **dopo** aver lanciato `python -m app.seed_from_json`:
 
 - I tre JSON (`cinemas.json`, `films.json`, `showings.json`) sono presenti in `SCRAPER_OUTPUT_DIR`.
-- **Idempotenza**: rieseguire il seed sullo stesso JSON non cambia i conteggi (upsert per chiave naturale).
+- **Idempotenza**: rieseguire il seed sullo stesso JSON non cambia i conteggi (upsert per identità a due segnali) e la guardia di identità torna vuota (`identity_conflicts` e `duplicate_titles` a `[]`).
+- **Guardia di identità**: nel report `identity_conflicts` e `duplicate_titles` sono vuoti (oppure vanno letti e decisi: ogni coppia è pronta per `dedup_films --merge A:B`) e nei log compare «Invariante certificato: 0 coppie con lo stesso `wikidata_id`».
 - **Conteggi reali**: li dà `GET /api/v1/admin/dataset-info` (numero di cinema, film e showings, ultima `scraped_at`). Non fissare numeri attesi nel documento: cambiano a ogni run.
 - **Nessuno showing orfano**: nei log del seed non compaiono `warning` di film non risolvibili dal lookup (vedi §5).

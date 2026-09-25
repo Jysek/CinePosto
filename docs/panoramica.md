@@ -80,7 +80,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 **Endpoint principali** (11 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
 
-- Numeri: **60 test** (unit sui repository, seed e archiviazione dei residui, script di manutenzione, end-to-end con TestClient su DB in-memory).
+- Numeri: **68 test** (unit sui repository, seed con archiviazione dei residui e guardia di identità, script di manutenzione, end-to-end con TestClient su DB in-memory).
 - Decisioni chiave: **SQLite anche in produzione** (D4 — un file, zero amministrazione, carico di lettura minuscolo: perfetto per l'MVP), **Wikidata-only senza TMDB** (D1 — niente API key, niente limiti commerciali).
 
 📂 Dettaglio: [backend/architecture.md](backend/architecture.md) · [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna) · [backend/api.md](backend/api.md) (contratto API completo per l'app)
@@ -114,7 +114,7 @@ Su VM Linux: lo scraper gira con un systemd timer (file in `scraper/deploy/`), i
 
 ## 7. Qualità
 
-- **221 test automatici** totali (173 scraper + 48 backend), lint ruff pulito su entrambi, CI a 2 job.
+- **241 test automatici** totali (173 scraper + 68 backend), lint ruff pulito su entrambi, CI a 2 job.
 - Seed **idempotente**: importare gli stessi JSON N volte produce sempre lo stesso DB.
 - Docstring complete su tutto il codice di produzione (backend, scraper, connettori).
 

@@ -96,7 +96,7 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Avvia il backend | `make up` | `docker compose up -d --build backend` |
 | Log del backend | `make logs` | `docker compose logs -f backend` |
 | Stato container | `make ps` | `docker compose ps` |
-| Test backend (60) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
+| Test backend (68) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
 | Test scraper (173) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
 | Messaggi di console ASCII | `make check-console` | controlla che `Makefile`, `dev.cmd` e `scripts/*.sh` stampino solo ASCII (vedi §9) |

@@ -14,7 +14,7 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 11 endpoint REST, 60 test | `backend/api.md` |
+| Backend | 11 endpoint REST, 68 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
@@ -183,3 +183,12 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   (il conflitto si segnala, non si risolve da soli), invariante di fine seed con `identity_conflicts`
   e `duplicate_titles` nel report, già nel formato `dedup_films --merge A:B`. Voce con la prova in
   `problemi-aperti.md`.
+- **2026-09-25** — **fase-21 eseguita**: guardia di identità del seed, un film = una riga.
+  `upsert_from_scraper` risolve l'identità con due segnali (chiave naturale, poi `wikidata_id`): il
+  film tornato con un titolo nuovo **riusa** la sua riga (mai INSERT, mai cambio di chiave né di
+  titolo — la stabilità della chiave è la difesa contro i doppioni), il conflitto fra i due segnali
+  non scrive `wikidata_id` da nessuna parte e si segnala. Report del seed con `identity_conflicts` e
+  `duplicate_titles` nel formato `dedup_films --merge A:B` + invariante certificata a fine seed
+  (0 coppie con lo stesso `wikidata_id`). Prima run sul DB reale: **0 conflitti, 0 coppie con anno
+  NULL**, contatori di archiviazione a 0 (nessun dato toccato). Casi A/B/C riprodotti nei test:
+  test backend 60 → 68. Voce del rischio `wikidata_id` cancellata da `problemi-aperti.md`.
