@@ -126,3 +126,14 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   162. Nuove voci in `problemi-aperti.md`: sequel con numeri romani (ancora fondono) e arricchimento
   Wikidata che non aggancia i titoli urlati (radice degli alias). I JSON restano quelli del
   2026-09-20: la run di rigenerazione va fatta solo su autorizzazione esplicita.
+- **2026-09-25** — rigenerati i JSON con la run di scraping autorizzata del 25/09 (40 film, 449
+  showings, 0 errori di scraping, `validate_output.py` senza errori critici) e committati come
+  fixture. Dalla run e dai controlli sull'app sono emersi 6 difetti/richieste, pianificati come
+  `fase-15`…`fase-20` in `pianificazione/`: (1) Cars compare in 3 schede, (2) coppie doppie anche per
+  Heart of the Beast/Oceania/Ultimo/The Invite per i residui del DB (82 film nel DB contro 40 nei
+  JSON), (3) "Leggi di più/Mostra meno" inutile nella trama, (4) il popup della mappa non apre Google
+  Maps, (5) al posto delle coordinate serve la place URL del cinema su Maps, (6) 4 descrizioni tronche
+  a 103 caratteri (Naza, Una storia, Ritorno a Buenos Aires, I figli della scimmia — tutte da
+  PostModernissimo). Decisioni prese: i residui del DB si **archiviano** con `removed_at`, mai si
+  cancellano; al posto della sola tabella alias serve un match più robusto; le 8 place URL si
+  raccolgono a mano (review dell'utente). Nota: `fase-12` è superata dalla `fase-16`.
