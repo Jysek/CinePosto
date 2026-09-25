@@ -1,7 +1,8 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su `5feb740` (`2026-09-25`): numeri dei test aggiornati. Il resto del documento non è
-> stato ricontrollato in questa sessione (ultima lettura completa su `9dc8fc1`).
+> Verificato su `a360d5a` (`2026-09-25`): numeri dei test e riga del seed (archiviazione dei
+> residui). Il resto del documento non è stato ricontrollato in questa sessione (ultima lettura
+> completa su `9dc8fc1`).
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 

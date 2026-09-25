@@ -1,6 +1,7 @@
 # Backend — Architettura tecnica
 
-> Verificato su `9dc8fc1` (`2026-09-23`).
+> Verificato su `a360d5a` (`2026-09-25`): modello con `removed_at`, seed con il passo di
+> riconciliazione, riga "Migrations".
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).

@@ -1,6 +1,6 @@
 # CinePosto — Contratto API (v1)
 
-> Verificato su `857c68b` (`2026-09-24`).
+> Verificato su `a360d5a` (`2026-09-25`): semantica dei film/spettacoli archiviati (§2, §4.6, §5).
 
 > **Contratto autorevole degli endpoint**: URL, forma delle risposte, affidabilità
 > dei dati, CORS. L'app è ora costruita e integrata — per il **client reale** vedi

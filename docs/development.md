@@ -1,7 +1,7 @@
 # Guida allo sviluppo
 
-> Verificato su `9dc8fc1` (`2026-09-23`): comandi, costanti, numeri di test (48 backend) e
-> variabili d'ambiente confrontati col codice.
+> Verificato su `a360d5a` (`2026-09-25`): numeri dei test (60 backend) e variabili d'ambiente
+> del seed. Comandi confrontati col codice su `9dc8fc1`.
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in

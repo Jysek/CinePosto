@@ -1,6 +1,7 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `5c53fd5` (`2026-09-23`).
+> Verificato su `a360d5a` (`2026-09-25`): cancellata la voce sui residui del DB (risolta con
+> l'archiviazione `removed_at`). Le altre voci non sono state ricontrollate in questa sessione.
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
