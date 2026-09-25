@@ -170,3 +170,16 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   le coppie doppie della tabella di fase-16 (Talking Tom comprese); restano le due «Cars» che
   vivono **nei JSON** (fase-15: la fusione si vedrà alla prossima run autorizzata). Test backend
   48 → 60 (archiviazione, guardia, idempotenza, filtri pubblici, migrazione).
+- **2026-09-25** — registrato il rischio di duplicazione/crash del seed per `wikidata_id`, emerso
+  chiudendo la fase-16: `upsert_from_scraper` risolve l'identità solo per chiave naturale
+  (`film_repo.py:101`), quindi un film tornato con un titolo nuovo ma lo stesso `wikidata_id` di
+  una riga già nel DB (anche archiviata) fa esplodere `make seed` con `IntegrityError: UNIQUE
+  constraint failed: films.wikidata_id`; stesso esito se il `wikidata_id` arriva in update su una
+  riga che non lo possiede (aggiornare la chiave di una riga trovata per wikidata aprirebbe invece
+  la porta ai doppioni: scenario N/N+1/N+2 di Cars). Riprodotto in-memory, nessun dato reale toccato
+  (0 conflitti sui dati del 25/09). Nessun codice cambiato in questa sessione: scritta
+  `pianificazione/fase-21` — guardia di identità a due segnali (chiave naturale, poi `wikidata_id`),
+  riuso della riga trovata per wikidata **senza cambiarle la chiave**, mai INSERT in conflitto
+  (il conflitto si segnala, non si risolve da soli), invariante di fine seed con `identity_conflicts`
+  e `duplicate_titles` nel report, già nel formato `dedup_films --merge A:B`. Voce con la prova in
+  `problemi-aperti.md`.

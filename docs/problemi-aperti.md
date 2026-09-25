@@ -1,7 +1,8 @@
 # CinePosto — Problemi aperti
 
 > Verificato su `a360d5a` (`2026-09-25`): cancellata la voce sui residui del DB (risolta con
-> l'archiviazione `removed_at`). Le altre voci non sono state ricontrollate in questa sessione.
+> l'archiviazione `removed_at`), aggiunta quella sul rischio `wikidata_id` del seed (riprodotto in
+> memoria). Le altre voci non sono state ricontrollate in questa sessione.
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
@@ -16,6 +17,23 @@ non è una roadmap: le cose da fare che non sono difetti stanno in `README.md` (
 Una o due righe: cosa dovrebbe succedere e cosa succede invece.
 
 ## Voci aperte
+
+### Il seed può esplodere (o creare un doppione) quando un film torna con un titolo nuovo
+**Dove**: `backend/app/repositories/film_repo.py:101` (`upsert_from_scraper`: lookup solo per chiave
+naturale) e `:135` (scrive `wikidata_id` anche quando è già di un'altra riga) · **Prova**:
+`docker compose run --rm backend python -c "from sqlalchemy import create_engine; from sqlalchemy.orm
+import sessionmaker; from app.database import Base; from app.models import Film; from app.repositories
+import film_repo; e = create_engine('sqlite:///:memory:'); Base.metadata.create_all(e); db =
+sessionmaker(bind=e)(); film_repo.upsert_from_scraper(db, {'title': 'A', 'wikidata_id': 'Q1'});
+db.commit(); film_repo.upsert_from_scraper(db, {'title': 'B', 'wikidata_id': 'Q1'}); db.commit()"` →
+`IntegrityError: UNIQUE constraint failed: films.wikidata_id` · **Data**: `2026-09-25`
+Se un film torna in programmazione con una forma di titolo che non incontra la chiave naturale ma
+con lo stesso `wikidata_id` di una riga già nel DB (anche archiviata), l'upsert prova l'INSERT e
+viola `UNIQUE(wikidata_id)`: `make seed` si ferma e il DB non si aggiorna. Stesso esito se il
+`wikidata_id` arriva in aggiornamento su una riga che non lo possiede. Nessun caso reale oggi (0
+coppie in conflitto sul DB del 25/09), ma la fase-16 lascia le righe archiviate con i loro
+`wikidata_id` e la probabilità cresce. Soluzione pianificata: `pianificazione/fase-21` (guardia di
+identità a due segnali, mai crash, invariante di fine seed).
 
 ### Un sequel con numero romano può essere fuso con il primo film
 **Dove**: `scraper/scraper/normalizer.py` (`fuzzy_match`, ramo di contenimento) · **Prova**:
