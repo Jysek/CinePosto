@@ -22,11 +22,15 @@ Regole della tabella (non degradarle):
 Se un caso si ripete (l'arricchimento Wikidata non trova l'entità per titoli
 "urlati" o con sottotitoli italiani), la strada giusta è migliorare
 `enrich_film`, non allungare questa lista.
+
+Qui vive anche `match_cross_source(a, b)`, il giudice unico della fusione
+fra fonti diverse (dedup in `main.py`): alias OR fuzzy sulle forme grezze
+OR fuzzy sulle forme canoniche.
 """
 
 from __future__ import annotations
 
-from scraper.normalizer import title_key
+from scraper.normalizer import fuzzy_match, title_key
 
 # The Space (Corciano/Terni) e UCI (Perugia) annunciano la riedizione del 20°
 # anniversario di *Cars* come "CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO",
@@ -45,3 +49,26 @@ def canonical_title(title: str) -> str:
         if key in (title_key(variant), title_key(canonical)):
             return canonical
     return title
+
+
+def match_cross_source(a: str, b: str) -> bool:
+    """True se a e b sono lo stesso film annunciato da fonti diverse.
+
+    Un solo punto di verità per «sono lo stesso film?», tre prove in OR:
+
+    1. le due forme cadono sullo stesso titolo canonico (`canonical_title`):
+       è l'uguaglianza curata dell'alias, l'unica che unisce forme che
+       nessuna regola di stringa avvicinerebbe;
+    2. `fuzzy_match` sulle forme GREZZE: il contenimento unisce
+       «Cars - Motori Ruggenti» a «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO»;
+    3. `fuzzy_match` sulle forme CANONICHE: la tolleranza ai refusi vale
+       anche dopo l'alias.
+
+    Le tre prove stanno in OR e non in sequenza: la canonizzazione NON deve
+    sostituire il titolo prima del confronto, sennò si perde la forma lunga,
+    che è l'unica che contiene la forma breve (difetto del 2026-09-25: le due
+    forme di *Cars* restavano in schede separate proprio per questo).
+    """
+    if canonical_title(a) == canonical_title(b):
+        return True
+    return fuzzy_match(a, b) or fuzzy_match(canonical_title(a), canonical_title(b))

@@ -1,7 +1,8 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `5c53fd5` (`2026-09-23`): costanti, modelli, connettori, orchestrazione
-> e fusioni confrontati col codice.
+> Verificato su `882ee13` (`2026-09-25`): costanti, modelli, connettori, orchestrazione
+> e fusioni confrontati col codice. Il capitolo su `_deduplicate_films` descrive
+> `match_cross_source`, modifica introdotta in questo stesso commit.
 
 ## Indice
 
@@ -37,6 +38,7 @@ scraper/
 ├── errors.py            # Scrittura errors.json accumulativo
 ├── metadata.py          # Enrichment Wikidata (poster, regista, durata)
 ├── normalizer.py        # Normalizzazione titoli, fuzzy match, Levenshtein
+├── title_aliases.py     # Alias di titoli fra fonti + match cross-fonte (match_cross_source)
 ├── browser.py           # CloakBrowser singleton (Chromium anti-fingerprint)
 └── connectors/
     ├── base.py          # BaseConnector ABC (scrape + fetch_film_detail)
@@ -57,7 +59,7 @@ scraper/
 ```
 Connettori (8) → all_films: list[Film]
                 ↓
-         _deduplicate_films()         ← fuzzy match + tabella di alias (titoli canonici)
+         _deduplicate_films()         ← match cross-fonte (alias OR fuzzy grezzo OR fuzzy canonico)
                 ↓
          enrich_film()                ← Wikidata per ogni film
                 ↓
@@ -368,6 +370,9 @@ Le cifre finali **restano**: un numero finale è parte del titolo — «Amori e 
 3. Se uno è sottostringa dell'altro → True
 4. Se distanza di Levenshtein ≤ max(2, len(ka)//4) → True
 
+Per la fusione cross-cinema `fuzzy_match` non si chiama direttamente: il giudice è
+`match_cross_source` di `title_aliases.py` (vedi [`_deduplicate_films`](#_deduplicate_filmsfilms---listfilm)).
+
 ### `normalize_duration(duration: str | None) -> str | None`
 
 Normalizza qualsiasi formato di durata a `"N min"`:
@@ -513,7 +518,7 @@ Flusso principale:
 2. Chiama `connector.scrape(today, week_dates)` per tutti i connettori in sequenza
 3. Per connettori falliti: attende `SCRAPER_RETRY_DELAY` secondi (default 300s) e riprova una volta
 4. Per connettori falliti al retry: carica cache dal file `output/cache/{slug}.json` come fallback
-5. `_deduplicate_films(all_films)` — fuzzy match cross-cinema sui titoli canonici (le varianti note in `title_aliases.py` contano come il loro titolo canonico), merge `present_in`
+5. `_deduplicate_films(all_films)` — match cross-fonte (`match_cross_source`: alias OR fuzzy grezzo OR fuzzy canonico) sui titoli grezzi, raggruppamento transitivo, merge `present_in`
 6. `enrich_film(film)` per ogni film — Wikidata (con try/except per continuare in caso di errore)
 7. `_merge_films_by_wikidata_id(all_films)` — seconda fusione, per identità Wikidata (dopo l'arricchimento: prima `wikidata_id` non esiste ancora)
 8. `merge_films(all_films, previous_data, today)` — delta con run precedente
@@ -528,7 +533,15 @@ Flusso principale:
 
 ### `_deduplicate_films(films) -> list[Film]`
 
-**Prima fusione** (dentro la run, prima di Wikidata): raggruppa i film con lo stesso titolo provenienti da cinema diversi. Il confronto è `fuzzy_match` sui **titoli canonici** (`canonical_title` di `title_aliases.py`): due forme dello stesso titolo noto si uniscono anche quando nessuna regola di stringa le avvicinerebbe. Il fuso si costruisce con `_fuse_group`.
+**Prima fusione** (dentro la run, prima di Wikidata): raggruppa i film con lo stesso titolo provenienti da cinema diversi. «Sono lo stesso film?» ha un solo giudice, `match_cross_source(a, b)` di `title_aliases.py`, applicato ai titoli **grezzi** dei Film (`title_normalized`). Tre prove, in **OR** — mai in sequenza: la canonizzazione *sostituirebbe* il titolo e perderebbe la forma lunga, che è l'unica che contiene la forma breve (difetto del 2026-09-25):
+
+1. stesso titolo canonico (`canonical_title`): è l'uguaglianza curata dell'alias, l'unica che unisce forme che nessuna regola di stringa avvicinerebbe;
+2. `fuzzy_match` sulle forme grezze: il contenimento unisce «Cars - Motori Ruggenti» a «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO»;
+3. `fuzzy_match` sulle forme canoniche: la tolleranza ai refusi vale anche dopo l'alias.
+
+Il raggruppamento è la **chiusura transitiva** del match: se A~B e B~C, anche A e C finiscono nella stessa scheda. Confrontare ogni film solo col primo risultato già presente dava 1 o 2 schede a seconda dell'ordine in cui arrivano i connettori. Gruppi e membri restano nell'ordine di arrivo; il fuso si costruisce con `_fuse_group`.
+
+*Esempio — le tre scritture della riedizione del 20° anniversario di* Cars*:* The Space la chiama «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO», Metropolis «Cars – 20esimo anniversario» (le due forme non si somigliano: le unisce l'alias), UCI e Nuovo Cinema Castello «Cars - Motori Ruggenti» (contenuto nella forma lunga, **non** in quella di Metropolis: è la transitività a chiudere il gruppo). Risultato: una scheda sola con tutti gli showings.
 
 ### `_merge_films_by_wikidata_id(films) -> list[Film]`
 
@@ -699,7 +712,7 @@ main.run_scraper()
 │
 ├── [retry dopo 300s per connettori falliti]
 │
-├── _deduplicate_films(all_films)                  [fuzzy match + alias]
+├── _deduplicate_films(all_films)                  [match cross-fonte + alias]
 │
 ├── per ogni film: enrich_film(film)               [Wikidata API]
 │   ├── _search_wikidata(title)                    [cache → wbsearchentities]

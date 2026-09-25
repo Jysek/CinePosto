@@ -57,8 +57,7 @@ from scraper.models import (
     output_to_json,
     showings_to_json,
 )
-from scraper.normalizer import fuzzy_match
-from scraper.title_aliases import canonical_title
+from scraper.title_aliases import canonical_title, match_cross_source
 
 logger = logging.getLogger("cinema_scraper")
 
@@ -384,26 +383,41 @@ def _merge_films_by_wikidata_id(films: list[Film]) -> list[Film]:
 def _deduplicate_films(films: list[Film]) -> list[Film]:
     """Fonde in un unico Film le copie dello stesso titolo arrivate da cinema diversi.
 
-    Match via fuzzy_match (tollera refusi e varianti) sui titoli canonici: due
-    forme dello stesso titolo note in `title_aliases.py` si uniscono anche se
-    nessuna regola di stringa le avvicinerebbe. Il primo match fa da base per
-    il fuso, di cui `_fuse_group` sceglie anche il titolo (regola deterministica,
-    vedi `_choose_master_title`). O(n²) ma n è dell'ordine delle decine: irrilevante.
+    «Sono lo stesso film?» ha un solo giudice, `match_cross_source`
+    (`title_aliases.py`), sui titoli GREZZI dei Film: alias noto (uguaglianza
+    curata), contenimento sulle forme grezze o fuzzy sulle forme canoniche —
+    in OR. Mai l'alias *al posto* del confronto grezzo: la canonizzazione
+    sostituirebbe la forma lunga («CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO»)
+    e perderebbe l'unica forma breve che la contiene («Cars - Motori Ruggenti»).
+
+    Il raggruppamento è la chiusura transitiva del match: se A~B e B~C, anche
+    A e C sono lo stesso film e finiscono in UNA scheda. Confrontare ogni film
+    solo col primo risultato già presente dava 1 o 2 schede a seconda
+    dell'ordine in cui arrivano i connettori. Gruppi e membri restano nell'ordine
+    di arrivo (il primo del gruppo fa da base a `_fuse_group`, che sceglie anche
+    il titolo). O(n²) ma n è dell'ordine delle decine: irrilevante.
     """
-    result: list[Film] = []
+    parent = list(range(len(films)))
 
-    for film in films:
-        for i, existing in enumerate(result):
-            if fuzzy_match(
-                canonical_title(existing.title_normalized),
-                canonical_title(film.title_normalized),
-            ):
-                result[i] = _fuse_group([existing, film])
-                break
-        else:
-            result.append(film)
+    def root(i: int) -> int:
+        while parent[i] != i:
+            i = parent[i]
+        return i
 
-    return result
+    # Union-find: ogni match unisce le componenti, la radice resta il film più
+    # vecchio (indice minore) così l'ordine di output non dipende dai match.
+    for i in range(len(films)):
+        for j in range(i + 1, len(films)):
+            if match_cross_source(films[i].title_normalized, films[j].title_normalized):
+                ri, rj = root(i), root(j)
+                if ri != rj:
+                    parent[max(ri, rj)] = min(ri, rj)
+
+    groups: dict[int, list[Film]] = {}
+    for i, film in enumerate(films):
+        groups.setdefault(root(i), []).append(film)
+
+    return [_fuse_group(group) if len(group) > 1 else group[0] for group in groups.values()]
 
 
 def schedule() -> None:

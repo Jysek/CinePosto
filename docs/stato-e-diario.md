@@ -137,3 +137,16 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   PostModernissimo). Decisioni prese: i residui del DB si **archiviano** con `removed_at`, mai si
   cancellano; al posto della sola tabella alias serve un match più robusto; le 8 place URL si
   raccolgono a mano (review dell'utente). Nota: `fase-12` è superata dalla `fase-16`.
+- **2026-09-25** — fase-15: una sola scheda per *Cars*. Il giudizio «sono lo stesso film?» è unico,
+  `match_cross_source` (`title_aliases.py`), con tre prove in **OR** — alias curato, `fuzzy_match`
+  sulle forme grezze, `fuzzy_match` sulle forme canoniche — e non più in sequenza: prima l'alias
+  sostituiva il titolo prima del confronto e spegneva il contenimento fra «Cars - Motori Ruggenti»
+  e «CARS - MOTORI RUGGENTI - 20MO ANNIVERSARIO», così la riedizione del 20° anniversario restava
+  in più schede. `_deduplicate_films` raggruppa inoltre per chiusura transitiva (se A~B e B~C, anche
+  A e C sono lo stesso film): senza questa il numero di schede dipendeva dall'ordine dei connettori,
+  perché la forma breve e «Cars – 20esimo anniversario» non si somigliano — è la forma lunga a fare
+  da ponte. Nessuna voce nuova nell'alias (la terza forma la unisce il contenimento). I JSON non
+  sono stati rigenerati (run live solo su richiesta): l'effetto si vedrà alla prossima run
+  autorizzata; i residui del DB restano di competenza `fase-16`. I sequel con numeri romani
+  («Rocky II») fondono ancora: test `xfail` che rimanda alla voce di `problemi-aperti.md`, non
+  risolti qui. Test scraper 162 → 173 casi (168 funzioni).
