@@ -1,8 +1,8 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `a360d5a` (`2026-09-25`): cancellata la voce sui residui del DB (risolta con
-> l'archiviazione `removed_at`), aggiunta quella sul rischio `wikidata_id` del seed (riprodotto in
-> memoria). Le altre voci non sono state ricontrollate in questa sessione.
+> Verificato su `20ca1bb` (`2026-09-25`): cancellata la voce sul rischio `wikidata_id` del seed
+> (risolta con la guardia di identità a due segnali). Le altre voci non sono state ricontrollate
+> in questa sessione.
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:

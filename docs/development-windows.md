@@ -1,6 +1,6 @@
 # Sviluppo su Windows
 
-> Verificato su `a360d5a` (`2026-09-25`): conteggi dei test (173 scraper, 60 backend). Comandi
+> Verificato su `20ca1bb` (`2026-09-25`): conteggi dei test (173 scraper, 68 backend). Comandi
 > e percorsi erano stati ricontrollati su `9dc8fc1`; §5 (Expo Go, rete e firewall su telefono
 > reale) non rieseguita.
 

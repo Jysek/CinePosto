@@ -1,7 +1,7 @@
 # Backend — Architettura tecnica
 
-> Verificato su `a360d5a` (`2026-09-25`): modello con `removed_at`, seed con il passo di
-> riconciliazione, riga "Migrations".
+> Verificato su `20ca1bb` (`2026-09-25`): invariante "un film = una riga", guardia di identità del
+> seed, coppie del report pronte per `--merge`.
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).

@@ -1,7 +1,7 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `a360d5a` (`2026-09-25`): colonne `removed_at` e §4.1 (riconciliazione con
-> archiviazione). Il resto del capitolo non è stato ricontrollato in questa sessione.
+> Verificato su `20ca1bb` (`2026-09-25`): identità a due segnali (§2, tabella dei casi) e guardia di
+> identità di fine seed (§4.1). Il resto del capitolo non è stato ricontrollato in questa sessione.
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).

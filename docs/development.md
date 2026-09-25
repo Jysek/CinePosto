@@ -1,7 +1,8 @@
 # Guida allo sviluppo
 
-> Verificato su `a360d5a` (`2026-09-25`): numeri dei test (60 backend) e variabili d'ambiente
-> del seed. Comandi confrontati col codice su `9dc8fc1`.
+> Verificato su `20ca1bb` (`2026-09-25`): report del seed (`identity_conflicts`,
+> `duplicate_titles`) e numeri dei test (173 scraper, 68 backend). Comandi confrontati col codice
+> su `9dc8fc1`.
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in
