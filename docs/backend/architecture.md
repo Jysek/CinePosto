@@ -55,6 +55,7 @@ poster_url        string nullable
 synopsis          text nullable
 wikidata_id       string nullable UNIQUE            -- arricchimento Wikidata (D1)
 created_at        datetime default now
+removed_at        datetime nullable                 -- archiviazione (soft delete), vedi «Seed»
 
 UNIQUE(title_normalized, year)
 INDEX  ix_film_title_normalized
@@ -85,6 +86,7 @@ language      string nullable              -- "ITA"/"ENG"/"ORIG-SUB"
 screen        string nullable
 buy_url       string nullable              -- source_url nel JSON scraper
 scraped_at    datetime default now
+removed_at    datetime nullable             -- archiviazione (soft delete), vedi «Seed»
 
 UNIQUE(film_id, cinema_slug, date)
 INDEX  ix_showings_date, ix_showings_film, ix_showings_cinema
@@ -127,6 +129,13 @@ scraper/output/showings.json → tabella showings
 1. cinemas → upsert per slug
 2. films → upsert per (title_normalized, year); costruisci lookup `{titolo_stringa_JSON: id_intera_DB}`
 3. showings → usa lookup per risolvere `film_id` intera; upsert per (film_id, cinema_slug, date)
+4. riconciliazione → le righe non più nei JSON dell'ultima importazione si **archiviano**
+   (`removed_at`), quelle che ricompaiono si riattivano. **Mai `DELETE`**: il DB conserva lo storico.
+
+La riconciliazione (finestra coperta dai JSON, guardia anti-fonte-rotta per cinema, report
+`archived_*`/`reactivated_*`/`skipped_cinemas`) è descritta in [schema-mapping.md](schema-mapping.md)
+§4.1. Le query pubbliche filtrano `removed_at IS NULL`: i film archiviati e i loro spettacoli non
+compaiono nell'API. Interruttori in config: `seed_archive_enabled`, `seed_archive_min_ratio`.
 
 Specifica completa in [schema-mapping.md](schema-mapping.md).
 
@@ -141,7 +150,9 @@ Nessuno scheduler interno al backend (decisione D2): lo scraper vive nel suo pro
 ## Manutenzione: fusione dei doppioni
 
 Il seed non cancella: con le run accumulate possono restare **due righe per lo stesso film**
-(titolo scritto diversamente, anno NULL). Lo script di manutenzione le fonde in modo controllato:
+(titolo scritto diversamente, anno NULL). Le righe non più in programmazione il seed le **archivia**
+(`removed_at`), ma due doppioni *entrambi* vivi restano da unire a mano — lo script di manutenzione le
+fonde in modo controllato:
 
 ```bash
 docker compose run --rm backend python -m app.maintenance.dedup_films               # DRY-RUN + report
@@ -177,7 +188,7 @@ valle, con `--merge` manuale o con un merge cross-fonte nello scraper.
 | Framework | FastAPI | Async, Pydantic integrato, Swagger auto |
 | ORM | SQLAlchemy 2.0 sync | Sufficiente per la scala, più semplice di async |
 | DB dev + prod | **SQLite** (D4) | Bassa concorrenza, lettura-pesante, zero ops |
-| Migrations | **nessuna configurata** | Le tabelle nascono con `Base.metadata.create_all` nel lifespan; il DB è ricreabile dal seed. Alembic va introdotto solo quando non lo sarà più (regola di `AGENTS.md`) |
+| Migrations | **nessun tool (niente Alembic)** | Le tabelle nascono con `Base.metadata.create_all` nel lifespan; le colonne nuove arrivano con un `ALTER TABLE` idempotente (`app/maintenance/migrate_removed_at.py`), perché il DB contiene storico e non si ricrea dal seed. Alembic va introdotto solo quando il DB non sarà più ricreabile (regola di `AGENTS.md`) |
 | Arricchimento dati | **Wikidata via scraper** (D1) | Già fatto a monte, gratis, niente API key |
 | Scheduling | **Esterno** (systemd timer + `--once`) (D2/L3) | Backend resta stateless rispetto allo scraping |
 | Identità Cinema | **PK slug stringa** (D3) | Allineato JSON, URL parlanti |

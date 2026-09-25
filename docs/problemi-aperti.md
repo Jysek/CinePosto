@@ -16,16 +16,6 @@ Una o due righe: cosa dovrebbe succedere e cosa succede invece.
 
 ## Voci aperte
 
-### I residui di run passate restano nel DB: «Talking Tom Heroes» compare in due schede
-**Dove**: `backend/app/seed_from_json.py` (nessuna riga non più nei JSON viene rimossa) · **Prova**:
-`curl -s http://localhost:8000/api/v1/film/oggi` → 23 film, fra cui #42 «TALKING TOM HEROES SUPER
-AMICI AL CINEMA» e #53 «Talking Tom Heroes - Super amici» (stesso film) · **Data**: `2026-09-23`
-Nei JSON la coppia non esiste (una sola forma: `grep -c '"id": "Talking' scraper/output/films.json` → 1), ma
-il seed non rimuove le righe accumulate dalle run passate: i residui hanno ancora showings nella
-finestra e nell'app tornano schede doppie. Le varianti di titolo fra fonti della run corrente si
-uniscono ora nello scraper (alias + fusione per `wikidata_id`); qui resta la pulizia del DB: serve
-il purge del seed, oppure `python -m app.maintenance.dedup_films --merge 42:53 --apply`.
-
 ### Un sequel con numero romano può essere fuso con il primo film
 **Dove**: `scraper/scraper/normalizer.py` (`fuzzy_match`, ramo di contenimento) · **Prova**:
 `fuzzy_match("Rocky II", "Rocky")` → `True` (le chiavi `rockyii`/`rocky`, la prima contiene la

@@ -50,6 +50,9 @@ class Showing(Base):
     screen: Mapped[str | None] = mapped_column(String, nullable=True)
     buy_url: Mapped[str | None] = mapped_column(String, nullable=True)
     scraped_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    # removed_at = archiviazione, NON cancellazione: valorizzato significa che questo
+    # spettacolo non è più nella programmazione importata (ma resta a memoria del passato).
+    removed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     film: Mapped["Film"] = relationship(back_populates="showings")
     cinema: Mapped["Cinema"] = relationship(back_populates="showings")

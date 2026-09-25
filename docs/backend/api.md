@@ -45,6 +45,7 @@ Su Android, se il backend gira sul PC (non sull'emulatore), invece di `localhost
 | **Encoding** | UTF-8 (accenti, caratteri speciali gestiti) |
 | **Timezone** | Europe/Rome (dati sono locali umbri) |
 | **Paginazione** | Nessuna nella v1 (dataset piccolo: max ~500 record) |
+| **Cosa torna agli endpoint** | Solo film e spettacoli **in programmazione**: le righe fuori dai JSON dell'ultima importazione sono archiviate nel DB (`removed_at`) e non compaiono — nemmeno i loro spettacoli. `removed_at` **non è esposto**: la forma delle risposte non cambia |
 | **CORS** | Backend accetta origini configurate in `.env`; per dev locale già configurato per `localhost:*` ed Expo Go |
 
 ---
@@ -318,7 +319,7 @@ Uguale a `oggi` ma range più ampio (oggi → +6 giorni).
 }
 ```
 
-**Errori**: `404` se `id` non esiste.
+**Errori**: `404` se `id` non esiste o è archiviato (fuori programmazione: la scheda sparisce, non diventa vuota).
 
 ---
 
@@ -362,7 +363,7 @@ Usato da UptimeRobot / monitoring. L'app **non** lo chiama.
 | Codice | Significato | Cosa fai nell'app |
 |---|---|---|
 | **200** | OK | Mostra dati |
-| **404** | Risorsa non esiste (film_id o cinema_slug errato) | Mostra schermata "non trovato" |
+| **404** | Risorsa non esiste (film_id o cinema_slug errato) oppure film archiviato | Mostra schermata "non trovato" |
 | **422** | Query param malformato (es. `date=pippo`) | Mostra errore "parametri non validi" — bug tuo, non del backend |
 | **500** | Errore server | Mostra "riprova più tardi" |
 | **Network error** | Backend giù o offline | Cache locale se disponibile, altrimenti "offline" |

@@ -2,10 +2,21 @@
 
 from datetime import date as date_type
 
-from sqlalchemy import func, select
+from sqlalchemy import ColumnElement, func, select
 from sqlalchemy.orm import Session, joinedload
 
+from app.models.film import Film
 from app.models.showing import Showing
+
+
+def _active_only() -> tuple[ColumnElement[bool], ...]:
+    """Condizioni di visibilità condivise dalle letture pubbliche.
+
+    Uno spettacolo conta solo se è attivo (non archiviato) **e** il suo film è
+    attivo: gli showings di un film archiviato non devono comparire, nemmeno
+    quelli fuori finestra che l'archiviazione non tocca perché sono storia.
+    """
+    return (Showing.removed_at.is_(None), Showing.film.has(Film.removed_at.is_(None)))
 
 
 def get_by_id(db: Session, showing_id: int) -> Showing | None:
@@ -22,7 +33,7 @@ def list_by_date(db: Session, target_date: date_type) -> list[Showing]:
     stmt = (
         select(Showing)
         .options(joinedload(Showing.film), joinedload(Showing.cinema))
-        .where(Showing.date == target_date)
+        .where(*_active_only(), Showing.date == target_date)
         .order_by(Showing.date)
     )
     return list(db.scalars(stmt))
@@ -33,7 +44,7 @@ def list_by_date_range(db: Session, date_from: date_type, date_to: date_type) ->
     stmt = (
         select(Showing)
         .options(joinedload(Showing.film), joinedload(Showing.cinema))
-        .where(Showing.date >= date_from, Showing.date <= date_to)
+        .where(*_active_only(), Showing.date >= date_from, Showing.date <= date_to)
         .order_by(Showing.date)
     )
     return list(db.scalars(stmt))
@@ -48,6 +59,7 @@ def list_by_cinema_in_range(db: Session, cinema_slug: str, date_from: date_type,
         select(Showing)
         .options(joinedload(Showing.film))  # solo film, cinema noto
         .where(
+            *_active_only(),
             Showing.cinema_slug == cinema_slug,
             Showing.date >= date_from,
             Showing.date <= date_to,
@@ -62,7 +74,7 @@ def list_by_film(db: Session, film_id: int, from_date: date_type) -> list[Showin
     stmt = (
         select(Showing)
         .options(joinedload(Showing.cinema))
-        .where(Showing.film_id == film_id, Showing.date >= from_date)
+        .where(*_active_only(), Showing.film_id == film_id, Showing.date >= from_date)
         .order_by(Showing.date)
     )
     return list(db.scalars(stmt))
@@ -75,8 +87,28 @@ def count_by_cinema(db: Session, cinema_slug: str) -> int:
         select(func.count())
         .select_from(Showing)
         .where(
+            *_active_only(),
             Showing.cinema_slug == cinema_slug,
             Showing.date >= date_type.today(),
+        )
+    )
+    return db.scalar(stmt)
+
+
+def count_active_in_window(db: Session, cinema_slug: str, date_from: date_type, date_to: date_type) -> int:
+    """Showings non archiviati del cinema nella finestra. Serve alla guardia del seed.
+
+    Conta solo gli attivi: sono le sole righe che l'archiviazione potrebbe toccare,
+    quindi sono il denominatore onesto del ratio importati/esistenti.
+    """
+    stmt = (
+        select(func.count())
+        .select_from(Showing)
+        .where(
+            Showing.cinema_slug == cinema_slug,
+            Showing.date >= date_from,
+            Showing.date <= date_to,
+            Showing.removed_at.is_(None),
         )
     )
     return db.scalar(stmt)
@@ -104,3 +136,64 @@ def upsert(db: Session, data: dict) -> Showing:
 
     db.flush()
     return showing
+
+
+def archive_not_in(
+    db: Session,
+    cinema_slug: str,
+    date_from: date_type,
+    date_to: date_type,
+    keep_keys: set[tuple[int, date_type]],
+) -> int:
+    """Archivia gli showings del cinema nella finestra non presenti fra quelli importati.
+
+    `keep_keys` sono le coppie (film_id, date) arrivate dai JSON; tutto ciò che
+    nella finestra non è fra quelle è un residuo di run passate e si archivia
+    (`removed_at = now`, soft delete — mai DELETE). Fuori finestra non si tocca
+    nulla: sono storia.
+    """
+    rows = list(
+        db.scalars(
+            select(Showing).where(
+                Showing.cinema_slug == cinema_slug,
+                Showing.date >= date_from,
+                Showing.date <= date_to,
+                Showing.removed_at.is_(None),
+            )
+        )
+    )
+    archived = 0
+    for showing in rows:
+        if (showing.film_id, showing.date) not in keep_keys:
+            showing.removed_at = func.now()
+            archived += 1
+    return archived
+
+
+def reactivate_in(
+    db: Session,
+    cinema_slug: str,
+    date_from: date_type,
+    date_to: date_type,
+    keep_keys: set[tuple[int, date_type]],
+) -> int:
+    """Riattiva gli showings archiviati che ricompaiono fra quelli importati.
+
+    `removed_at` torna NULL: lo spettacolo torna in programmazione con i suoi dati.
+    """
+    rows = list(
+        db.scalars(
+            select(Showing).where(
+                Showing.cinema_slug == cinema_slug,
+                Showing.date >= date_from,
+                Showing.date <= date_to,
+                Showing.removed_at.is_not(None),
+            )
+        )
+    )
+    reactivated = 0
+    for showing in rows:
+        if (showing.film_id, showing.date) in keep_keys:
+            showing.removed_at = None
+            reactivated += 1
+    return reactivated

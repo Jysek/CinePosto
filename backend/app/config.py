@@ -42,6 +42,15 @@ class Settings(BaseSettings):
     # viene risolto a path assoluto al load, cosi' non dipende dalla CWD.
     scraper_output_dir: Path = Path("../scraper/output")
 
+    # Archiviazione dei residui del seed (soft delete con `removed_at`): le righe non
+    # piu' nei JSON dell'ultima importazione si marcano come fuori programmazione,
+    # mai si cancellano (decisione dell'utente: i dati storici si conservano).
+    seed_archive_enabled: bool = True
+    # Guardia anti-fonte-rotta: se per un cinema gli showings importati sono meno di
+    # `seed_archive_min_ratio` di quelli gia' nel DB per la stessa finestra, sembra una
+    # fonte andata a metà e non una programmazione cambiata: l'archiviazione si salta.
+    seed_archive_min_ratio: float = 0.5
+
     # CORS: se .env non specifica CORS_ORIGINS, usa i default dev.
     cors_origins: list[str] = Field(default_factory=lambda: list(_DEV_CORS_DEFAULTS))
 

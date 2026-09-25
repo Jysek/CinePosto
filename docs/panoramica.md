@@ -31,7 +31,9 @@ flowchart LR
     class SITI,APP api
 ```
 
-**Una notte tipo**: alle 03:00 il timer systemd sveglia lo scraper → gli 8 connettori raccolgono la programmazione dei prossimi 8 giorni → i titoli vengono normalizzati e deduplicati → Wikidata arricchisce ogni film (poster, regista, anno, sinossi) → escono 3 JSON "DB-ready" → il backend li importa nel DB SQLite (seed idempotente) → da quel momento l'app riceve dati freschi dall'API.
+**Una notte tipo**: alle 03:00 il timer systemd sveglia lo scraper → gli 8 connettori raccolgono la programmazione dei prossimi 8 giorni → i titoli vengono normalizzati e deduplicati → Wikidata arricchisce ogni film (poster, regista, anno, sinossi) → escono 3 JSON "DB-ready" → il backend li importa nel DB SQLite (seed idempotente: le righe non più
+presenti nei JSON si **archiviano** con `removed_at`, mai cancellate) → da quel momento l'app riceve
+dati freschi dall'API.
 
 ## 2. Stadio 1 — Scraper (`scraper/`)
 
@@ -77,7 +79,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 **Endpoint principali** (11 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
 
-- Numeri: **48 test** (unit sui repository, script di manutenzione, end-to-end con TestClient su DB in-memory).
+- Numeri: **60 test** (unit sui repository, seed e archiviazione dei residui, script di manutenzione, end-to-end con TestClient su DB in-memory).
 - Decisioni chiave: **SQLite anche in produzione** (D4 — un file, zero amministrazione, carico di lettura minuscolo: perfetto per l'MVP), **Wikidata-only senza TMDB** (D1 — niente API key, niente limiti commerciali).
 
 📂 Dettaglio: [backend/architecture.md](backend/architecture.md) · [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna) · [backend/api.md](backend/api.md) (contratto API completo per l'app)

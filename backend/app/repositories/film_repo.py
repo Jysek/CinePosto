@@ -4,7 +4,7 @@ from datetime import date as date_type
 import re
 import unicodedata
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.film import Film
@@ -33,8 +33,14 @@ def normalize_title(title: str) -> str:
 
 
 def get_by_id(db: Session, film_id: int) -> Film | None:
-    """Ritorna il film con la PK data, o None se non esiste."""
-    return db.get(Film, film_id)
+    """Ritorna il film con la PK data, o None se non esiste (o è archiviato).
+
+    È una lettura pubblica (dettaglio film nell'app): un film archiviato non deve
+    comparire. Per il lookup del seed serve invece `get_by_natural_key`, che li
+    trova tutti — è così che una riga archiviata si riattiva.
+    """
+    stmt = select(Film).where(Film.id == film_id, Film.removed_at.is_(None))
+    return db.scalars(stmt).one_or_none()
 
 
 def get_by_natural_key(db: Session, title_normalized: str, year: int | None) -> Film | None:
@@ -60,20 +66,32 @@ def get_by_natural_key(db: Session, title_normalized: str, year: int | None) -> 
 
 
 def search_by_title(db: Session, query: str, limit: int = 20) -> list[Film]:
-    """Ricerca 'contains' sul titolo normalizzato."""
+    """Ricerca 'contains' sul titolo normalizzato. Esclude gli archiviati."""
     q_norm = normalize_title(query)
-    stmt = select(Film).where(Film.title_normalized.like(f"%{q_norm}%")).order_by(Film.title).limit(limit)
+    stmt = (
+        select(Film)
+        .where(Film.removed_at.is_(None), Film.title_normalized.like(f"%{q_norm}%"))
+        .order_by(Film.title)
+        .limit(limit)
+    )
     return list(db.scalars(stmt))
 
 
 def list_in_programming(db: Session, date_from: date_type, date_to: date_type) -> list[Film]:
     """Film con almeno uno spettacolo tra date_from e date_to (inclusi).
     JOIN con showings + DISTINCT per evitare duplicati.
+    Solo righe attive: un film archiviato o uno spettacolo archiviato non conta
+    come "in programmazione".
     """
     stmt = (
         select(Film)
         .join(Showing, Showing.film_id == Film.id)
-        .where(Showing.date >= date_from, Showing.date <= date_to)
+        .where(
+            Film.removed_at.is_(None),
+            Showing.removed_at.is_(None),
+            Showing.date >= date_from,
+            Showing.date <= date_to,
+        )
         .order_by(Film.title)
         .distinct()
     )
@@ -85,6 +103,10 @@ def upsert_from_scraper(db: Session, data: dict) -> Film:
 
     Il JSON scraper NON ha `title_normalized` né `year` come chiave —
     li ricaviamo qui. Torna sempre un Film con `.id` popolato (serve per FK).
+
+    `removed_at` non si tocca qui: chi decide se una riga è in programmazione o
+    archiviata è la riconciliazione a fine import (`archive_not_in`/`reactivate_in`),
+    che ragiona sull'insieme importato, non sul singolo record.
     """
     title = data["title"]
     title_normalized = normalize_title(title)
@@ -120,3 +142,36 @@ def upsert_from_scraper(db: Session, data: dict) -> Film:
 
     db.flush()  # forza l'assegnazione dell'id (serve al seed di showings)
     return film
+
+
+def archive_not_in(db: Session, keep_keys: set[tuple[str, int | None]]) -> int:
+    """Archivia i film la cui chiave naturale non è fra quelle importate. Ritorna quanti.
+
+    Archiviare = soft delete (`removed_at = now`): la riga resta nel DB con tutti i
+    suoi dati e i suoi showings, ma sparisce dalle query pubbliche. È la regola
+    decisa dall'utente — i dati non si cancellano mai, perché tra due anni lo stesso
+    film può tornare in programmazione e i dati vecchi si vogliono riusare.
+    Le righe già archiviate non si toccano: la data resta quella della prima uscita.
+    """
+    rows = list(db.scalars(select(Film).where(Film.removed_at.is_(None))))
+    archived = 0
+    for film in rows:
+        if (film.title_normalized, film.year) not in keep_keys:
+            film.removed_at = func.now()
+            archived += 1
+    return archived
+
+
+def reactivate_in(db: Session, keep_keys: set[tuple[str, int | None]]) -> int:
+    """Riattiva i film archiviati che ricompaiono fra le chiavi importate. Ritorna quanti.
+
+    `removed_at` torna NULL: la riga torna visibile e i dati storici (creazione,
+    showings passati) restano intatti.
+    """
+    rows = list(db.scalars(select(Film).where(Film.removed_at.is_not(None))))
+    reactivated = 0
+    for film in rows:
+        if (film.title_normalized, film.year) in keep_keys:
+            film.removed_at = None
+            reactivated += 1
+    return reactivated

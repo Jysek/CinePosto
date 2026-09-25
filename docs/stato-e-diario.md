@@ -14,7 +14,7 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 11 endpoint REST, 48 test | `backend/api.md` |
+| Backend | 11 endpoint REST, 60 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
@@ -155,3 +155,18 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   senza legame con le modifiche in corso. Aggiornato solo `package-lock.json` (`npm update expo`,
   spec `^57` invariato): `expo-doctor` 21/21 ed export web verdi. Commit `chore(app)` separato
   dalla fase-15, perché le dipendenze non si mescolano a una feature.
+- **2026-09-25** — fase-16: i residui del DB si **archiviano**, mai si cancellano. Colonne
+  `removed_at` su `films`/`showings`, arrivate con una migrazione `ALTER TABLE` **idempotente**
+  (`app/maintenance/migrate_removed_at.py`): niente Alembic perché il DB contiene storico e non si
+  ricrea dal seed. Dopo l'upsert il seed **riconcilia**: le righe non più nei JSON dell'ultima
+  importazione si archiviano (film: assenza della chiave naturale `(title_normalized, year)`;
+  showings: solo dentro la finestra `date_from`/`date_to` e per i cinema di `cinemas.json`), quelle
+  che ricompaiono si riattivano. Guardia anti-fonte-rotta per cinema (`seed_archive_min_ratio` =
+  0.5): sotto soglia l'archiviazione si salta e finisce in `skipped_cinemas`. Tutte le letture
+  pubbliche filtrano `removed_at IS NULL` — compresi gli showings dei film archiviati — e `removed_at`
+  non è esposto dall'API. Report `archived_*`/`reactivated_*`/`skipped_cinemas` nel return del seed
+  e in `make seed`. Prima run sul DB di sviluppo: **42 film archiviati, 59 showings archiviati,
+  0 riattivati, nessun cinema saltato**; seconda run: tutto a 0 (idempotente). Dall'API sono sparite
+  le coppie doppie della tabella di fase-16 (Talking Tom comprese); restano le due «Cars» che
+  vivono **nei JSON** (fase-15: la fusione si vedrà alla prossima run autorizzata). Test backend
+  48 → 60 (archiviazione, guardia, idempotenza, filtri pubblici, migrazione).

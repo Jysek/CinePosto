@@ -42,6 +42,10 @@ class Film(Base):
     # wikidata_id = es. "Q97154362", utile per future re-importazioni di metadati
     wikidata_id: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    # removed_at = archiviazione, NON cancellazione: valorizzato significa "fuori
+    # programmazione" (assente dai JSON dell'ultima importazione). La riga resta nel
+    # DB con tutti i suoi dati: se il film torna in programmazione si riattiva.
+    removed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     showings: Mapped[list["Showing"]] = relationship(
         back_populates="film",

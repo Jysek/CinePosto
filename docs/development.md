@@ -131,7 +131,7 @@ Swagger UI: `http://localhost:8000/docs`.
 ### Test
 
 ```bash
-python -m pytest tests/ -q       # 48 test (~0.2s)
+python -m pytest tests/ -q       # 60 test (~0.2s)
 python -m pytest tests/ -v       # verbose
 ```
 
@@ -141,6 +141,8 @@ Setup dei test:
 - `test_repositories.py` — 21 unit test sui repository (normalizzazione titoli, upsert, search)
 - `test_routers.py` — 12 end-to-end via TestClient FastAPI
 - `test_maintenance_dedup.py` — 10 test sullo script di fusione dei film duplicati
+- `test_seed_archive.py` — 8 test sull'archiviazione dei residui del seed (soft delete)
+- `test_maintenance_migrate_removed_at.py` — 4 test sulla migrazione idempotente delle colonne `removed_at`
 
 ### Variabili d'ambiente (`.env`)
 
@@ -151,6 +153,8 @@ Setup dei test:
 | `CORS_ORIGINS` | *(dev defaults)* | JSON array; se vuoto usa `localhost:8081/19006/3000` |
 | `ENV` | `development` | `development` → SQL echo + `create_all` in lifespan |
 | `LOG_LEVEL` | `INFO` | |
+| `SEED_ARCHIVE_ENABLED` | `true` | Il seed archivia i residui non più nei JSON (`removed_at`), mai cancellati. `false` = solo upsert |
+| `SEED_ARCHIVE_MIN_RATIO` | `0.5` | Guardia anti-fonte-rotta: sotto questo ratio importati/già nel DB l'archiviazione per quel cinema si salta |
 | `ADMIN_TOKEN` | *(auto-generato)* | Se vuoto o `"change-me-before-deploy"`, il backend genera un token random e lo stampa una volta al boot |
 
 ---

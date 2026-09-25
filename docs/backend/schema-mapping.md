@@ -107,6 +107,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 | `wikidata_id` | `wikidata_id` | UNIQUE, nullable |
 | — | `id` (DB) | PK autoincrement, generato dal DB |
 | — | `created_at` | default `now()` |
+| — | `removed_at` | nullable. **Archiviazione** (soft delete), non cancellazione: vedi §4.1 |
 
 **Strategia seed**:
 
@@ -178,6 +179,7 @@ per ogni record film nel JSON:
 | `language` | `language` | nullable; presente per The Space, assente altrove |
 | `screen` | `screen` | nullable; conservato solo se proviene da un'unica sala (vedi sotto) |
 | — | `scraped_at` | default `now()` |
+| — | `removed_at` | nullable. **Archiviazione** (soft delete), non cancellazione: vedi §4.1 |
 
 **Strategia seed — pre-aggregazione obbligatoria**: più sale dello stesso cinema possono
 pubblicare lo stesso film con orari diversi, e il JSON contiene **un record per sala**. Poiché
@@ -231,8 +233,30 @@ L'ordine è vincolato dalle FK. **Sempre questo ordine**:
                      COSTRUISCI title_to_id        (lookup string → int)
 3. showings.json  →  upsert in `showings`,
                      USA title_to_id per film_id intero
-4. cleanup       →  showings con date < oggi (opzionale, configurabile)
+4. riconciliazione →  ARCHIVIA i residui (`removed_at`), riattiva ciò che ricompare
 ```
+
+### 4.1 Riconciliazione: si archivia, mai si cancella
+
+Dopo l'upsert, le righe che non compaiono più nei JSON dell'ultima importazione sono **residui di
+run passate** e si **archiviano**: `removed_at = now()`, la riga resta nel DB con tutti i suoi dati e
+i suoi showings. Se la riga ricompare nei JSON → `removed_at = NULL` (riattivazione) e i campi si
+aggiornano come nell'upsert di sempre. **Mai `DELETE`** (decisione dell'utente, 2026-09-25: «tra 2
+anni lo stesso film torna al cinema e voglio riusare/risalire ai dati vecchi»).
+
+| Cosa | Regola |
+|---|---|
+| **Film** | la chiave naturale `(title_normalized, year)` non è fra quelle importate → archiviato. La regola è l'**assenza**, non la somiglianza: alcuni residui hanno chiavi normalizzate che non assomigliano a nessuna forma attuale dei JSON |
+| **Showings** | stessa regola per `(film_id, date)`, ma solo **dentro la finestra** `date_from`/`date_to` di `showings.json` e per i cinema di `cinemas.json`. Fuori finestra non si tocca nulla: è storia |
+| **Guardia anti-fonte-rotta** | se per un cinema gli showings importati sono meno di `seed_archive_min_ratio` (default 0.5) di quelli già attivi nel DB nella stessa finestra → l'archiviazione per quel cinema si **salta** e finisce in `skipped_cinemas`: sembra una fonte andata a metà, non una programmazione cambiata |
+| **Query pubbliche** | `removed_at IS NULL` su film e showings: un film archiviato non compare, e nemmeno i suoi spettacoli. `removed_at` non è esposto dall'API (è un fatto interno del DB) |
+| **Report** | `seed_from_json` ritorna `archived_films`, `reactivated_films`, `archived_showings`, `reactivated_showings`, `skipped_cinemas` e `make seed` li stampa: un'archiviazione silenziosa è un'archiviazione che spaventa |
+| **Idempotenza** | rieseguire il seed sugli stessi JSON non cambia nulla: tutti i contatori a 0 |
+
+Le colonne arrivano con una migrazione **idempotente**
+(`app/maintenance/migrate_removed_at.py`: `ALTER TABLE` solo se la colonna manca). Il DB contiene
+storico e non si ricrea dal seed, quindi qui non serve `create_all` da zero né Alembic. Interruttore:
+`seed_archive_enabled` nella config del backend.
 
 ---
 
@@ -241,6 +265,7 @@ L'ordine è vincolato dalle FK. **Sempre questo ordine**:
 | Scenario | Comportamento |
 |----------|---------------|
 | File JSON mancante | abort: errore esplicito, exit code != 0 |
+| `showings.json` senza `date_from`/`date_to` (o finestra invertita) | abort: errore esplicito (la finestra delimita dove archiviare: senza non si decide nulla) |
 | Cinema con slug duplicato dentro lo stesso JSON | log warning, ultima vince |
 | Film senza `title` o senza `id` | skip record + log error |
 | Showing con `film_id` che non matcha `title_to_id` | skip record + log warning (può capitare se films.json e showings.json sono incoerenti) |
