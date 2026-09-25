@@ -1,8 +1,8 @@
 # Sviluppo su Windows
 
-> Verificato su `9dc8fc1` (`2026-09-23`): §1–4 e §6–9 ricontrollate (comandi, file, numeri di
-> test 149, dataset). §5 (Expo Go, rete e firewall su telefono reale) non rieseguita in quella
-> sessione.
+> Verificato su `5feb740` (`2026-09-25`): conteggi dei test (173 scraper, 48 backend). Comandi
+> e percorsi erano stati ricontrollati su `9dc8fc1`; §5 (Expo Go, rete e firewall su telefono
+> reale) non rieseguita.
 
 Guida pratica per far girare CinePosto su Windows. Tutti i comandi qui sono stati eseguiti
 e verificati su questo ambiente (Windows 11, Git Bash, Docker Desktop).
@@ -97,7 +97,7 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Log del backend | `make logs` | `docker compose logs -f backend` |
 | Stato container | `make ps` | `docker compose ps` |
 | Test backend (48) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
-| Test scraper (149) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
+| Test scraper (173) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
 | Messaggi di console ASCII | `make check-console` | controlla che `Makefile`, `dev.cmd` e `scripts/*.sh` stampino solo ASCII (vedi §9) |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |

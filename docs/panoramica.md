@@ -1,6 +1,7 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su `9dc8fc1` (`2026-09-23`).
+> Verificato su `5feb740` (`2026-09-25`): numeri dei test aggiornati. Il resto del documento non è
+> stato ricontrollato in questa sessione (ultima lettura completa su `9dc8fc1`).
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 
@@ -49,7 +50,7 @@ Le **8 sale** e la tecnica di ciascuna sono nel registro [`scraper/copertura.md`
 
 Dopo la raccolta: **normalizzazione titoli** (minuscole, via accenti e punteggiatura — serve a capire che "Dune – Parte 2" e "DUNE Parte 2" sono lo stesso film), **dedup**, **arricchimento Wikidata** (SPARQL, con cache locale per non ribombardare l'endpoint), **delta tracking** (un film che sparisce dalla programmazione viene marcato "rimosso" dopo 7 giorni, non cancellato subito).
 
-- Numeri: **149 test**, 8 connettori; l'output copre le 8 sale con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
+- Numeri: **173 test**, 8 connettori; l'output copre le 8 sale con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
 - Etica scraping: rispetto robots.txt, rate limiting, run notturna, User-Agent identificabile con contatto reale (RF-09/RNF-04).
 - Produzione: systemd timer + service `--once` su VM Linux (decisione L3 — niente scheduler interno: se il processo muore, systemd lo rilancia lui).
 
@@ -110,7 +111,7 @@ Su VM Linux: lo scraper gira con un systemd timer (file in `scraper/deploy/`), i
 
 ## 7. Qualità
 
-- **180 test automatici** totali (149 scraper + 31 backend), lint ruff pulito su entrambi, CI a 2 job.
+- **221 test automatici** totali (173 scraper + 48 backend), lint ruff pulito su entrambi, CI a 2 job.
 - Seed **idempotente**: importare gli stessi JSON N volte produce sempre lo stesso DB.
 - Docstring complete su tutto il codice di produzione (backend, scraper, connettori).
 

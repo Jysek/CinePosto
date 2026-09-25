@@ -1,8 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `882ee13` (`2026-09-25`): costanti, modelli, connettori, orchestrazione
-> e fusioni confrontati col codice. Il capitolo su `_deduplicate_films` descrive
-> `match_cross_source`, modifica introdotta in questo stesso commit.
+> Verificato su `5feb740` (`2026-09-25`): capitolo fusioni e pipeline confrontati col codice;
+> costanti, modelli e connettori riletti su `5c53fd5`.
 
 ## Indice
 
