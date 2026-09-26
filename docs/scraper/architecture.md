@@ -217,7 +217,7 @@ PostModernissimo usa Next.js 13 con React Server Components. Il payload dati è 
 1. `GET /` — scarica la homepage
 2. `_parse_rsc_payload(html)` — estrae il chunk più grande dal pattern `self.__next_f.push([1,"..."])` e lo unescapa (solo `\"` e `\\`)
 3. Regex `{"id":N,"title":"...","slug":"...","permalink":"..."}` trova tutti i film nel payload
-4. Per ogni film: `_extract_shows(text, pos)` cerca il blocco `"shows":[...]` entro 5000 caratteri dall'inizio del film; `_extract_details(text, pos)` cerca `"details":{...}` entro 3000 caratteri
+4. Per ogni film: `_extract_shows(text, pos)` cerca il blocco `"shows":[...]` entro 5000 caratteri dall'inizio del film; `_extract_details(text, pos)` cerca `"details":{...}` entro 3000 caratteri; `_extract_content(text, pos)` cerca la sinossi intera in `"content":"..."` nella stessa finestra (scartata se nel frattempo è iniziata un'altra voce film)
 5. `_is_event_stub(movie)` filtra eventi non-film (parole chiave: "ospiti", "rassegna", "concerto", ecc.)
 6. Filtra gli show per `target_date_ints` e `opzioni != "noprog"`
 7. `_parse_film_cards(soup)` — parser HTML parallelo per poster (da `<img>` nei `<li class="movie-item">`)
@@ -226,7 +226,7 @@ PostModernissimo usa Next.js 13 con React Server Components. Il payload dati è 
 
 **Formato date nel payload:** `YYYYMMDD` (intero, non ISO). Conversione: `f"{d[:4]}-{d[4:6]}-{d[6:8]}"`.
 
-**Parsing dettaglio:** `fetch_film_detail(url)` cerca `<meta name="description">` o primo `<p>` in `article, .film-content, .description`.
+**Parsing dettaglio:** `fetch_film_detail(url)` cerca la sinossi in ordine **dal più completo al più debole**: payload RSC della pagina di dettaglio (`content` della voce col giusto slug), poi primo `<p>` in `article, .film-content, .description`, infine `<meta name="description">` — che il CMS tronca a ~100 caratteri a metà parola, quindi è solo l'ultima spiaggia. Un dettaglio irraggiungibile non rompe la run: viene raccolto in `ScrapeResult.errors` (fase `detail`) e il film resta con la descrizione del payload, se presente.
 
 **Finestre di ricerca hardcoded** (nota: possono causare dati incompleti su payload molto grandi):
 - `details`: +3000 caratteri dalla posizione del film

@@ -21,9 +21,18 @@ from scraper.connectors.base import BaseConnector
 from scraper.errors import make_error
 from scraper.http import retry_request
 from scraper.models import CinemaError, Film, ScrapeResult, Showing
-from scraper.normalizer import normalize_title
+from scraper.normalizer import normalize_title, pick_fuller_description
 
 logger = logging.getLogger(__name__)
+
+# Valore del campo `content` del payload RSC: stringa JSON con escape (\n, \u00e0…).
+_CONTENT_VALUE_RE = re.compile(r'"content":"((?:[^"\\]|\\.)*)"')
+
+# Chunk del payload RSC di Next.js: `self.__next_f.push([1,"..."])`.
+_RSC_PUSH_RE = re.compile(r'self\.__next_f\.push\(\[1,"(.*?)"\]\)', re.DOTALL)
+
+# Inizio di una voce film nel payload unescapato (stesso ancoraggio di _parse_rsc_payload).
+_MOVIE_START_RE = re.compile(r'\{"id":(\d+),"title":"([^"]*)","slug":"([^"]+)","permalink":"([^"]+)"')
 
 
 def _decode_html_entities(text: str) -> str:
@@ -142,7 +151,7 @@ class PostModernissimoConnector(BaseConnector):
                 poster_url = _normalize(poster_map.get(slug)) or self._extract_poster_url(details)
                 description = movie.get("content", "")
                 if not description and permalink:
-                    detail = self.fetch_film_detail(permalink)
+                    detail = self.fetch_film_detail(permalink, errors)
                     if detail:
                         description = detail.get("description", "")
 
@@ -207,6 +216,7 @@ class PostModernissimoConnector(BaseConnector):
                     "title": title,
                     "slug": slug,
                     "permalink": permalink,
+                    "content": self._extract_content(unescaped, m.start()),
                     "details": details,
                     "shows": list(shows),
                     "_stream_pos": m.start(),
@@ -223,6 +233,9 @@ class PostModernissimoConnector(BaseConnector):
                     existing_keys.add(key)
             if details and not existing.get("details"):
                 existing["details"] = details
+            existing["content"] = (
+                pick_fuller_description(existing.get("content"), self._extract_content(unescaped, m.start())) or ""
+            )
             if m.start() > existing.get("_stream_pos", 0):
                 existing["_stream_pos"] = m.start()
 
@@ -252,6 +265,44 @@ class PostModernissimoConnector(BaseConnector):
         if "/eventi/" in permalink:
             return True
         return any(h in title for h in self._EVENT_HINTS)
+
+    def _extract_rsc_synopsis(self, page_html: str, film_url: str) -> str:
+        """Sinossi intera dal payload RSC di una pagina, per il film indicato.
+
+        La pagina di dettaglio porta anch'essa il payload `self.__next_f.push`: la
+        sinossi può stare lì (dato strutturato) invece che nel primo paragrafo
+        dell'HTML. Si accetta solo la voce col `slug` richiesto, per non prendere
+        la sinossi di un film correlato; `""` se non c'è.
+        """
+        matches = _RSC_PUSH_RE.findall(page_html)
+        if not matches:
+            return ""
+        unescaped = max(matches, key=len).replace('\\"', '"').replace("\\\\", "\\")
+        target_slug = film_url.rstrip("/").split("/")[-1]
+        for m in _MOVIE_START_RE.finditer(unescaped):
+            if m.group(3) == target_slug:
+                return self._extract_content(unescaped, m.start())
+        return ""
+
+    def _extract_content(self, text: str, start: int) -> str:
+        """Estrae il campo `content` (sinossi intera) dell'oggetto film vicino al match.
+
+        Il payload RSC porta la sinossi in `"content":"..."`: non è una chiave
+        su cui fa match il regex dei film, quindi si cerca in una finestra e si
+        scarta il valore se una nuova voce film (`{"id":`) è iniziata nel
+        frattempo. È una stringa JSON: `json.loads` ne scioglie gli escape
+        (`\\n`, `\\u00e0`).
+        """
+        m = _CONTENT_VALUE_RE.search(text, start, start + 3000)
+        if not m:
+            return ""
+        next_movie = text.find('{"id":', start + 1)
+        if 0 <= next_movie < m.start():
+            return ""
+        try:
+            return json.loads(f'"{m.group(1)}"')
+        except json.JSONDecodeError:
+            return m.group(1)
 
     def _extract_details(self, text: str, start: int) -> dict:
         """Estrae l'oggetto `details` (genere, regia, durata) vicino al match del film.
@@ -307,27 +358,38 @@ class PostModernissimoConnector(BaseConnector):
         except json.JSONDecodeError:
             return []
 
-    def fetch_film_detail(self, film_url: str) -> dict | None:
-        """Recupera la descrizione dalla pagina di dettaglio: meta description, poi primo paragrafo."""
+    def fetch_film_detail(self, film_url: str, errors: list[CinemaError] | None = None) -> dict | None:
+        """Recupera la sinossi dalla pagina di dettaglio.
+
+        Ordine dal più completo al più debole: primo paragrafo dell'articolo
+        (testo intero), poi la meta description (che il CMS tronca a ~100
+        caratteri a metà parola: ultima spiaggia, meglio di niente).
+        """
         if not film_url or not film_url.startswith("http"):
             return None
         try:
             session = requests.Session()
             session.headers.update({"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"})
             resp = retry_request("get", film_url, session, label="POSTMOD")
+            # 1. Sinossi intera dal payload RSC della pagina di dettaglio.
+            synopsis = self._extract_rsc_synopsis(resp.text, film_url)
+            if synopsis:
+                return {"description": synopsis}
             soup = BeautifulSoup(resp.text, "lxml")
-            # 1. Meta description
-            meta = soup.find("meta", attrs={"name": "description"})
-            if meta and meta.get("content"):
-                return {"description": meta["content"].strip()}
-            # 2. Fallback: primo paragrafo significativo
+            # 2. Primo paragrafo significativo: è la sinossi intera.
             p = soup.select_one("article p, .film-content p, .description p")
             if p:
                 text = p.get_text(strip=True)
                 if text:
                     return {"description": text}
+            # 3. Meta description: il CMS l'ha già troncata, si usa solo se non c'è altro.
+            meta = soup.find("meta", attrs={"name": "description"})
+            if meta and meta.get("content"):
+                return {"description": meta["content"].strip()}
         except Exception as exc:
             logger.warning("POSTMOD failed to fetch detail %s: %s", film_url, exc)
+            if errors is not None:
+                errors.append(make_error(self.cinema_name, exc, "detail", url=film_url))
         return None
 
     def _fetch_detail_shows(self, permalink: str) -> list[dict]:

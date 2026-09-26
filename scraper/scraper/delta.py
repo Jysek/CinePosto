@@ -8,7 +8,7 @@ import logging
 
 from scraper.config import HISTORY_DIR, MOVIES_JSON, REMOVAL_THRESHOLD_DAYS
 from scraper.models import Film, Showing
-from scraper.normalizer import title_key
+from scraper.normalizer import pick_fuller_description, title_key
 
 logger = logging.getLogger(__name__)
 
@@ -99,8 +99,9 @@ def merge_films(new_films: list[Film], previous_data: list[dict], today: str) ->
 
             if not film.poster and prev.get("poster"):
                 film.poster = prev["poster"]
-            if not film.description and prev.get("description"):
-                film.description = prev["description"]
+            # Non si declassa: una sinossi intera non si perde perché la nuova run
+            # porta la meta description tronca di un'altra fonte.
+            film.description = pick_fuller_description(film.description, prev.get("description"))
 
         else:
             film.history = [{"date": today, "action": "added"}]

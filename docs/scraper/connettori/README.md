@@ -49,8 +49,9 @@ Regola: se la scheda dice "riusa `SchemaOrgExtractor`", la sessione **legge il f
 
 Una scheda dedicata serve quando la tecnica **non è banale** o va studiata prima di scrivere il
 codice (markup proprietario, microdata, API da ricostruire). Le sale coperte da connettori
-diretti — **PostModernissimo, The Space Cinema Corciano, UCI Cinemas Perugia** — sono descritte
-in [../architecture.md](../architecture.md). L'elenco completo e aggiornato delle **8 sale
+diretti — **The Space Cinema Corciano, UCI Cinemas Perugia** — sono descritte in
+[../architecture.md](../architecture.md); PostModernissimo ha una scheda sua perché il parser
+del payload RSC va conosciuto prima di toccarlo. L'elenco completo e aggiornato delle **8 sale
 implementate** sta in [../copertura.md](../copertura.md).
 
 ## Indice
@@ -61,6 +62,7 @@ implementate** sta in [../copertura.md](../copertura.md).
 | Nuovo Cinema Castello | [nuovo-cinema-castello.md](nuovo-cinema-castello.md) | schema.org JSON-LD (tema `zen25`) | homepage, 1 richiesta |
 | Cinema Teatro Concordia | [cinema-teatro-concordia.md](cinema-teatro-concordia.md) | schema.org microdata (tema `concordia`) | homepage, 1 richiesta |
 | Cinema Metropolis | [cinema-metropolis.md](cinema-metropolis.md) | schema.org microdata (tema `postmetro`) | homepage + N dettagli film |
+| PostModernissimo | [postmodernissimo.md](postmodernissimo.md) | Next.js RSC + HTML (connettore storico) | homepage RSC + N dettagli film |
 | The Space Cinema Terni | [the-space-terni.md](the-space-terni.md) | API REST microservice (come Corciano) | API, 1 richiesta/data |
 
 Le prime quattro condividono lo stesso vocabolario di dati ([schema.org](https://schema.org)

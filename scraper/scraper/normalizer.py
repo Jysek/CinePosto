@@ -199,3 +199,34 @@ def normalize_duration(duration: str | None) -> str | None:
         return f"{int(nums[0])} min"
 
     return None
+
+
+_TRUNCATED_TAIL = re.compile(r"(\.{3}|…)\s*$")
+
+
+def is_truncated_description(text: str | None) -> bool:
+    """True se la descrizione si chiude con i puntini di sospensione.
+
+    Le meta description dei CMS sono tagliate a ~100 caratteri a metà parola e
+    chiuse con "...": un testo così non è mai preferibile a uno intero.
+    """
+    return bool(text) and bool(_TRUNCATED_TAIL.search(text))
+
+
+def pick_fuller_description(a: str | None, b: str | None) -> str | None:
+    """Sceglie la descrizione più completa fra due, senza declassare quella buona.
+
+    Ordine di preferenza: un testo non troncato batte un testo troncato; a pari
+    troncamento vince il più lungo. `None` o stringa vuota perdono sempre.
+    Serve a impedire che una sinossi intera venga sovrascritta dalla meta
+    description tagliata di un'altra fonte (o di una run successiva).
+    """
+    if not a:
+        return b
+    if not b:
+        return a
+    truncated_a = is_truncated_description(a)
+    truncated_b = is_truncated_description(b)
+    if truncated_a != truncated_b:
+        return b if truncated_a else a
+    return a if len(a) >= len(b) else b

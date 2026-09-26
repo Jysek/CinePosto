@@ -32,6 +32,7 @@ Nessuna registrazione utente.
 | `scraper/architecture.md` | Connettori, normalizzazione, Wikidata, delta, deploy systemd | completo |
 | `scraper/copertura.md` | Registro delle sale dell'Umbria: cosa è coperto e cosa no | si aggiorna a ogni sala |
 | `scraper/connettori/README.md` | Come si scrive un connettore e quali esistono | completo |
+| `scraper/connettori/*.md` | Schede di implementazione per connettore (PostModernissimo, Zenith, Castello, Concordia, Metropolis, The Space Terni) | si aggiorna a ogni sala |
 | `backend/architecture.md` | Layering, modelli, endpoint | completo |
 | `backend/schema-mapping.md` | Come ogni campo JSON diventa colonna (autorevole per il seed) | completo |
 | `backend/api.md` | Contratto API completo | completo |

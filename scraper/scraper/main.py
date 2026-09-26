@@ -57,6 +57,7 @@ from scraper.models import (
     output_to_json,
     showings_to_json,
 )
+from scraper.normalizer import pick_fuller_description
 from scraper.title_aliases import canonical_title, match_cross_source
 
 logger = logging.getLogger("cinema_scraper")
@@ -296,10 +297,12 @@ def run_scraper() -> None:
 
 
 # Metadati che un film fuso adotta dagli altri membri del gruppo quando gli mancano.
+# `description` è esclusa: non è "il primo valore utile" ma la più completa (vedi
+# `pick_fuller_description`), altrimenti una sinossi intera si perderebbe dietro
+# alla meta description tronca del primo membro.
 _MERGE_FILL_FIELDS = (
     "poster",
     "source_poster",
-    "description",
     "genres",
     "director",
     "duration",
@@ -337,11 +340,17 @@ def _fuse_group(group: list[Film]) -> Film:
         )
         for field in _MERGE_FILL_FIELDS
     }
+    # La descrizione del fuso è la più completa del gruppo, non la prima: una
+    # meta description tronca non deve battere la sinossi intera di un'altra fonte.
+    description: str | None = None
+    for member in group:
+        description = pick_fuller_description(description, member.description)
     return replace(
         master,
         title=_choose_master_title([f.title for f in group]),
         present_in=[s for f in group for s in f.present_in],
         history=[h for f in group for h in f.history],
+        description=description,
         **filled,
     )
 
