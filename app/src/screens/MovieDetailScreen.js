@@ -23,6 +23,17 @@ import { getFilmById, getCinemas, getCinemaShowings } from '../api/api';
 
 const HEADER_HEIGHT = 300;
 
+// Trama collassata: il bottone «Leggi di più» compare solo se il testo occupa
+// davvero più righe del limite. La soglia in caratteri (120) era fuorviante:
+// a schermo largo 700 caratteri stanno in 3 righe, a schermo stretto 100 no.
+const SYNOPSIS_COLLAPSED_LINES = 3;
+// Line height di styles.overview: costante unica per stile e misura.
+const SYNOPSIS_LINE_HEIGHT = 22;
+const SYNOPSIS_COLLAPSED_HEIGHT = SYNOPSIS_COLLAPSED_LINES * SYNOPSIS_LINE_HEIGHT;
+// Tolleranza per gli arrotondamenti sub-pixel della misura sul web: un testo
+// di esattamente 3 righe (66px) non deve far comparire il bottone.
+const HEIGHT_TOLERANCE_PX = 1;
+
 // blurRadius non funziona su react-native-web: sul web la sfocatura si fa con
 // la CSS filter.
 const WEB_BLUR = Platform.OS === 'web' ? { filter: 'blur(22px)' } : null;
@@ -33,6 +44,9 @@ export default function MovieDetailScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(date || getToday);
   const [synopsisExpanded, setSynopsisExpanded] = useState(false);
+  // La trama sfora le righe di collasso? Lo dice la misura del testo
+  // invisibile (onLayout), non la lunghezza in caratteri.
+  const [synopsisOverflows, setSynopsisOverflows] = useState(false);
   // Orari di questo film, ognuno con il proprio `cinema` (per raggrupparli).
   const [showings, setShowings] = useState([]);
 
@@ -196,12 +210,36 @@ export default function MovieDetailScreen({ route, navigation }) {
           {film.synopsis ? (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Trama</Text>
-              <Text style={styles.overview} numberOfLines={synopsisExpanded ? undefined : 3}>
+              {/* Misuratore invisibile, senza clamp: con onLayout dice l'altezza
+                  naturale del testo, così il bottone esiste solo quando serve. */}
+              <View style={styles.synopsisMeasureBox} pointerEvents="none">
+                <Text
+                  style={[styles.overview, styles.synopsisMeasure]}
+                  onLayout={({ nativeEvent: { layout } }) =>
+                    setSynopsisOverflows(
+                      layout.height > SYNOPSIS_COLLAPSED_HEIGHT + HEIGHT_TOLERANCE_PX
+                    )
+                  }
+                  accessible={false}
+                >
+                  {film.synopsis}
+                </Text>
+              </View>
+              <Text
+                style={styles.overview}
+                numberOfLines={synopsisExpanded ? undefined : SYNOPSIS_COLLAPSED_LINES}
+              >
                 {film.synopsis}
               </Text>
-              {film.synopsis.length > 120 && (
-                <TouchableOpacity onPress={() => setSynopsisExpanded(!synopsisExpanded)}>
-                  <Text style={styles.readMore}>{synopsisExpanded ? 'Mostra meno' : 'Leggi di più...'}</Text>
+              {synopsisOverflows && (
+                <TouchableOpacity
+                  onPress={() => setSynopsisExpanded(!synopsisExpanded)}
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded: synopsisExpanded }}
+                >
+                  <Text style={styles.readMore}>
+                    {synopsisExpanded ? 'Mostra meno' : 'Leggi di più...'}
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -428,7 +466,19 @@ const styles = StyleSheet.create({
   overview: {
     color: Colors.lightGray,
     fontSize: 14,
-    lineHeight: 22,
+    lineHeight: SYNOPSIS_LINE_HEIGHT,
+  },
+  synopsisMeasureBox: {
+    // Il relative ancora il testo assoluto al proprio contenitore anche sul web,
+    // dove il genitore senza position non è un containing block.
+    position: 'relative',
+  },
+  synopsisMeasure: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    opacity: 0,
   },
   readMore: {
     color: Colors.primary,

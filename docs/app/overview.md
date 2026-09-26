@@ -111,6 +111,12 @@ SplashScreen
   "leggi di più", link al trailer (ricerca YouTube) e **orari raggruppati per cinema**
   nella data scelta. Si apre sulla data da cui arrivi (passata dalla Home) e, se quel
   film in quella data non ha orari, salta alla prima data utile.
+  La trama è collassata a `SYNOPSIS_COLLAPSED_LINES` righe (`numberOfLines`) e il
+  bottone "Leggi di più" / "Mostra meno" compare **solo se il testo sfora davvero**:
+  un testo invisibile senza clamp misura con `onLayout` l'altezza naturale e la
+  confronta con `SYNOPSIS_COLLAPSED_HEIGHT` (righe × line height, tolleranza
+  sub-pixel per il web). Niente soglia in caratteri: a schermo largo 700 caratteri
+  stanno in 3 righe, a schermo stretto no — conta il layout, non la lunghezza.
 
 ## Componenti chiave
 

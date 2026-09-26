@@ -209,3 +209,13 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   `A Fox Under a Pink Moon`, `PerSo Short Award`, `Como tú me ves`, `Un solco nella terra`,
   `Indietro così!`, `Torneranno i lupi`, `Una cosa vicina`): problema diverso, annotato per una
   fase futura. Scheda nuova: `docs/scraper/connettori/postmodernissimo.md`.
+- `fix(app)` **2026-09-26** — Fase 17: «Leggi di più» nella Trama del dettaglio film ora funziona.
+  Il bottone compariva per qualunque sinossi oltre 120 caratteri anche quando il testo stava
+  intero in 3 righe (a viewport largo 694 caratteri stanno in 3 righe: il bottone non faceva
+  nulla di visibile — riprodotto su web a 1920px). Soglia in caratteri sostituita dalla misura
+  dell'overflow reale: testo invisibile senza clamp misura con `onLayout` l'altezza naturale,
+  confrontata con `lineHeight × SYNOPSIS_COLLAPSED_LINES` (+ tolleranza sub-pixel). Il clamp
+  resta su `numberOfLines` (verificato efficace su web). Verificato su web (1920/1024/390px)
+  con Playwright: no bottone se sta in 3 righe, bottone + espandi/ricompatta se sfora, nessun
+  bottone per sinossi brevi; `expo-doctor` 21/21, export web verde. Verifica nativa non
+  eseguibile: nessun device/emulatore disponibile (niente adb, non macOS).
