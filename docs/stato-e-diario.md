@@ -1,6 +1,6 @@
 # CinePosto — Stato attuale e diario
 
-> Verificato su `20ca1bb` (`2026-09-25`).
+> Verificato su `056f04f` (`2026-09-26`).
 
 **Come si usa questo file.** La sezione «Stato attuale» è una fotografia di oggi e si **riscrive**
 quando cambia. La sezione «Diario» è **append-only**: si aggiunge in coda, non si riscrive mai il
@@ -14,7 +14,7 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 11 endpoint REST, 68 test | `backend/api.md` |
+| Backend | 11 endpoint REST, 70 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
@@ -192,3 +192,20 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   (0 coppie con lo stesso `wikidata_id`). Prima run sul DB reale: **0 conflitti, 0 coppie con anno
   NULL**, contatori di archiviazione a 0 (nessun dato toccato). Casi A/B/C riprodotti nei test:
   test backend 60 → 68. Voce del rischio `wikidata_id` cancellata da `problemi-aperti.md`.
+- **2026-09-26** — **fase-20 eseguita**: le descrizioni tronche del PostModernissimo arrivano
+  intere. Il campo `content` del payload RSC non era mai estratto (`_parse_rsc_payload` leggeva
+  solo `details`/`shows`), quindi scattava sempre la meta description del CMS, tagliata a ~100
+  caratteri a metà parola; ora `_extract_content` legge la sinossi intera dal payload e
+  `fetch_film_detail` cerca **prima il paragrafo e poi la meta** (dal più completo al più debole).
+  Aggiunta la regola di **non-degrado** (`pick_fuller_description`) nel delta e nella fusione
+  cross-fonte, e `_pick_fuller_synopsis` nell'`upsert_from_scraper` del backend: una sinossi
+  intera non si sovrascrive con una tronca. Un dettaglio che fallisce ora finisce in
+  `ScrapeResult.errors` (fase `detail`) senza rompere la run. Nessuna run live e nessuna fetch
+  diagnostica in questa sessione: i test usano fixture RSC/HTML registrate. Test scraper
+  173 → 181 (180 pass + 1 xfail), backend 68 → 70. Guarigione dei dati: nei JSON ci sono **7**
+  descrizioni da 103 caratteri (il caso citato era `Naza`; il dataset nel frattempo è cresciuto),
+  il DB si sistema alla prossima run autorizzata + `make seed`. Restano **10 film senza
+  descrizione** (`MATRIX 4K`, `Maigret, l'amore e la morte`, `Dov'è la Fiesta?`,
+  `A Fox Under a Pink Moon`, `PerSo Short Award`, `Como tú me ves`, `Un solco nella terra`,
+  `Indietro così!`, `Torneranno i lupi`, `Una cosa vicina`): problema diverso, annotato per una
+  fase futura. Scheda nuova: `docs/scraper/connettori/postmodernissimo.md`.

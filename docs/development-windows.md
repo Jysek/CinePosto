@@ -1,6 +1,6 @@
 # Sviluppo su Windows
 
-> Verificato su `20ca1bb` (`2026-09-25`): conteggi dei test (173 scraper, 68 backend). Comandi
+> Verificato su `056f04f` (`2026-09-26`): conteggi dei test (181 scraper, 70 backend). Comandi
 > e percorsi erano stati ricontrollati su `9dc8fc1`; §5 (Expo Go, rete e firewall su telefono
 > reale) non rieseguita.
 
@@ -96,8 +96,8 @@ Con `make` (scorciatoia) o con il comando `docker compose` equivalente: sono la 
 | Avvia il backend | `make up` | `docker compose up -d --build backend` |
 | Log del backend | `make logs` | `docker compose logs -f backend` |
 | Stato container | `make ps` | `docker compose ps` |
-| Test backend (68) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
-| Test scraper (173) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
+| Test backend (70) | `make test` | `docker compose run --rm backend python -m pytest tests/ -q` |
+| Test scraper (181) | `make test-scraper` | `docker compose run --rm scraper python -m pytest tests/ -q` |
 | Lint (ruff check + format) | `make lint` | `ruff check` e `ruff format --check` su backend e scraper (4 comandi, vedi il target `lint` nel `Makefile`) |
 | Messaggi di console ASCII | `make check-console` | controlla che `Makefile`, `dev.cmd` e `scripts/*.sh` stampino solo ASCII (vedi §9) |
 | Seed del DB | `make seed` | `docker compose run --rm backend python -m app.seed_from_json` |

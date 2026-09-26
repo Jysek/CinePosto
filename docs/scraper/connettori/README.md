@@ -1,8 +1,8 @@
 # Connettori — schede di implementazione
 
-> Verificato su `5c53fd5` (`2026-09-23`): schede, contratto tecnico e sezione alias
-> confrontati col codice (costanti in `config.py`, estrattore, fixture, test);
-> il markup dei siti osservato il 19/09/2026 non è stato ri-verificato (nessuno scraping live).
+> Verificato su `6fff83b` (`2026-09-26`): la scheda di PostModernissimo e l'indice aggiunti in
+> questa sessione; schede, contratto tecnico e sezione alias sono della verifica su `5c53fd5`;
+> il markup dei siti non è stato ri-verificato (nessuno scraping live).
 
 Schede pronte per essere passate a una **sessione nuova**: contengono lo studio fatto sul
 sito (piattaforma, markup reale, URL, insidie) e la specifica di implementazione per il

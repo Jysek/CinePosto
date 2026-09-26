@@ -1,6 +1,6 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `071b125` (`2026-09-25`): connettore, test e ordine delle fonti di testo
+> Verificato su `6fff83b` (`2026-09-26`): connettore, test e ordine delle fonti di testo
 > confrontati col codice. Il markup del sito osservato l'ultima volta in una run reale non è
 > stato ri-verificato in questa sessione (nessuno scraping live).
 

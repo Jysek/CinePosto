@@ -1,7 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `5feb740` (`2026-09-25`): capitolo fusioni e pipeline confrontati col codice;
-> costanti, modelli e connettori riletti su `5c53fd5`.
+> Verificato su `6fff83b` (`2026-09-26`): capitolo PostModernissimo e ordine delle fonti di testo
+> confrontati col codice; il resto del capitolo è la verifica precedente su `5feb740`.
 
 ## Indice
 

@@ -1,8 +1,7 @@
 # Guida allo sviluppo
 
-> Verificato su `20ca1bb` (`2026-09-25`): report del seed (`identity_conflicts`,
-> `duplicate_titles`) e numeri dei test (173 scraper, 68 backend). Comandi confrontati col codice
-> su `9dc8fc1`.
+> Verificato su `056f04f` (`2026-09-26`): numeri dei test (181 scraper, 70 backend). Report del
+> seed (`identity_conflicts`, `duplicate_titles`) e comandi confrontati col codice su `20ca1bb`.
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in
@@ -139,7 +138,7 @@ Swagger UI: `http://localhost:8000/docs`.
 ### Test
 
 ```bash
-python -m pytest tests/ -q       # 68 test (~0.2s)
+python -m pytest tests/ -q       # 70 test (~0.2s)
 python -m pytest tests/ -v       # verbose
 ```
 

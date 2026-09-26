@@ -1,7 +1,7 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `20ca1bb` (`2026-09-25`): identità a due segnali (§2, tabella dei casi) e guardia di
-> identità di fine seed (§4.1). Il resto del capitolo non è stato ricontrollato in questa sessione.
+> Verificato su `056f04f` (`2026-09-26`): non-degrado di `synopsis` in `upsert_from_scraper`.
+> Il resto del capitolo è della verifica precedente su `20ca1bb`.
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).

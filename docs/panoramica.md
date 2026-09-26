@@ -52,7 +52,7 @@ Le **8 sale** e la tecnica di ciascuna sono nel registro [`scraper/copertura.md`
 
 Dopo la raccolta: **normalizzazione titoli** (minuscole, via accenti e punteggiatura — serve a capire che "Dune – Parte 2" e "DUNE Parte 2" sono lo stesso film), **dedup**, **arricchimento Wikidata** (SPARQL, con cache locale per non ribombardare l'endpoint), **delta tracking** (un film che sparisce dalla programmazione viene marcato "rimosso" dopo 7 giorni, non cancellato subito).
 
-- Numeri: **173 test**, 8 connettori; l'output copre le 8 sale con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
+- Numeri: **181 test**, 8 connettori; l'output copre le 8 sale con qualche decina di film e alcune centinaia di spettacoli (i conteggi cambiano a ogni giro, perché i cinema pubblicano il palinsesto solo pochi giorni in anticipo).
 - Etica scraping: rispetto robots.txt, rate limiting, run notturna, User-Agent identificabile con contatto reale (RF-09/RNF-04).
 - Produzione: systemd timer + service `--once` su VM Linux (decisione L3 — niente scheduler interno: se il processo muore, systemd lo rilancia lui).
 
@@ -79,7 +79,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 **Endpoint principali** (11 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
 
-- Numeri: **68 test** (unit sui repository, seed con archiviazione dei residui e guardia di identità, script di manutenzione, end-to-end con TestClient su DB in-memory).
+- Numeri: **70 test** (unit sui repository, seed con archiviazione dei residui e guardia di identità, script di manutenzione, end-to-end con TestClient su DB in-memory).
 - Decisioni chiave: **SQLite anche in produzione** (D4 — un file, zero amministrazione, carico di lettura minuscolo: perfetto per l'MVP), **Wikidata-only senza TMDB** (D1 — niente API key, niente limiti commerciali).
 
 📂 Dettaglio: [backend/architecture.md](backend/architecture.md) · [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna) · [backend/api.md](backend/api.md) (contratto API completo per l'app)
@@ -113,7 +113,7 @@ Su VM Linux: lo scraper gira con un systemd timer (file in `scraper/deploy/`), i
 
 ## 7. Qualità
 
-- **241 test automatici** totali (173 scraper + 68 backend), lint ruff pulito su entrambi, CI a 2 job.
+- **251 test automatici** totali (181 scraper + 70 backend), lint ruff pulito su entrambi, CI a 2 job.
 - Seed **idempotente**: importare gli stessi JSON N volte produce sempre lo stesso DB.
 - Docstring complete su tutto il codice di produzione (backend, scraper, connettori).
 
