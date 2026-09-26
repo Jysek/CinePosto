@@ -161,6 +161,34 @@ def test_upsert_from_scraper_updates_only_non_null(session):
     assert found.director == "Villeneuve"  # aggiornata
 
 
+def test_upsert_does_not_replace_full_synopsis_with_shorter_one(session):
+    """Una sinossi intera non si perde se l'upsert successivo ne porta una tronca."""
+    full = "Sinossi intera " * 20
+    truncated = "Sinossi tagliata a metà par..."
+    film_repo.upsert_from_scraper(session, {"title": "Naza", "year": 2026, "synopsis": full})
+    session.commit()
+
+    film_repo.upsert_from_scraper(session, {"title": "Naza", "year": 2026, "synopsis": truncated})
+    session.commit()
+
+    found = film_repo.get_by_natural_key(session, "naza", 2026)
+    assert found.synopsis == full
+
+
+def test_upsert_replaces_truncated_synopsis_with_full_one(session):
+    """Una sinossi tronca viene invece aggiornata quando ne arriva una intera."""
+    truncated = "Sinossi tagliata a metà par..."
+    full = "Sinossi intera " * 20
+    film_repo.upsert_from_scraper(session, {"title": "Naza", "year": 2026, "synopsis": truncated})
+    session.commit()
+
+    film_repo.upsert_from_scraper(session, {"title": "Naza", "year": 2026, "synopsis": full})
+    session.commit()
+
+    found = film_repo.get_by_natural_key(session, "naza", 2026)
+    assert found.synopsis == full
+
+
 def test_upsert_does_not_duplicate_when_only_the_year_is_null(session):
     """Un anno NULL nel JSON non crea una seconda riga se il film esiste già con l'anno.
 

@@ -102,7 +102,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 | `genres` (array) | `genres` (string CSV) | `",".join(genres)` |
 | `director` | `director` | nullable |
 | `poster` | `poster_url` | |
-| `description` | `synopsis` | |
+| `description` | `synopsis` | In update si scrive solo se **più completa** di quella presente (`_pick_fuller_synopsis`): una meta description tronca a metà parola (finisce con `...`) non sovrascrive mai una sinossi intera, e una sinossi intera aggiorna sempre una tronca. |
 | `wikidata_id` | `wikidata_id` | UNIQUE, nullable. **Secondo segnale di identità** (dopo la chiave naturale): si scrive solo quando è libero, mai quando è già di un'altra riga — vedi la tabella dei casi sotto |
 | — | `id` (DB) | PK autoincrement, generato dal DB |
 | — | `created_at` | default `now()` |

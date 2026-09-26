@@ -121,9 +121,35 @@ def list_in_programming(db: Session, date_from: date_type, date_to: date_type) -
 
 
 # Metadati aggiornati in tutti i rami dell'upsert (i null del JSON non sovrascrivono).
-# `wikidata_id` non è in questa lista: si scrive solo quando è libero — vedi la
-# tabella dei casi di `upsert_from_scraper`.
-METADATA_FIELDS = ("original_title", "runtime_minutes", "genres", "director", "poster_url", "synopsis")
+# `synopsis` è fuori dalla lista: si aggiorna solo se più completa, vedi
+# `_pick_fuller_synopsis`. `wikidata_id` non è in questa lista: si scrive solo
+# quando è libero — vedi la tabella dei casi di `upsert_from_scraper`.
+METADATA_FIELDS = ("original_title", "runtime_minutes", "genres", "director", "poster_url")
+
+_TRUNCATED_SYNOPSIS_TAIL = re.compile(r"(\.{3}|…)\s*$")
+
+
+def _is_truncated_synopsis(text: str) -> bool:
+    """True se la sinossi si chiude con i puntini di sospensione (troncamento del CMS)."""
+    return bool(_TRUNCATED_SYNOPSIS_TAIL.search(text))
+
+
+def _pick_fuller_synopsis(current: str | None, new: str) -> str:
+    """Sceglie fra la sinossi presente e quella nuova la più completa.
+
+    Una descrizione tronca a metà parola (finisce con "...") non deve mai
+    sovrascrivere una sinossi intera, e viceversa: a pari troncamento vince la
+    più lunga; a parità di lunghezza resta quella presente. È la stessa regola
+    del merge dello scraper (`pick_fuller_description`, `normalizer.py`),
+    duplicata qui perché backend e scraper sono due pacchetti indipendenti.
+    """
+    if not current:
+        return new
+    truncated_current = _is_truncated_synopsis(current)
+    truncated_new = _is_truncated_synopsis(new)
+    if truncated_current != truncated_new:
+        return new if truncated_current else current
+    return new if len(new) > len(current) else current
 
 
 def _update_metadata(film: Film, data: dict) -> None:
@@ -131,6 +157,9 @@ def _update_metadata(film: Film, data: dict) -> None:
     for key in METADATA_FIELDS:
         if data.get(key) is not None:
             setattr(film, key, data[key])
+    new_synopsis = data.get("synopsis")
+    if new_synopsis is not None:
+        film.synopsis = _pick_fuller_synopsis(film.synopsis, new_synopsis)
 
 
 def upsert_from_scraper(db: Session, data: dict) -> Film:
