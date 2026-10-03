@@ -38,3 +38,15 @@ export function formatShortDate(dateStr) {
 export function isToday(dateStr) {
   return dateStr === getToday();
 }
+
+// ISO (con offset, es. '2026-09-25T07:47:22+00:00') -> '25/09/2026, 09:47'
+// in ora locale del dispositivo. `new Date(iso)` converte da solo il fuso.
+export function formatDateTime(isoString) {
+  return new Date(isoString).toLocaleString('it-IT', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}

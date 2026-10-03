@@ -64,6 +64,13 @@ export const getShowings = async (filters = {}) => {
   return res.json();
 };
 
+// Stato del dataset: conteggi e freschezza dei dati. Pubblico, nessun token.
+export const getDatasetInfo = async () => {
+  const res = await fetch(`${API_BASE}/dataset`);
+  if (!res.ok) throw new Error('Errore nel caricamento dello stato dei dati');
+  return res.json();
+};
+
 // Preferiti (locali con AsyncStorage)
 const FAVORITES_KEY = '@cineposto_favorites';
 

@@ -18,9 +18,10 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import SwipeableHero from '../components/SwipeableHero';
 import DateBar from '../components/DateBar';
 import MovieGrid from '../components/MovieGrid';
+import StaleDataBanner from '../components/StaleDataBanner';
 import Colors from '../constants/colors';
 import { getToday } from '../utils/dates';
-import { getCinemas, getCinemaShowings } from '../api/api';
+import { getCinemas, getCinemaShowings, getDatasetInfo } from '../api/api';
 
 export default function FilmsTab({ navigation }) {
   const [films, setFilms] = useState([]);
@@ -28,6 +29,9 @@ export default function FilmsTab({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  // Stato del dataset dal backend (freschezza dei dati). Il booleano is_stale
+  // arriva già calcolato: l'app non duplica la regola della soglia.
+  const [dataset, setDataset] = useState(null);
   // true mentre si ricaricano i dati dopo un cambio data (loading resta
   // per il primo caricamento a schermo intero)
   const [updating, setUpdating] = useState(false);
@@ -41,6 +45,14 @@ export default function FilmsTab({ navigation }) {
     try {
       setError(null);
       setUpdating(true);
+
+      // Stato del dataset in parallelo al resto, con try/catch separato: se
+      // /dataset non risponde la home deve continuare a funzionare. Niente
+      // banner in quel caso, ma l'errore non si ingoia: finisce in console.
+      getDatasetInfo()
+        .then(setDataset)
+        .catch((e) => console.warn('Stato dei dati non disponibile:', e.message));
+
       const cinemasData = await getCinemas();
       setCinemas(cinemasData);
 
@@ -157,6 +169,11 @@ export default function FilmsTab({ navigation }) {
             <Ionicons name="options" size={22} color={Colors.white} />
           </TouchableOpacity>
         </View>
+
+        {/* Avviso programmazione vecchia: non bloccante, non copre la griglia */}
+        {dataset?.is_stale && (
+          <StaleDataBanner latestScrapedAt={dataset.latest_scraped_at} onRetry={onRefresh} />
+        )}
 
         {/* Chip del filtro attivo, per vederlo e toglierlo al volo */}
         {selectedCinema && (
