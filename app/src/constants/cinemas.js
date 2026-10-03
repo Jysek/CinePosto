@@ -66,3 +66,8 @@ export const CINEMA_LOGOS = Object.fromEntries(
     .filter(([, presentation]) => presentation.logo)
     .map(([slug, presentation]) => [slug, presentation.logo])
 );
+
+// Funzionale, non di presentazione: la URL di Google Maps di un cinema è logica,
+// non scelta grafica. Riesportata solo per comodità (mapHtml.js beve da constants
+// come per colori e loghi): la fonte di verità resta utils/mapsUrl.js.
+export { cinemaMapsUrl } from '../utils/mapsUrl';

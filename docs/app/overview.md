@@ -1,8 +1,9 @@
 # App — React Native + Expo
 
-> Verificato su fase-19 (`2026-10-03`): apertura di Google Maps dalla schermata Località verificata
-> su web con Playwright (tap sulla riga → scheda del luogo; cinema senza `maps_place_url` → fallback
-> a coordinate).
+> Verificato su fase-18 (`2026-10-03`): popup della mappa (rettangolo bianco)
+> interamente cliccabile verso Google Maps, verificato su web con Playwright
+> su export web. Precedente: fase-19 (`2026-10-03`) — apertura di Google Maps dalla
+> schermata Località con la scheda del luogo verificata su web.
 > Precedente: `857c68b` (`2026-09-24`) — struttura, schermate, client API e costanti.
 
 App mobile/web di CinePosto: mostra i film in programmazione nei cinema dell'Umbria,
@@ -111,9 +112,17 @@ SplashScreen
   luogo salvato** (nome, foto, recensioni, orari): unica fonte dell'URL è
   `cinemaMapsUrl()` in `utils/mapsUrl.js`, che usa `maps_place_url` dell'API e
   quando manca cade indietro alla ricerca a coordinate (pin senza scheda).
+  Anche il **popup della mappa è interamente cliccabile**: il rettangolo bianco
+  è un `<a>` DOM puro (`href` via `setAttribute`, testi in `textContent`) con la
+  stessa URL dell'elenco. Comportamento doppio per i due ambienti: dentro la
+  WebView nativa il click manda un messaggio `openMaps` al contenitore
+  (`onMessage` di `CinemaMap.js`, che valida la URL e chiama `Linking`, che passa
+  per l'app Maps del sistema); dentro l'iframe web il browser segue
+  l'`href target="_blank"` e apre una nuova scheda.
   **I dati dei cinema arrivano dall'API** (`getCinemas()`, oggi 8 sale): slug, nome,
   indirizzo, coordinate e place URL non sono costanti dell'app. In
-  `constants/cinemas.js` restano solo colore e logo (presentazione).
+  `constants/cinemas.js` restano colore e logo (presentazione) più la
+  riesportazione di `cinemaMapsUrl` per `mapHtml.js`.
 - **MovieDetailScreen** (dettaglio): poster, durata, regista, generi, trama con
   "leggi di più", link al trailer (ricerca YouTube) e **orari raggruppati per cinema**
   nella data scelta. Si apre sulla data da cui arrivi (passata dalla Home) e, se quel

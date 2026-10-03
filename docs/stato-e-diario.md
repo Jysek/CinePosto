@@ -1,6 +1,6 @@
 # CinePosto — Stato attuale e diario
 
-> Verificato su `056f04f` (`2026-09-26`).
+> Verificato su `7e325b9` (`2026-10-03`).
 
 **Come si usa questo file.** La sezione «Stato attuale» è una fotografia di oggi e si **riscrive**
 quando cambia. La sezione «Diario» è **append-only**: si aggiunge in coda, non si riscrive mai il
@@ -240,3 +240,14 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   (`expo-doctor` 21/21). Tra le sessioni: una run di scraping locale (30/09) aveva toccato i JSON di
   output **senza** essere committata — le modifiche sono in `git stash` (rigenererebbero
   `generated_at` 30/09); questa fase non le ripristina, il campo viene da `config.py`.
+- **2026-10-03** — **fase-18 eseguita**: il popup della mappa (il rettangolo bianco) è diventato
+  interamente cliccabile e apre Google Maps. L'intero contenuto del popup è un `<a>` costruito con
+  `createElement`/`setAttribute` (i testi restano in `textContent`, niente HTML concatenato) con
+  `aria-label`, `target="_blank"` e `rel="noopener"`. Comportamento doppio: dentro la WebView
+  nativa il click devolve l'apertura al contenitore RN via `postMessage` (tipo `openMaps`, URL
+  validata HTTPS) e `CinemaMap.js` la esegue con `Linking.openURL` (errore loggato, mai crash);
+  dentro l'iframe web non c'è bridge e il browser segue l'`href` in una nuova scheda, verificato
+  con Playwright su export web (`make check-app-web`): tap sul marker → popup, tap sul rettangolo
+  → `google.com/maps`, riga dell'elenco continua a funzionare; `expo-doctor` 21/21. La URL ha una
+  sola fonte: `cinemaMapsUrl` in `utils/mapsUrl.js` (l'helper già nato con la fase-19, che qui
+  si consuma così com'è), riesportato da `constants/cinemas.js` per il solo `mapHtml.js`.

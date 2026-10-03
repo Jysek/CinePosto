@@ -1,4 +1,4 @@
-import { cinemaInitials } from '../constants/cinemas';
+import { cinemaInitials, cinemaMapsUrl } from '../constants/cinemas';
 import Colors from '../constants/colors';
 
 // Genera l'HTML della mappa (OpenFreeMap + MapLibre GL JS) con i marker dei cinema.
@@ -40,6 +40,9 @@ export default function buildMapHtml(cinemas) {
     initials: cinemaInitials(c.name),
     lat: c.coords.latitude,
     lon: c.coords.longitude,
+    // URL di Google Maps, la stessa dell'elenco in schermata: unica fonte è
+    // cinemaMapsUrl in utils/mapsUrl.js (bersaglio della fase-19 se cambia).
+    mapsUrl: cinemaMapsUrl(c),
   }));
 
   return `<!DOCTYPE html>
@@ -91,6 +94,11 @@ export default function buildMapHtml(cinemas) {
     .map-fallback-icon { font-size: 48px; }
     .map-fallback-title { color: ${Colors.white}; font: 700 16px sans-serif; }
     .map-fallback-hint { color: ${Colors.lightGray}; font: 400 14px sans-serif; }
+
+    /* Popup cliccabile: tutta l'area del contenuto è un link a Google Maps.
+      I margini negativi compensano il padding dell'HTML di default di MapLibre
+      (senza, i bordi del rettangolo bianco resterebbero zone "morte" da clic). */
+    .cinema-popup { display: block; color: inherit; text-decoration: none; margin: -13px -13px -10px; padding: 13px 13px 10px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -158,14 +166,38 @@ export default function buildMapHtml(cinemas) {
       }
 
       function createPopup(cinema) {
-        var content = document.createElement('div');
+        // Rettangolo bianco interamente cliccabile: il contenuto (nome + indirizzo)
+        // è dentro un <a> che apre Google Maps. I lati restano DOM puro: i testi con
+        // textContent (dati dell'API, mai markup), l'href con setAttribute.
+        var link = document.createElement('a');
+        link.className = 'cinema-popup';
+        link.setAttribute('href', cinema.mapsUrl);
+        link.setAttribute('aria-label', 'Apri ' + cinema.name + ' su Google Maps');
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+
         var name = document.createElement('strong');
         name.textContent = cinema.name;
         var address = document.createElement('div');
         address.textContent = cinema.address;
-        content.appendChild(name);
-        content.appendChild(address);
-        return new maplibregl.Popup({ offset: POPUP_OFFSET }).setDOMContent(content);
+        link.appendChild(name);
+        link.appendChild(address);
+
+        // Comportamento doppio: dentro la WebView nativa il bridge c'è e la pagina
+        // devolve l'apertura al contenitore RN (Linking, che passa per l'app Maps);
+        // dentro l'iframe web non c'è bridge e basta la nuova scheda dell'href
+        // (equivalente a window.open: è il browser a seguire target="_blank").
+        link.addEventListener('click', function (event) {
+          if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+            event.preventDefault();
+            window.ReactNativeWebView.postMessage(
+              JSON.stringify({ type: 'openMaps', url: cinema.mapsUrl })
+            );
+          }
+          // senza bridge non preventDefault: il browser segue l'href (target=_blank)
+        });
+
+        return new maplibregl.Popup({ offset: POPUP_OFFSET }).setDOMContent(link);
       }
 
       var map;
