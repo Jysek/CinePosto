@@ -1,13 +1,14 @@
 // Schermata "Località": mappa Leaflet dei cinema + elenco con indirizzi,
 // ognuno apribile in Google Maps. I cinema arrivano dall'API.
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, StatusBar, Linking, TouchableOpacity, Platform, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, StatusBar, TouchableOpacity, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { Asset } from 'expo-asset';
 import CinemaMap from '../components/CinemaMap';
 import Colors from '../constants/colors';
 import { CINEMA_LOGOS, cinemaColor } from '../constants/cinemas';
 import { getCinemas } from '../api/api';
+import { openCinemaInMaps } from '../utils/mapsUrl';
 
 // Converte il logo in data URI per incorporarlo nell'HTML della mappa.
 // Usa fetch + FileReader (funzionano su iOS, Android e web) invece di
@@ -62,10 +63,7 @@ export default function LocationTab() {
     })();
   }, []);
 
-  const openInMaps = (cinema) => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${cinema.lat},${cinema.lon}`;
-    Linking.openURL(url);
-  };
+  const openInMaps = (cinema) => openCinemaInMaps(cinema);
 
   if (loading) {
     return (
