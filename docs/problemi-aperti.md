@@ -1,7 +1,8 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `20ca1bb` (`2026-09-25`): cancellata la voce sul rischio `wikidata_id` del seed
-> (risolta con la guardia di identità a due segnali). Le altre voci non sono state ricontrollate
+> Verificato su fase-7 (`2026-10-03`): cancellata la voce «L'app non avverte quando i dati sono
+> vecchi» (risolta con l'endpoint pubblico `GET /api/v1/dataset` + banner `StaleDataBanner`),
+> aggiunta la voce sulla fonte di `latest_scraped_at`. Le altre voci non sono state ricontrollate
 > in questa sessione.
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
@@ -47,9 +48,15 @@ La tab bar di React Navigation 7 la passa ancora come prop (`pointerEvents={isTa
 l'istanza nostra (`app/src/screens/FilmsTab.js`) è stata corretta nella stessa data. Si risolve con un
 upgrade di react-navigation che converta la prop in stile; non si patcha `node_modules`.
 
-### L'app non avverte quando i dati sono vecchi
-**Dove**: `app/src/api/api.js` · **Prova**: `grep -rn "latest_scraped\|dati non aggiornati" app/src` → nessun risultato · **Data**: `2026-09-21`
-Se lo scraping notturno fallisce, l'app mostra la programmazione vecchia senza dirlo all'utente.
-La data dell'ultimo aggiornamento esiste solo in `GET /api/v1/admin/dataset-info`
-(`backend/app/routers/admin.py:53`), protetto da token admin e non consumato dall'app: serve un
-dato pubblico (o un endpoint) su cui costruire l'avviso.
+### La fonte di `latest_scraped_at` è l'istante di insert, non quello della run di scraping
+**Dove**: `backend/app/services/dataset_service.py` (`get_dataset_info`) · **Prova**: `make seed` il
+2026-10-03 alle 11:28 (run riuscita) + `curl localhost:8000/api/v1/dataset` →
+`"latest_scraped_at": "2026-10-03T11:17:50+00:00"`: la run non ha inserito righe nuove e il
+timestamp è rimasto quello dell'import precedente · **Data**: `2026-10-03`
+`max(Showing.scraped_at)` registra quando la riga è stata **inserita** (`showing_repo.upsert` non
+aggiorna `scraped_at` sulle righe esistenti), non quando è girata la run che ha prodotto i dati:
+una run senza righe nuove sembra «dati vecchi» e un seed eseguito su JSON vecchi sembra fresco. La
+fonte giusta è il `generated_at` dei JSON (`scraper/output/showings.json`) persistito dal seed in
+una tabella `dataset_meta` (disegno del dato in `pianificazione/fase-12-seed-autorevole.md` §5.1):
+quando esiste, `GET /api/v1/dataset` va ricollegato a quella. Fino ad allora il limite è dichiarato
+nel docstring di `get_dataset_info` e in `docs/backend/api.md` §4.10.

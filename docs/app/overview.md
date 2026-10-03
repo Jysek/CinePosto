@@ -1,6 +1,9 @@
 # App — React Native + Expo
 
-> Verificato su fase-18 (`2026-10-03`): popup della mappa (rettangolo bianco)
+> Verificato su fase-7 (2026-10-03): banner «Programmazione non aggiornata» nella Home
+> (`StaleDataBanner`), verificato su web con Playwright su export web (dati vecchi → banner,
+> dati freschi → nessun banner).
+> Precedente: fase-18 (`2026-10-03`): popup della mappa (rettangolo bianco)
 > interamente cliccabile verso Google Maps, verificato su web con Playwright
 > su export web. Precedente: fase-19 (`2026-10-03`) — apertura di Google Maps dalla
 > schermata Località con la scheda del luogo verificata su web.
@@ -58,12 +61,13 @@ app/
     │   ├── colors.js      ← palette tema scuro
     │   └── cinemas.js     ← presentazione dei cinema: colore e logo (l'anagrafica arriva dall'API)
     ├── utils/
-    │   ├── dates.js       ← date in ora locale (YYYY-MM-DD), prossimi 7 giorni
+    │   ├── dates.js       ← date in ora locale (YYYY-MM-DD), prossimi 7 giorni, data+ora locale
     │   └── mapsUrl.js     ← URL di Google Maps di un cinema (place URL o fallback a coordinate)
     ├── components/
     │   ├── SwipeableHero.js   ← carosello "hero" della Home
     │   ├── MovieGrid.js       ← griglia locandine adattiva
     │   ├── DateBar.js         ← barra date (oggi + 6 giorni)
+    │   ├── StaleDataBanner.js ← avviso "programmazione non aggiornata" (non bloccante)
     │   ├── PosterImage.js     ← poster con gestione immagini panoramiche
     │   ├── SplashScreen.js    ← animazione logo all'avvio
     │   ├── CinemaMap.js       ← mappa nativa (WebView)
@@ -105,6 +109,14 @@ SplashScreen
   ogni giorno mostra esattamente ciò che è in cartellone. In cima un carosello
   `SwipeableHero` con i primi film; sotto la `DateBar` (7 giorni) e la `MovieGrid`.
   C'è un filtro per cinema (modal) e il pull-to-refresh.
+  Sotto l'header compare il banner `StaleDataBanner` quando il backend dice che i
+  dati non sono aggiornati (`GET /dataset`, campo `is_stale`): **non bloccante** —
+  la programmazione resta leggibile, l'avviso la accompagna — e con il bottone
+  «Riprova» che rifà il caricamento. Se `/dataset` non risponde la home funziona
+  lo stesso: niente banner e `console.warn` con il motivo (mai errori ingoiati).
+  La soglia di freschezza **non** è duplicata nell'app: arriva già calcolata dal
+  backend insieme a `latest_scraped_at`, mostrato in ora locale con
+  `formatDateTime()` (`utils/dates.js`).
 - **SearchTab** (Cerca): ricerca per titolo con **debounce 300 ms** e annullamento
   delle risposte obsolete (`requestId`): se digiti in fretta conta solo l'ultima query.
 - **LocationTab** (Località): mappa OpenFreeMap con i cinema (marker con logo) e
@@ -161,11 +173,13 @@ Chiama il backend via `fetch`; l'indirizzo base è in `constants/config.js`.
 | `getCinemaShowings(slug, from, to)` | `GET /cinema/{slug}/showings?date_from=&date_to=` |
 | `getShowingsToday()` | `GET /showings` |
 | `getShowings(filters)` | `GET /showings?date=YYYY-MM-DD` |
+| `getDatasetInfo()` | `GET /dataset` |
 
 Le funzioni `getFilmsToday`, `getCinemaBySlug`, `getShowingsToday` e `getShowings` sono
 esposte ma non ancora usate dalle schermate: le quattro che leggono i dati sono
 `getCinemas`, `getCinemaShowings` (Home, Cerca e dettaglio) e `getFilmById` (dettaglio)
-più `searchFilms`. I preferiti (`addFavorite`, `getFavorites`, …) sono **locali**, salvati
+più `searchFilms`, e la Home chiama anche `getDatasetInfo` per il banner di freschezza.
+I preferiti (`addFavorite`, `getFavorites`, …) sono **locali**, salvati
 in AsyncStorage.
 
 > **Forma dei dati**: gli spettacoli del backend (`ShowingDetail`) hanno il film e il

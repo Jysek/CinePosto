@@ -1,6 +1,8 @@
 # Backend — Architettura tecnica
 
-> Verificato su `20ca1bb` (`2026-09-25`): invariante "un film = una riga", guardia di identità del
+> Verificato su fase-7 (2026-10-03): endpoint pubblico `GET /api/v1/dataset` con
+> `dataset_service`/`dataset_repo` nel rispetto del layering (12 endpoint).
+> Precedente: `20ca1bb` (`2026-09-25`) — invariante "un film = una riga", guardia di identità del
 > seed, coppie del report pronte per `--merge`.
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
@@ -117,6 +119,7 @@ INDEX  ix_showings_date, ix_showings_film, ix_showings_cinema
 | `GET`  | `/api/v1/film/search?q=...&limit=...` | Ricerca per titolo (min 2 caratteri) |
 | `GET`  | `/api/v1/film/{film_id}` | Dettaglio film + prossimi showings |
 | `GET`  | `/api/v1/showings?date=YYYY-MM-DD` | Spettacoli di una data (default: oggi) |
+| `GET`  | `/api/v1/dataset` | Riepilogo pubblico del dataset: conteggi e freschezza dei dati |
 | `POST` | `/api/v1/admin/reimport` | Rilegge JSON scraper (header `X-Admin-Token` richiesto) |
 | `GET`  | `/api/v1/admin/dataset-info` | Conteggi e ultima data dataset (protetto) |
 

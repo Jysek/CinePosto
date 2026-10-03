@@ -1,6 +1,7 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su `20ca1bb` (`2026-09-25`): numeri dei test (241 totali). Il resto del documento non
+> Verificato su fase-7 (2026-10-03): endpoint pubblico `GET /api/v1/dataset` e avviso di
+> freschezza nell'app (12 endpoint, 84 test backend). Il resto del documento non
 > è stato ricontrollato in questa sessione (ultima lettura completa su `9dc8fc1`).
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
@@ -77,9 +78,9 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 - `Film` — PK = id intero + vincolo UNIQUE su (titolo normalizzato, anno): il titolo è troppo fragile per fare da chiave (apostrofi, trattini, remake omonimi).
 - `Showing` — la classe associativa: film X, al cinema Y, il giorno Z, con la lista orari. UNIQUE su (film, cinema, data) = il re-import non crea mai duplicati.
 
-**Endpoint principali** (11 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
+**Endpoint principali** (12 totali, Swagger su `/docs`): `/api/v1/film/oggi`, `/film/settimana`, `/film/search?q=`, `/film/{id}`, `/cinema`, `/cinema/{slug}/showings`, `/showings?date=`, `/dataset` (stato e freschezza dei dati, pubblico), più 2 admin protetti da token (`/admin/reimport`, `/admin/dataset-info`) e `/health`.
 
-- Numeri: **70 test** (unit sui repository, seed con archiviazione dei residui e guardia di identità, script di manutenzione, end-to-end con TestClient su DB in-memory).
+- Numeri: **84 test** (unit sui repository, seed con archiviazione dei residui e guardia di identità, script di manutenzione, end-to-end con TestClient su DB in-memory).
 - Decisioni chiave: **SQLite anche in produzione** (D4 — un file, zero amministrazione, carico di lettura minuscolo: perfetto per l'MVP), **Wikidata-only senza TMDB** (D1 — niente API key, niente limiti commerciali).
 
 📂 Dettaglio: [backend/architecture.md](backend/architecture.md) · [backend/schema-mapping.md](backend/schema-mapping.md) (come ogni campo JSON diventa colonna) · [backend/api.md](backend/api.md) (contratto API completo per l'app)
@@ -90,7 +91,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 - Stack: React Native + **Expo SDK 57** (nativo via development build, non Expo Go), navigazione con React Navigation — tre tab (Film, Cerca, Località) più uno stack per il dettaglio del film.
 - Legge tutto dal backend via `fetch`: nessun dato finto. L'indirizzo dell'API è configurabile con la variabile `EXPO_PUBLIC_API_BASE`.
-- Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (OpenFreeMap). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app.
+- Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (OpenFreeMap). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app. Se il backend dichiara i dati non aggiornati (`GET /dataset`), la Home mostra un avviso non bloccante «Programmazione non aggiornata».
 - Codice in JavaScript (`.js`); la migrazione a TypeScript resta rimandata (decisione D5).
 
 📂 Dettaglio: [app/overview.md](app/overview.md)

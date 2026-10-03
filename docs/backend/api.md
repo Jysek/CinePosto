@@ -1,6 +1,7 @@
 # CinePosto — Contratto API (v1)
 
-> Verificato su fase-19 (2026-10-03): campo `maps_place_url` in `Cinema`/`CinemaWithCount` (§4.1, §4.2).
+> Verificato su fase-7 (2026-10-03): nuovo endpoint pubblico `GET /dataset` (§4.10).
+> Precedente: fase-19 (2026-10-03) — campo `maps_place_url` in `Cinema`/`CinemaWithCount` (§4.1, §4.2).
 > Precedente: `a360d5a` (`2026-09-25`) — semantica dei film/spettacoli archiviati (§2, §4.6, §5).
 
 > **Contratto autorevole degli endpoint**: URL, forma delle risposte, affidabilità
@@ -362,6 +363,75 @@ Usato da UptimeRobot / monitoring. L'app **non** lo chiama.
 
 ---
 
+### 4.10 `GET /dataset` — Stato e freschezza dei dati
+
+**URL**: `GET /api/v1/dataset`
+**Query params**: nessuno
+**Auth**: **nessuna — è pubblico di proposito**. L'app deve poter avvisare l'utente quando la
+programmazione non è aggiornata, e un token admin nel bundle JS non è un segreto. L'endpoint
+admin `/admin/dataset-info` resta protetto e **separato**: non è questo.
+**Response**: `DatasetInfo`
+
+| Campo | Tipo | Significato |
+|---|---|---|
+| `latest_scraped_at` | `string \| null` | istante della run di scraping che ha prodotto i dati oggi nel DB, ISO **con offset UTC**; `null` se non c'è nessun dato |
+| `age_hours` | `number \| null` | ore trascorse da `latest_scraped_at`; `null` se non c'è nessun dato |
+| `is_stale` | `boolean` | `true` se non c'è nessun dato **oppure** `age_hours > stale_after_hours`. La regola di dominio è calcolata dal backend: l'app la mostra e basta |
+| `stale_after_hours` | `number` | soglia applicata, esplicita (oggi 36: `Settings.dataset_stale_after_hours`) — il client non la indovina |
+| `showings` | `number` | righe in `showings` (conteggio totale, archiviate incluse) |
+| `cinemas` | `number` | righe in `cinemas` |
+
+**Esempio richiesta**:
+```bash
+curl http://localhost:8000/api/v1/dataset
+```
+
+**Esempio risposta** (200 OK, dati freschi):
+```json
+{
+  "latest_scraped_at": "2026-10-03T11:41:42.954477+00:00",
+  "age_hours": 0.0,
+  "is_stale": false,
+  "stale_after_hours": 36,
+  "showings": 1196,
+  "cinemas": 8
+}
+```
+
+**Esempio risposta** (200 OK, dati vecchi — dopo 48 h senza scraping):
+```json
+{
+  "latest_scraped_at": "2026-10-01T11:40:41.097430+00:00",
+  "age_hours": 48.0,
+  "is_stale": true,
+  "stale_after_hours": 36,
+  "showings": 1196,
+  "cinemas": 8
+}
+```
+
+**Formato del timestamp**: ISO 8601 **con offset UTC** (`+00:00`), in controtendenza col
+«Timezone Europe/Rome» di §2: qui serve un **istante**, non una data di programmazione. In
+JavaScript `new Date(iso)` converte da solo nell'ora locale del dispositivo (su Perugia mostra
+l'ora italiana senza calcoli dal lato app).
+
+**Semantica di `is_stale`**: la soglia è **36 ore** perché lo scraping gira una volta al giorno
+(03:00, timer systemd). Due cicli mancati non si perdonano, uno saltato sì: gli orari di oggi
+possono essere già pubblicati alle 09:00 di ieri. La regola vive **solo** nel backend
+(`dataset_service`): nell'app non c'è nessuna soglia duplicata.
+
+**⚠️ Limite noto sulla fonte del timestamp**: oggi `latest_scraped_at` = `max(Showing.scraped_at)`,
+cioè l'istante in cui la riga più recente è stata **inserita** nel DB, **non** l'istante della run
+che ha prodotto i dati: `showing_repo.upsert` non aggiorna `scraped_at` sulle righe già esistenti.
+Quindi una run che non inserisce righe nuove sembra «vecchia» anche se è appena riuscita, e un
+seed eseguito su JSON vecchi sembra fresco. La fonte corretta è il `generated_at` dei JSON
+persistito dal seed: è un'evoluzione tracciata in `docs/problemi-aperti.md`.
+
+**Errori**: nessun errore dedicato. Un DB vuoto è uno stato **legittimo**, non un 500: risponde
+200 con `is_stale: true`, `latest_scraped_at: null`, `age_hours: null` e conteggi a 0.
+
+---
+
 ## 5. Codici HTTP che devi gestire
 
 | Codice | Significato | Cosa fai nell'app |
@@ -601,4 +671,4 @@ function FilmCard({ film }) {
 
 ## 13. Stato dell'integrazione
 
-L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa OpenFreeMap con MapLibre GL JS. Il dettaglio del client è in [app/overview.md](../app/overview.md).
+L'integrazione dell'app con questa API è **completata**: il client sta in `app/src/api/api.js`, la base URL è configurabile via `EXPO_PUBLIC_API_BASE`, tutte le schermate leggono dal backend (niente più dati finti), con gestione di loading ed errori, e la mappa dei cinema usa OpenFreeMap con MapLibre GL JS. La home chiama anche `GET /dataset` e mostra il banner «Programmazione non aggiornata» quando `is_stale` è vero (§4.10). Il dettaglio del client è in [app/overview.md](../app/overview.md).

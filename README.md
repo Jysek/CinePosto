@@ -25,7 +25,7 @@ API REST tra backend e app. Ogni stadio si testa da solo — **251 test** (181 s
 | Componente | Tecnologie | Cosa fa |
 |---|---|---|
 | `scraper/` | Python 3.12, requests, BeautifulSoup, Wikidata SPARQL | un connettore per cinema (pattern Strategy), normalizzazione dei titoli, dedup, arricchimento metadati |
-| `backend/` | FastAPI, SQLAlchemy 2.0, SQLite, Pydantic | architettura a strati (routers → services → repositories → models), 11 endpoint REST, seed idempotente |
+| `backend/` | FastAPI, SQLAlchemy 2.0, SQLite, Pydantic | architettura a strati (routers → services → repositories → models), 12 endpoint REST, seed idempotente |
 | `app/` | Expo SDK 57, React Native 0.86, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
 | infra | Docker Compose, GitHub Actions, Caddy | Docker per sviluppo e produzione, CI che testa dentro le immagini, HTTPS gestito da Caddy |
 
@@ -62,12 +62,12 @@ backend, scraper e build web a ogni push.
 
 - ✅ Scraper, backend e app completi e collegati
 - ✅ Ricerca in-app, mappa delle sale, orari per data
+- ✅ Avviso "dati non aggiornati" nell'app (banner sulla home, `GET /api/v1/dataset`)
 - ✅ Docker per sviluppo e produzione, CI, deploy pronto e verificato in locale
 - 🔄 **Estensione a tutte le sale dell'Umbria**: quelle implementate sono 8 su 30 sale note
   (21 comuni con almeno una sala), come tracciato in
   [`docs/scraper/copertura.md`](docs/scraper/copertura.md). Un connettore alla volta, con
   una tabella di copertura che dichiara per ogni sala se ha una fonte leggibile
-- ⏳ Avviso "dati non aggiornati" nell'app
 - ⏳ Deploy sulla VPS (procedura pronta in [`docs/deploy.md`](docs/deploy.md))
 - ❌ Fuori scope per scelta: account utente, acquisto biglietti in-app, notifiche
 

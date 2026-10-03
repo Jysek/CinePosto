@@ -1,6 +1,7 @@
 # CinePosto — Stato attuale e diario
 
-> Verificato su `7e325b9` (`2026-10-03`).
+> Verificato su fase-7 (`2026-10-03`): avviso "programmazione non aggiornata" (12 endpoint REST,
+> 84 test backend). Precedente: `7e325b9` (`2026-10-03`).
 
 **Come si usa questo file.** La sezione «Stato attuale» è una fotografia di oggi e si **riscrive**
 quando cambia. La sezione «Diario» è **append-only**: si aggiunge in coda, non si riscrive mai il
@@ -14,13 +15,14 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 11 endpoint REST, 70 test | `backend/api.md` |
+| Backend | 12 endpoint REST, 84 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
 **In corso / prossimo passo**: estensione della copertura a tutte le sale dell'Umbria (8 connettori
 su 30 sale note, 11 con sito noto e tecnica da analizzare — vedi `scraper/copertura.md`). Restano
-aperti l'avviso "dati non aggiornati" nell'app e il primo deploy sulla VPS (`problemi-aperti.md`).
+aperti il primo deploy sulla VPS (`problemi-aperti.md`) e la fonte dell'ultimo aggiornamento dati
+(`generated_at` della run, vedi `problemi-aperti.md`).
 
 **Fuori scope per scelta**: account utente, acquisto biglietti in-app, notifiche push.
 
@@ -251,3 +253,14 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   → `google.com/maps`, riga dell'elenco continua a funzionare; `expo-doctor` 21/21. La URL ha una
   sola fonte: `cinemaMapsUrl` in `utils/mapsUrl.js` (l'helper già nato con la fase-19, che qui
   si consuma così com'è), riesportato da `constants/cinemas.js` per il solo `mapHtml.js`.
+- **2026-10-03** — **fase-7 eseguita**: avviso "programmazione non aggiornata" end-to-end. Nuovo
+  endpoint pubblico `GET /api/v1/dataset` (conteggi + `latest_scraped_at` in ISO UTC + `is_stale`
+  con soglia di 36 h in `Settings.dataset_stale_after_hours`), nuove query in
+  `showing_repo`/`cinema_repo` + `dataset_service` nel rispetto del layering (nessuna query nel
+  router, nessun SQL nel service) e banner `StaleDataBanner` nella home (non bloccante, degrada in
+  silenzio con `console.warn` se l'endpoint non risponde). Il fuso è gestito al confine del
+  dominio (i datetime naive di SQLite si assumono UTC, fuori esce solo ISO con offset). Endpoint
+  REST da 11 a 12; voce chiusa in `problemi-aperti.md` e in roadmap, al suo posto aperta la voce
+  sulla **fonte** di `latest_scraped_at` (`max(Showing.scraped_at)` = istante di insert, non della
+  run: serve `generated_at` persistito dal seed). Verificato su web con Playwright su export web:
+  dati vecchi → banner visibile, dati freschi → banner assente. 84 test backend.
