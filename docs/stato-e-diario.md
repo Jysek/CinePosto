@@ -264,3 +264,8 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   sulla **fonte** di `latest_scraped_at` (`max(Showing.scraped_at)` = istante di insert, non della
   run: serve `generated_at` persistito dal seed). Verificato su web con Playwright su export web:
   dati vecchi → banner visibile, dati freschi → banner assente. 84 test backend.
+- **2026-10-03** — coda della sessione fase-7: committati come fixture i JSON della run di scraping
+  live del 03/10 (13:17, arrivata fuori dalla sessione; `validate_output.py` senza errori critici) —
+  con essa diventa obsoleto lo `stash@{0}` della run del 30/09. Allineati i conteggi dei test
+  dichiarati alla realtà misurata: **84 backend, 185 scraper (269 totali)** in `Makefile`,
+  `AGENTS.md` e `README.md`.

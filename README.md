@@ -20,7 +20,7 @@ cineposto/
 ```
 
 Una pipeline in tre stadi collegati da **contratti espliciti**: file JSON tra scraper e backend,
-API REST tra backend e app. Ogni stadio si testa da solo — **251 test** (181 scraper, 70 backend).
+API REST tra backend e app. Ogni stadio si testa da solo — **269 test** (185 scraper, 84 backend).
 
 | Componente | Tecnologie | Cosa fa |
 |---|---|---|
