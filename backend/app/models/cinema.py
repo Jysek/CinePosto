@@ -32,6 +32,10 @@ class Cinema(Base):
     lon: Mapped[float] = mapped_column(Float, nullable=False)
     website: Mapped[str | None] = mapped_column(String, nullable=True)
     phone: Mapped[str | None] = mapped_column(String, nullable=True)
+    # Place URL di Google Maps del luogo salvato: serve all'app per aprire la
+    # scheda del luogo invece del pin di coordinate. Nullable: un cinema senza
+    # URL non è un errore, l'app cade indietro alla URL a coordinate.
+    maps_place_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     showings: Mapped[list["Showing"]] = relationship(
         back_populates="cinema",

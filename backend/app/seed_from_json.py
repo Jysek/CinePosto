@@ -28,6 +28,7 @@ from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.database import Base, SessionLocal, engine
+from app.maintenance.migrate_maps_place_url import ensure_maps_place_url_column
 from app.maintenance.migrate_removed_at import ensure_removed_at_columns
 from app.models import Cinema, Film, Showing  # noqa: F401
 from app.repositories import cinema_repo, film_repo, showing_repo
@@ -75,6 +76,8 @@ def _seed_cinemas(db: Session, data: dict) -> int:
                 "lon": entry["lon"],
                 "website": entry.get("website"),
                 "phone": entry.get("phone"),
+                # Il campo arriva dal JSON dello scraper: niente default inventati.
+                "maps_place_url": entry.get("maps_place_url"),
             },
         )
         count += 1
@@ -375,6 +378,9 @@ def seed_from_json(
     # Migrazione idempotente: il DB conserva storico e non si ricrea dal seed,
     # quindi le colonne nuove arrivano con un ALTER TABLE (vedi app/maintenance/).
     ensure_removed_at_columns(db.connection())
+    # Colonna nuova sul DB esistente: stessa regola di `removed_at` — ALTER TABLE
+    # idempotente invece di ricreare il database.
+    ensure_maps_place_url_column(db.connection())
 
     cinemas_data = _load_json(output_dir / "cinemas.json")
     films_data = _load_json(output_dir / "films.json")

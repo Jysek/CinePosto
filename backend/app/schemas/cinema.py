@@ -19,6 +19,7 @@ class CinemaOut(BaseModel):
     lon: float
     website: str | None = None
     phone: str | None = None
+    maps_place_url: str | None = None
 
 
 class CinemaWithCount(CinemaOut):
