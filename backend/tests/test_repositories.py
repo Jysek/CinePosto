@@ -4,7 +4,7 @@ Testiamo direttamente i repository con una session in-memory,
 senza far girare FastAPI. Test veloci e mirati.
 """
 
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 from sqlalchemy import select
@@ -308,3 +308,35 @@ def test_count_by_cinema_only_future(session, sample_cinema, sample_film):
 
     count = showing_repo.count_by_cinema(session, sample_cinema.slug)
     assert count == 1  # solo domani, ieri escluso
+
+
+def test_latest_scraped_at_returns_none_when_no_showings(session):
+    """Nessuno spettacolo nel DB → nessun istante di scraping."""
+    assert showing_repo.latest_scraped_at(session) is None
+
+
+def test_latest_scraped_at_returns_the_most_recent_timestamp(session, sample_cinema, sample_film):
+    """Più righe → ritorna il timestamp più recente, non l'ultima inserita in ordine."""
+    older = datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=48)
+    newer = datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=1)
+    session.add_all(
+        [
+            Showing(
+                film_id=sample_film.id,
+                cinema_slug=sample_cinema.slug,
+                date=date.today(),
+                times='["20:00"]',
+                scraped_at=newer,
+            ),
+            Showing(
+                film_id=sample_film.id,
+                cinema_slug=sample_cinema.slug,
+                date=date.today() + timedelta(days=1),
+                times='["21:00"]',
+                scraped_at=older,
+            ),
+        ]
+    )
+    session.commit()
+
+    assert showing_repo.latest_scraped_at(session) == newer

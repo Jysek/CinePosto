@@ -1,6 +1,7 @@
 """Re-export degli schemas + risoluzione delle forward reference."""
 
 from .cinema import CinemaOut, CinemaWithCount
+from .dataset import DatasetInfo
 from .film import FilmDetail, FilmOut
 from .showing import ShowingDetail, ShowingOut
 
@@ -13,6 +14,7 @@ FilmDetail.model_rebuild()
 __all__ = [
     "CinemaOut",
     "CinemaWithCount",
+    "DatasetInfo",
     "FilmOut",
     "FilmDetail",
     "ShowingOut",

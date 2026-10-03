@@ -1,6 +1,6 @@
 """Data access layer: query su Cinema. SOLO query, niente logica business."""
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.cinema import Cinema
@@ -14,6 +14,11 @@ def get_by_slug(db: Session, slug: str) -> Cinema | None:
 def list_all(db: Session) -> list[Cinema]:
     """Ritorna tutti i cinema, ordinati per nome."""
     return list(db.scalars(select(Cinema).order_by(Cinema.name)))
+
+
+def count_all(db: Session) -> int:
+    """Numero totale di cinema nel DB (usato dal riepilogo pubblico del dataset)."""
+    return db.scalar(select(func.count()).select_from(Cinema))
 
 
 def upsert(db: Session, data: dict) -> Cinema:

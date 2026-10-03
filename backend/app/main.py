@@ -11,7 +11,7 @@ from app.database import Base, engine
 # Import dei moduli models — necessario perche' SQLAlchemy scopra tutte le tabelle
 # prima di chiamare Base.metadata.create_all().
 from app.models import Cinema, Film, Showing  # noqa: F401
-from app.routers import admin, cinema, film, showings
+from app.routers import admin, cinema, dataset, film, showings
 
 
 @asynccontextmanager
@@ -57,6 +57,7 @@ def create_app() -> FastAPI:
 
     # Router principali sotto /api/v1
     app.include_router(cinema.router, prefix="/api/v1")
+    app.include_router(dataset.router, prefix="/api/v1")
     app.include_router(film.router, prefix="/api/v1")
     app.include_router(showings.router, prefix="/api/v1")
     app.include_router(admin.router, prefix="/api/v1")

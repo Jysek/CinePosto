@@ -51,6 +51,11 @@ class Settings(BaseSettings):
     # fonte andata a metà e non una programmazione cambiata: l'archiviazione si salta.
     seed_archive_min_ratio: float = 0.5
 
+    # Freschezza del dataset: lo scraper gira una volta al giorno (03:00). Oltre
+    # questa soglia l'app avverte l'utente che la programmazione può essere vecchia.
+    # 36h = due cicli mancati non si perdonano, uno saltato sì.
+    dataset_stale_after_hours: int = 36
+
     # CORS: se .env non specifica CORS_ORIGINS, usa i default dev.
     cors_origins: list[str] = Field(default_factory=lambda: list(_DEV_CORS_DEFAULTS))
 

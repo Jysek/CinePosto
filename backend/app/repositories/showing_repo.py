@@ -1,6 +1,7 @@
 """Data access layer: query su Showing (spettacoli)."""
 
 from datetime import date as date_type
+from datetime import datetime
 
 from sqlalchemy import ColumnElement, func, select
 from sqlalchemy.orm import Session, joinedload
@@ -112,6 +113,20 @@ def count_active_in_window(db: Session, cinema_slug: str, date_from: date_type, 
         )
     )
     return db.scalar(stmt)
+
+
+def count_all(db: Session) -> int:
+    """Numero totale di spettacoli nel DB (usato dal riepilogo pubblico del dataset)."""
+    return db.scalar(select(func.count()).select_from(Showing))
+
+
+def latest_scraped_at(db: Session) -> datetime | None:
+    """Ultimo istante di scraping registrato (None se il DB è vuoto).
+
+    `Showing.scraped_at` ha `server_default=func.now()`: SQLite lo scrive in UTC.
+    Qui NON si converte: il fuso si gestisce al confine (service/API).
+    """
+    return db.scalar(select(func.max(Showing.scraped_at)))
 
 
 def upsert(db: Session, data: dict) -> Showing:

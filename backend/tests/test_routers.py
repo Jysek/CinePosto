@@ -4,8 +4,9 @@ Testiamo la catena completa router → service → repo → DB in-memory
 con TestClient di FastAPI. Ogni test parte da un DB pulito.
 """
 
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 
+from app.config import get_settings
 from app.models.cinema import Cinema
 from app.models.film import Film
 from app.models.showing import Showing
@@ -144,3 +145,76 @@ def test_admin_reimport_rejects_wrong_token(client):
         headers={"X-Admin-Token": "token-sbagliato"},
     )
     assert resp.status_code == 403
+
+
+# ============ /api/v1/dataset ============
+
+
+# SQLite scrive `scraped_at` come datetime naive in UTC: i test lo simulano
+# esplicitamente, per non dipendere dall'orologio del server.
+def _naive_utc(hours_ago: int = 0) -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=hours_ago)
+
+
+def _add_showing(session, cinema, film, scraped_at: datetime, day_offset: int = 0) -> Showing:
+    showing = Showing(
+        film_id=film.id,
+        cinema_slug=cinema.slug,
+        # day_offset diverso per riga: UNIQUE(film_id, cinema_slug, date)
+        date=date.today() + timedelta(days=day_offset),
+        times='["20:00"]',
+        scraped_at=scraped_at,
+    )
+    session.add(showing)
+    session.commit()
+    return showing
+
+
+def test_dataset_info_is_public_and_returns_counts(client, session, sample_cinema, sample_film):
+    """GET /dataset senza token → 200 e conteggi coerenti con le righe inserite."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(), day_offset=0)
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(), day_offset=1)
+
+    resp = client.get("/api/v1/dataset")  # nessun header X-Admin-Token
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["showings"] == 2
+    assert body["cinemas"] == 1
+
+
+def test_dataset_info_is_not_stale_when_scraped_recently(client, session, sample_cinema, sample_film):
+    """Dato appena inserito → is_stale False e timestamp in ISO con offset UTC."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc())
+
+    body = client.get("/api/v1/dataset").json()
+    assert body["is_stale"] is False
+    assert body["age_hours"] < 1
+    # Offset esplicito: `new Date(iso)` in JS converte da solo nell'ora locale.
+    assert body["latest_scraped_at"].endswith("+00:00")
+
+
+def test_dataset_info_is_stale_when_older_than_threshold(client, session, sample_cinema, sample_film):
+    """Scraping di 48 h fa → oltre la soglia → is_stale True."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=48))
+
+    body = client.get("/api/v1/dataset").json()
+    assert body["is_stale"] is True
+    assert body["age_hours"] > body["stale_after_hours"]
+
+
+def test_dataset_info_is_stale_on_empty_database(client):
+    """DB vuoto → stale senza errore: 'nessun dato' è uno stato legittimo, non un 500."""
+    resp = client.get("/api/v1/dataset")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["is_stale"] is True
+    assert body["latest_scraped_at"] is None
+    assert body["age_hours"] is None
+    assert body["showings"] == 0
+    assert body["cinemas"] == 0
+
+
+def test_dataset_info_reports_the_configured_threshold(client):
+    """La soglia nella risposta è quella di Settings, non un numero cablato nel router."""
+    body = client.get("/api/v1/dataset").json()
+    assert body["stale_after_hours"] == get_settings().dataset_stale_after_hours
