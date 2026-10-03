@@ -19,6 +19,9 @@ CINEMAS_JSON = OUTPUT_DIR / "cinemas.json"
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 TIME_RE = re.compile(r"^\d{2}:\d{2}$")
+# Place URL di Google Maps: il dominio + /maps/place/ è la parte fissa; la coda
+# (coordinate, data blob) varia da luogo a luogo, quindi si valida solo il prefisso.
+MAPS_PLACE_URL_RE = re.compile(r"^https://www\.google\.com/maps/place/[^\s]+")
 
 ERRORS: list[str] = []
 WARNINGS: list[str] = []
@@ -141,6 +144,14 @@ def validate_cinemas() -> None:
             _warn(f"Cinema '{name}': coordinate mancanti")
         if not c.get("website"):
             _warn(f"Cinema '{name}': website mancante")
+        # maps_place_url è opzionale, ma se il valore c'è deve essere una place URL
+        # di Google Maps: una URL di altra forma (per esempio una ricerca per
+        # coordinate) riporterebbe l'utente al pin senza scheda del luogo.
+        maps_url = c.get("maps_place_url")
+        if not maps_url:
+            _warn(f"Cinema '{name}': maps_place_url mancante")
+        elif not MAPS_PLACE_URL_RE.match(maps_url):
+            _err(f"Cinema '{name}': maps_place_url malformata '{maps_url[:60]}…'")
 
 
 def print_report(stats: dict) -> None:

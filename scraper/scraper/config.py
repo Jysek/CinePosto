@@ -16,6 +16,10 @@ ERRORS_JSON = OUTPUT_DIR / "errors.json"
 CINEMAS_JSON = OUTPUT_DIR / "cinemas.json"
 
 # Coordinate approssimate - verificare prima del deploy della mappa
+#
+# maps_place_url: place URL di Google Maps, raccolte a mano il 2026-09-25; servono per
+# aprire il luogo salvato (nome, foto, recensioni) invece del pin di coordinate.
+# Le URL sono senza i parametri di sessione (hl/entry/g_ep), che scadono e non vanno salvati.
 CINEMA_LOCATIONS: dict[str, dict] = {
     "postmodernissimo": {
         "name": "PostModernissimo",
@@ -26,6 +30,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.1129,
         "lon": 12.3933,
         "website": "https://www.postmodernissimo.com",
+        "maps_place_url": "https://www.google.com/maps/place/PostModernissimo/@43.112795,12.3933012,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea07e158767a5:0xf07683069b4f710c!8m2!3d43.112795!4d12.3933012!16s%2Fg%2F11bbw_zg66",
     },
     "the-space-corciano": {
         "name": "The Space Cinema Corciano",
@@ -36,6 +41,9 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.0990,
         "lon": 12.3144,
         "website": "https://www.thespacecinema.it",
+        # Nome su Maps "The Space Cinema Crociano-Perugia": refuso del luogo su Maps,
+        # confermato dall'utente (2026-09-25) che è la sala giusta.
+        "maps_place_url": "https://www.google.com/maps/place/The+Space+Cinema+Crociano-Perugia/@43.099009,12.314361,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea711b9c24fdb:0xe2c0ffd36eaeceec!8m2!3d43.099009!4d12.314361!16s%2Fg%2F11b7ln0zcy",
     },
     "the-space-terni": {
         "name": "The Space Cinema Terni",
@@ -46,6 +54,9 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 42.5727,
         "lon": 12.6355,
         "website": "https://www.thespacecinema.it",
+        # Scarto di ~150 m dalle coordinate config: confermato dall'utente (2026-09-25),
+        # è la sala giusta e lo scarto è irrilevante.
+        "maps_place_url": "https://www.google.com/maps/place/The+Space+Cinema+Terni/@42.571487,12.6365495,17z/data=!3m1!4b1!4m6!3m5!1s0x132efb389b90c005:0x85dc3e8bb721393d!8m2!3d42.571487!4d12.6365495!16s%2Fg%2F1ptw0shwr",
     },
     "uci-perugia": {
         "name": "UCI Cinemas Perugia",
@@ -56,6 +67,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.0965,
         "lon": 12.3554,
         "website": "https://ucicinemas.it",
+        "maps_place_url": "https://www.google.com/maps/place/UCI+Cinemas+Perugia/@43.0964489,12.3554245,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea0b98aff92ed:0x3fb73a068f3414bd!8m2!3d43.0964489!4d12.3554245!16s%2Fg%2F1td2q6pc",
     },
     "cinema-zenith": {
         "name": "Cinema Zenith",
@@ -66,6 +78,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.10421,
         "lon": 12.39403,
         "website": "https://cinemazenith.it",
+        "maps_place_url": "https://www.google.com/maps/place/Cinema+Zenith/@43.1041966,12.3941355,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea0628a88a375:0xc2531e10ebbcd02b!8m2!3d43.1041966!4d12.3941355!16s%2Fg%2F1tj357f8",
     },
     "nuovo-cinema-castello": {
         "name": "Nuovo Cinema Castello",
@@ -76,6 +89,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.45808,
         "lon": 12.24147,
         "website": "https://www.nuovocinemacastello.it",
+        "maps_place_url": "https://www.google.com/maps/place/Nuovo+Cinema+Castello/@43.4581657,12.241471,17z/data=!3m1!4b1!4m6!3m5!1s0x132c7297beb30feb:0x7a7d23f9e1f320e0!8m2!3d43.4581657!4d12.241471!16s%2Fg%2F11bwqqschp",
     },
     "cinema-teatro-concordia": {
         "name": "Cinema Teatro Concordia",
@@ -86,6 +100,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 42.90966,
         "lon": 12.33726,
         "website": "https://www.cineconcordia.it",
+        "maps_place_url": "https://www.google.com/maps/place/Cinema+Concordia/@42.9097025,12.3372287,17z/data=!3m1!4b1!4m6!3m5!1s0x132ebbf2fc48d631:0x9f1d3182932cd9de!8m2!3d42.9097025!4d12.3372287!16s%2Fg%2F1tdv8y0c",
     },
     "cinema-metropolis": {
         "name": "Cinema Metropolis",
@@ -96,6 +111,7 @@ CINEMA_LOCATIONS: dict[str, dict] = {
         "lat": 43.30572,
         "lon": 12.33572,
         "website": "https://www.cinemametropolis.it",
+        "maps_place_url": "https://www.google.com/maps/place/Cinema+Metropolis/@43.3057053,12.3360185,17z/data=!3m1!4b1!4m6!3m5!1s0x132c10d0688444b9:0x4c165b5f9f294018!8m2!3d43.3057053!4d12.3360185!16s%2Fg%2F1ptxwc63j",
     },
 }
 SCRAPER_LOG = BASE_DIR / "scraper.log"
