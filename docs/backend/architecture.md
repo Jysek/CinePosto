@@ -38,6 +38,7 @@ lat         float NOT NULL
 lon         float NOT NULL
 website     string nullable
 phone       string nullable
+maps_place_url string nullable             -- place URL di Google Maps, vedi «Seed»
 ```
 
 ### Film (`films`)

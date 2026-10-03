@@ -219,3 +219,24 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   con Playwright: no bottone se sta in 3 righe, bottone + espandi/ricompatta se sfora, nessun
   bottone per sinossi brevi; `expo-doctor` 21/21, export web verde. Verifica nativa non
   eseguibile: nessun device/emulatore disponibile (niente adb, non macOS).
+
+- **2026-10-03** — **fase-19 eseguita**: al posto del pin di coordinate, Google Maps apre la
+  **scheda del luogo salvato** (nome, foto, recensioni, orari). Nuovo campo lungo tutta la catena:
+  `CINEMA_LOCATIONS` (`config.py`) → `cinemas.json` (8 place URL raccolte a mano il 2026-09-25,
+  senza parametri di sessione; `generated_at` del 25/09 non toccato — evoluzione di contratto e non
+  rigenerazione) → seed backend con migrazione idempotente `cinemas.maps_place_url`
+  (`app/maintenance/migrate_maps_place_url.py`) → `CinemaOut` → helper
+  `cinemaMapsUrl()`/`openCinemaInMaps()` in `app/src/utils/mapsUrl.js` usato da `LocationTab.openInMaps`
+  (il popup della mappa erediterà l'helper con la `fase-18`, non ancora eseguita). Il campo è
+  **nullable by design**: senza URL l'app cade indietro alla ricerca a coordinate (verificato a mano:
+  tap su Zenith senza campo → `maps/search/?api=1&query=lat,lon`). `validate_output.py`: warning se
+  mancante (campo opzionale), errore se malformata. Niente Places API di Google — 8 cinema stabili
+  curati a mano bastano. Test scraper 181 → 185 (`test_maps_place_url.py`: serializer 8/8, validatore
+  senza warning sul file committato, warning mancante, errore malformata), backend 70 → 77
+  (`test_cinema_maps_place_url.py`: migrazione, seed persiste/null/aggiorna, API valorizzato/null).
+  Verifica end-to-end con Playwright su export web: tap su Cinema Teatro Concordia (URL fornita
+  dall'utente) → «Cinema Concordia - Google Maps» con panoteca e recensioni; tap su The Space Terni
+  (confermato dall'utente) → scheda del luogo. Allineato `expo` 57.0.25 → 57.0.26 per la CI
+  (`expo-doctor` 21/21). Tra le sessioni: una run di scraping locale (30/09) aveva toccato i JSON di
+  output **senza** essere committata — le modifiche sono in `git stash` (rigenererebbero
+  `generated_at` 30/09); questa fase non le ripristina, il campo viene da `config.py`.

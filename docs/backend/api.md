@@ -1,6 +1,7 @@
 # CinePosto — Contratto API (v1)
 
-> Verificato su `a360d5a` (`2026-09-25`): semantica dei film/spettacoli archiviati (§2, §4.6, §5).
+> Verificato su fase-19 (2026-10-03): campo `maps_place_url` in `Cinema`/`CinemaWithCount` (§4.1, §4.2).
+> Precedente: `a360d5a` (`2026-09-25`) — semantica dei film/spettacoli archiviati (§2, §4.6, §5).
 
 > **Contratto autorevole degli endpoint**: URL, forma delle risposte, affidabilità
 > dei dati, CORS. L'app è ora costruita e integrata — per il **client reale** vedi
@@ -73,6 +74,7 @@ Il progetto è **JavaScript** (`.js`), non TypeScript. Per avere comunque **auto
  * @property {number} lon
  * @property {string|null} website
  * @property {string|null} phone
+ * @property {string|null} maps_place_url - place URL di Google Maps del luogo salvato
  */
 
 /**
@@ -178,7 +180,8 @@ curl http://localhost:8000/api/v1/cinema
     "lat": 43.1129,
     "lon": 12.3933,
     "website": "https://www.postmodernissimo.com",
-    "phone": null
+    "phone": null,
+    "maps_place_url": "https://www.google.com/maps/place/PostModernissimo/@43.112795,12.3933012,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea07e158767a5:0xf07683069b4f710c!8m2!3d43.112795!4d12.3933012!16s%2Fg%2F11bbw_zg66"
   },
   { "slug": "the-space-corciano", "...": "..." },
   { "slug": "uci-perugia", "...": "..." }
@@ -217,6 +220,7 @@ async function fetchCinemas() {
   "lon": 12.3933,
   "website": "...",
   "phone": null,
+  "maps_place_url": "...",
   "showings_count": 42
 }
 ```
@@ -483,7 +487,7 @@ Le percentuali qui sotto sono una **misura storica al 2026-07-02** sul dataset d
 | `title` | `Film` | Titolo mostrato |
 | `poster_url` | `Film` | Locandina in card e dettaglio |
 | `synopsis` | `Film` | Testo descrittivo |
-| `cinema.slug` `name` `city` `address` `region` `lat` `lon` `website` | `Cinema` | Card cinema, marker mappa, link sito |
+| `cinema.slug` `name` `city` `address` `region` `lat` `lon` `website` `maps_place_url` | `Cinema` | Card cinema, marker mappa, link sito, apertura in Maps |
 | `date` `times` | `Showing` | Data + array orari |
 | `buy_url` | `Showing` | Bottone "Acquista biglietto" |
 
@@ -524,6 +528,7 @@ Le percentuali qui sotto sono una **misura storica al 2026-07-02** sul dataset d
 4. **`times` invece è già array**: `showing.times[0]` funziona direttamente, no parse
 5. **`date` è stringa ISO** `"2026-07-02"`: parsa con `new Date(showing.date)` per formattare
 6. **`year`, `original_title`, `phone`** → considerali sempre null di default, mostra solo se presenti
+7. **`maps_place_url`** → oggi è valorizzata per tutti gli 8 cinema (URL raccolte a mano il 2026-09-25), ma resta **nullable by design**: se è null apri la ricerca a coordinate (vedi `app/src/utils/mapsUrl.js`)
 
 ### Esempio pattern React Native
 

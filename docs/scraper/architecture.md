@@ -1,7 +1,7 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `6fff83b` (`2026-09-26`): capitolo PostModernissimo e ordine delle fonti di testo
-> confrontati col codice; il resto del capitolo è la verifica precedente su `5feb740`.
+> Verificato su fase-19 (2026-10-03): campo `maps_place_url` in `CINEMA_LOCATIONS` e in `cinemas.json`.
+> Precedente: `6fff83b` (`2026-09-26`) — capitolo PostModernissimo e ordine delle fonti di testo.
 
 ## Indice
 
@@ -180,7 +180,7 @@ class ScrapeResult:
 - `output_to_json(films, errors, city) -> dict` — produce la struttura finale di `movies.json`
 - `films_to_json(films) -> dict` — produce `films.json` DB-ready (tabella `films`): id=title_normalized, campi anagrafici, first_seen/last_seen estratti da history
 - `showings_to_json(films, date_from, date_to) -> dict` — produce `showings.json` DB-ready (tabella `showings`): film_id FK, cinema_slug FK, date, times JSON array
-- `cinemas_to_json(locations) -> dict` — produce `cinemas.json` DB-ready (tabella `cinemas`): slug PK, nome, lat, lon, indirizzo, website
+- `cinemas_to_json(locations) -> dict` — produce `cinemas.json` DB-ready (tabella `cinemas`): slug PK, nome, lat, lon, indirizzo, website, place URL di Google Maps (`maps_place_url`). Il serializer spedisce **tutte** le chiavi di `CINEMA_LOCATIONS` (`{"slug": slug, **data}`): ogni campo nuovo finisce da solo nel JSON, nessuna modifica al serializer serve
 
 ---
 
@@ -661,11 +661,24 @@ Una riga per combinazione (film, cinema, data). `film_id` FK→`films.id`, `cine
       "region": "Umbria",
       "lat": 43.0745,
       "lon": 12.2891,
-      "website": "https://ucicinemas.it"
+      "website": "https://ucicinemas.it",
+      "maps_place_url": "https://www.google.com/maps/place/UCI+Cinemas+Perugia/@43.0964489,12.3554245,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea0b98aff92ed:0x3fb73a068f3414bd!8m2!3d43.0964489!4d12.3554245!16s%2Fg%2F1td2q6pc"
     }
   ]
 }
 ```
+
+Il campo `maps_place_url` è la place URL di Google Maps del luogo salvato, **raccolta a mano**
+(su Maps si apre il luogo e si prende l'URL risolto, senza i parametri di sessione `hl`/`entry`/
+`g_ep`, che scadono). Serve all'app per aprire la scheda del luogo — nome, foto, recensioni, orari —
+invece del pin di coordinate. Niente Places API di Google (chiave, costi, privacy): 8 cinema stabili
+curati a mano bastano ed è il dato "giusto". `validate_output.py` segnala un **warning** se un
+cinema non ce l'ha (il campo è opzionale) e un **errore** se una URL presente è malformata (non
+à `https://www.google.com/maps/place/…`: manderebbe l'utente da una parte sbagliata di Maps).
+
+Il sorgente è `CINEMA_LOCATIONS` in `config.py` (slug, nome, indirizzo, city, region, lat, lon,
+website, maps_place_url): la serializzazione `cinemas_to_json` non filtra le chiavi, quindi ogni
+campo del dizionario finisce nel JSON.
 
 **Campi nullable:** `poster`, `description`, `director`, `duration`, `genres` (può essere `null`), `screen`, `language`, `source_url`, `session_attributes`.
 

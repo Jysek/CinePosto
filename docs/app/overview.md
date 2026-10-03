@@ -1,7 +1,9 @@
 # App — React Native + Expo
 
-> Verificato su `857c68b` (`2026-09-24`): struttura, schermate, client API e costanti
-> confrontati col codice; l'app non è stata avviata in quella sessione.
+> Verificato su fase-19 (`2026-10-03`): apertura di Google Maps dalla schermata Località verificata
+> su web con Playwright (tap sulla riga → scheda del luogo; cinema senza `maps_place_url` → fallback
+> a coordinate).
+> Precedente: `857c68b` (`2026-09-24`) — struttura, schermate, client API e costanti.
 
 App mobile/web di CinePosto: mostra i film in programmazione nei cinema dell'Umbria,
 con orari per data e cinema, ricerca, dettaglio film e mappa. Consuma il backend
@@ -54,7 +56,9 @@ app/
     │   ├── config.js      ← API_BASE (configurabile via env)
     │   ├── colors.js      ← palette tema scuro
     │   └── cinemas.js     ← presentazione dei cinema: colore e logo (l'anagrafica arriva dall'API)
-    ├── utils/dates.js     ← date in ora locale (YYYY-MM-DD), prossimi 7 giorni
+    ├── utils/
+    │   ├── dates.js       ← date in ora locale (YYYY-MM-DD), prossimi 7 giorni
+    │   └── mapsUrl.js     ← URL di Google Maps di un cinema (place URL o fallback a coordinate)
     ├── components/
     │   ├── SwipeableHero.js   ← carosello "hero" della Home
     │   ├── MovieGrid.js       ← griglia locandine adattiva
@@ -103,10 +107,13 @@ SplashScreen
 - **SearchTab** (Cerca): ricerca per titolo con **debounce 300 ms** e annullamento
   delle risposte obsolete (`requestId`): se digiti in fretta conta solo l'ultima query.
 - **LocationTab** (Località): mappa OpenFreeMap con i cinema (marker con logo) e
-  l'elenco con indirizzi; il tap apre il cinema in Google Maps. **I dati dei cinema
-  arrivano dall'API** (`getCinemas()`, oggi 8 sale): slug, nome, indirizzo e
-  coordinate non sono più costanti dell'app. In `constants/cinemas.js` restano solo
-  colore e logo (presentazione).
+  l'elenco con indirizzi; il tap apre il cinema in Google Maps **alla scheda del
+  luogo salvato** (nome, foto, recensioni, orari): unica fonte dell'URL è
+  `cinemaMapsUrl()` in `utils/mapsUrl.js`, che usa `maps_place_url` dell'API e
+  quando manca cade indietro alla ricerca a coordinate (pin senza scheda).
+  **I dati dei cinema arrivano dall'API** (`getCinemas()`, oggi 8 sale): slug, nome,
+  indirizzo, coordinate e place URL non sono costanti dell'app. In
+  `constants/cinemas.js` restano solo colore e logo (presentazione).
 - **MovieDetailScreen** (dettaglio): poster, durata, regista, generi, trama con
   "leggi di più", link al trailer (ricerca YouTube) e **orari raggruppati per cinema**
   nella data scelta. Si apre sulla data da cui arrivi (passata dalla Home) e, se quel

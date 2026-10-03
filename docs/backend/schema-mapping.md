@@ -1,7 +1,7 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su `056f04f` (`2026-09-26`): non-degrado di `synopsis` in `upsert_from_scraper`.
-> Il resto del capitolo è della verifica precedente su `20ca1bb`.
+> Verificato su fase-19 (2026-10-03): campo `maps_place_url` nel JSON e nella tabella `cinemas` (§1).
+> Precedente: `056f04f` (`2026-09-26`) — non-degrado di `synopsis` in `upsert_from_scraper`.
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).
@@ -37,7 +37,8 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
       "region": "Umbria",
       "lat": 43.1129,
       "lon": 12.3933,
-      "website": "https://www.postmodernissimo.com"
+      "website": "https://www.postmodernissimo.com",
+      "maps_place_url": "https://www.google.com/maps/place/PostModernissimo/@43.112795,12.3933012,17z/data=!3m1!4b1!4m6!3m5!1s0x132ea07e158767a5:0xf07683069b4f710c!8m2!3d43.112795!4d12.3933012!16s%2Fg%2F11bbw_zg66"
     },
     ...
   ]
@@ -56,6 +57,7 @@ Schema completamente in **inglese** (decisione L1+L2): tabelle DB e chiavi JSON 
 | `lat` | `lat` | float |
 | `lon` | `lon` | float |
 | `website` | `website` | nullable |
+| `maps_place_url` | `maps_place_url` | nullable: place URL di Google Maps del luogo salvato, raccolte a mano (2026-09-25); un cinema senza URL non è un errore |
 | — | `phone` | non presente nel JSON; sempre null al seed |
 
 **Strategia seed**: per ogni record nel JSON → `cinema_repo.upsert(data)` (SELECT by slug, UPDATE o INSERT).
@@ -274,10 +276,11 @@ anni lo stesso film torna al cinema e voglio riusare/risalire ai dati vecchi»).
 | **Invariante** | a fine seed la query «coppie con lo stesso `wikidata_id`» deve tornare **0**: il vincolo `UNIQUE(wikidata_id)` la garantisce e la query la certifica nei log invece di darla per scontata |
 | **Idempotenza** | rieseguire il seed sugli stessi JSON non cambia nulla: tutti i contatori a 0 |
 
-Le colonne arrivano con una migrazione **idempotente**
-(`app/maintenance/migrate_removed_at.py`: `ALTER TABLE` solo se la colonna manca). Il DB contiene
-storico e non si ricrea dal seed, quindi qui non serve `create_all` da zero né Alembic. Interruttore:
-`seed_archive_enabled` nella config del backend.
+Le colonne che si aggiungono **dopo** il primo schema arrivano con migrazioni **idempotenti**
+(`app/maintenance/`: `ALTER TABLE` solo se la colonna manca): `removed_at` su films/showings per
+l'archiviazione, `maps_place_url` su cinemas per la place URL di Google Maps. Il DB contiene
+storico e non si ricrea dal seed, quindi qui non serve `create_all` da zero né Alembic.
+Interruttore dell'archiviazione: `seed_archive_enabled` nella config del backend.
 
 ---
 
