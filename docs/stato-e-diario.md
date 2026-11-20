@@ -1,7 +1,7 @@
 # CinePosto — Stato attuale e diario
 
 > Verificato su fase-7 (`2026-10-03`): avviso "programmazione non aggiornata" (12 endpoint REST,
-> 84 test backend). Precedente: `7e325b9` (`2026-10-03`).
+> 95 test backend). Precedente: `7e325b9` (`2026-10-03`).
 
 **Come si usa questo file.** La sezione «Stato attuale» è una fotografia di oggi e si **riscrive**
 quando cambia. La sezione «Diario» è **append-only**: si aggiunge in coda, non si riscrive mai il
@@ -15,7 +15,7 @@ web, iOS e Android dalla stessa codebase. La CI testa backend, scraper e export 
 | Area | Stato | Dove |
 |---|---|---|
 | Scraper | 8 connettori attivi | `scraper/copertura.md` |
-| Backend | 12 endpoint REST, 84 test | `backend/api.md` |
+| Backend | 12 endpoint REST, 95 test | `backend/api.md` |
 | App | web + iOS + Android, dati dall'API | `app/overview.md` |
 | Deploy | procedura pronta e verificata in locale, non ancora eseguita sulla VPS | `deploy.md` |
 
@@ -285,3 +285,10 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   aggiorna a ogni seed, test del rollback che forza un errore dopo la scrittura della meta), P2 su
   admin/reimport/test di discriminazione chiusi; zero P0. Test: **95 backend**,
   **185 scraper + 1 xfail**.
+- **2026-11-20** — CI rossa sull'ultimo commit per sola deriva di versioni, non di codice:
+  `npx expo install` ha allineato `expo` a `~57.0.33`, `expo-asset` a `~57.0.21` e
+  `expo-splash-screen` a `~57.0.11` (`app/package.json` e lockfile). Verifiche: `npx expo-doctor`
+  21/21, `make check-app-web` con export web servito su :3000 (HTTP 200 su index e bundle, 8 cinema
+  dall'API). Allineati i conteggi dei test dichiarati alla realtà misurata — 95 backend, 186 scraper
+  (di cui 1 `xfail`, il sequel con numeri romani), 281 totali — in `Makefile`, `AGENTS.md`,
+  `README.md`, `panoramica.md` e nella tabella «Stato attuale». Nessun cambiamento di codice.
