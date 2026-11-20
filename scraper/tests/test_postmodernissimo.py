@@ -16,6 +16,15 @@ def _build_rsc_push(movies: list[dict]) -> str:
     return f'self.__next_f.push([1,"{escaped}"]);\n'
 
 
+_EXTRA_PERMALINK = "https://www.postmodernissimo.com/extra/prince-of-broadway"
+_FILMS_PERMALINK = "https://www.postmodernissimo.com/films/prince-of-broadway"
+
+
+def _show(date: str, orario: str) -> dict:
+    """Una proiezione nel formato del payload RSC (date YYYYMMDD, orario HH:MM)."""
+    return {"date": date, "orario": orario, "opzioni": "off", "nota": None, "ticket": ""}
+
+
 @responses.activate
 def test_postmodernissimo_connector_scrape():
     rsc_push = _build_rsc_push(
@@ -152,3 +161,168 @@ def test_postmodernissimo_director_cleaned():
 
     assert len(result.films) == 1
     assert result.films[0].director == "John Doe"
+
+
+@responses.activate
+def test_extra_permalink_resolves_to_film_page_and_merges_shows():
+    # Arrange: il record /extra/ porta il film annidato sotto `movie`, più un record
+    # /films/ separato dello stesso film con date diverse.
+    extra_record = {
+        "id": 41200,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _EXTRA_PERMALINK,
+        "content": "Proiezione unica in lingua originale.",
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "21:30")]},
+        "movie": {
+            "id": 30500,
+            "title": "Prince of Broadway",
+            "slug": "prince-of-broadway",
+            "permalink": _FILMS_PERMALINK,
+            "content": "Sinossi del film.",
+            "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+            "programmazione": {"spazio_prog": "postmod", "shows": []},
+        },
+    }
+    films_record = {
+        "id": 30500,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _FILMS_PERMALINK,
+        "content": "Sinossi del film dalla pagina del film.",
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261124", "21:00")]},
+    }
+    rsc_push = _build_rsc_push([extra_record, films_record])
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    # Pagina del film: senza payload RSC di show, la riconciliazione tiene i dati homepage.
+    responses.add(
+        responses.GET,
+        _FILMS_PERMALINK,
+        body="<html><body><article><p>Sinossi dalla pagina del film.</p></article></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23", "2026-11-24"])
+
+    # Assert: una sola voce di film, link sulla pagina /films/ e orari di entrambi i record.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert film.title == "Prince of Broadway"
+    assert [s.date for s in film.present_in] == ["2026-11-23", "2026-11-24"]
+    assert film.present_in[0].times == ["21:30"]
+    assert film.present_in[1].times == ["21:00"]
+    assert {s.source_url for s in film.present_in} == {_FILMS_PERMALINK}
+    assert result.errors == []
+
+
+@responses.activate
+def test_extra_record_without_film_page_keeps_shows_without_source_url():
+    # Arrange: nessun permalink /films/ in tutta la pagina, quindi niente da risolvere.
+    rsc_push = _build_rsc_push(
+        [
+            {
+                "id": 41201,
+                "title": "Yalla Parkour",
+                "slug": "yalla-parkour",
+                "permalink": "https://www.postmodernissimo.com/extra/yalla-parkour",
+                "content": "",
+                "details": {"regia": "Areej Mahmoud", "genere": "Documentario", "durata": "85"},
+                "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "19:00")]},
+            }
+        ]
+    )
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    # Sentinella: se il connettore chiedesse la route morta la richiesta finirebbe in
+    # responses.calls (invece di sollevare) e l'asserzione finale la vedrebbe.
+    responses.add(
+        responses.GET,
+        "https://www.postmodernissimo.com/extra/yalla-parkour",
+        body="<html><body></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23"])
+
+    # Assert
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert film.title == "Yalla Parkour"
+    assert film.present_in[0].date == "2026-11-23"
+    assert film.present_in[0].times == ["19:00"]
+    assert film.present_in[0].source_url is None
+    requested = [call.request.url for call in responses.calls]
+    assert all("/extra/" not in url for url in requested), requested
+
+
+@responses.activate
+def test_event_permalink_is_still_discarded():
+    # Arrange: record sotto /eventi/, con un titolo senza parole-spia da evento.
+    rsc_push = _build_rsc_push(
+        [
+            {
+                "id": 41202,
+                "title": "Notte Horror",
+                "slug": "notte-horror",
+                "permalink": "https://www.postmodernissimo.com/eventi/notte-horror",
+                "content": "",
+                "details": {"regia": None, "genere": "", "durata": None},
+                "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "23:00")]},
+            }
+        ]
+    )
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23"])
+
+    # Assert
+    assert result.films == []
+
+
+@responses.activate
+def test_extra_record_with_mismatched_film_slug_stays_unresolved():
+    # Arrange: il permalink /films/ vicino è di un altro film, quindi non vale la risoluzione.
+    rsc_push = _build_rsc_push(
+        [
+            {
+                "id": 41203,
+                "title": "Prince of Broadway",
+                "slug": "prince-of-broadway",
+                "permalink": _EXTRA_PERMALINK,
+                "content": "Proiezione unica.",
+                "details": {"regia": "Sean Baker", "genere": "Commedia", "durata": "98"},
+                "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "18:00")]},
+                "movie": {
+                    "id": 30999,
+                    "title": "Un Altro Film",
+                    "slug": "un-altro-film",
+                    "permalink": "https://www.postmodernissimo.com/films/un-altro-film",
+                    "content": "",
+                    "details": {},
+                    "programmazione": {"spazio_prog": "postmod", "shows": []},
+                },
+            }
+        ]
+    )
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23"])
+
+    # Assert: gli orari restano, il link no.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert film.present_in[0].times == ["18:00"]
+    assert film.present_in[0].source_url is None

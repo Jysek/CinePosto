@@ -34,6 +34,14 @@ _RSC_PUSH_RE = re.compile(r'self\.__next_f\.push\(\[1,"(.*?)"\]\)', re.DOTALL)
 # Inizio di una voce film nel payload unescapato (stesso ancoraggio di _parse_rsc_payload).
 _MOVIE_START_RE = re.compile(r'\{"id":(\d+),"title":"([^"]*)","slug":"([^"]+)","permalink":"([^"]+)"')
 
+# Qualsiasi coppia "permalink":"..." nel payload unescapato (per risolvere le route morte).
+_PERMALINK_VALUE_RE = re.compile(r'"permalink":"([^"]+)"')
+
+# Route del sito: `/films/` è la pagina del film, `/extra/` è una route morta (404) che il
+# payload porta ancora per le proiezioni fuori cartellone.
+_FILMS_ROUTE = "/films/"
+_EXTRA_ROUTE = "/extra/"
+
 
 def _decode_html_entities(text: str) -> str:
     """Decodifica i titoli estratti dal payload RSC: prima gli escape Unicode JSON (\\u0026 -> &), poi le entità HTML (&amp; -> &). L'ordine conta."""
@@ -205,13 +213,21 @@ class PostModernissimoConnector(BaseConnector):
             mid, title, slug, permalink = m.groups()
             if "/eventi/" in permalink:
                 continue
+            if _EXTRA_ROUTE in permalink:
+                # Prima della chiave di deduplica: così la voce `/extra/` e quella
+                # `/films/` dello stesso film si fondono in un solo candidato.
+                permalink = self._resolve_film_permalink(unescaped, m.start(), slug)
+
+            # Senza pagina film la chiave è lo slug: due film diversi, entrambi senza
+            # link, non devono fondersi in un solo candidato.
+            permalink_key = permalink or slug
 
             shows = self._extract_shows(unescaped, m.start())
             details = self._extract_details(unescaped, m.start())
 
-            existing = candidates_by_permalink.get(permalink)
+            existing = candidates_by_permalink.get(permalink_key)
             if existing is None:
-                candidates_by_permalink[permalink] = {
+                candidates_by_permalink[permalink_key] = {
                     "id": mid,
                     "title": title,
                     "slug": slug,
@@ -242,6 +258,20 @@ class PostModernissimoConnector(BaseConnector):
         return [
             {k: v for k, v in m.items() if k != "_stream_pos"} for m in candidates_by_permalink.values() if m["shows"]
         ]
+
+    def _resolve_film_permalink(self, text: str, start: int, slug: str) -> str | None:
+        """Permalink della pagina film per una voce nata sotto la route morta `/extra/`.
+
+        Il payload annida la pagina `/films/` poco dopo la voce `/extra/`, quindi si
+        cerca solo nella finestra utile (3000 caratteri, come `_extract_content`) per
+        non agganciare il film successivo. `None` se la pagina film non c'è: gli orari
+        restano, il link no.
+        """
+        for m in _PERMALINK_VALUE_RE.finditer(text, start, start + 3000):
+            permalink = m.group(1)
+            if _FILMS_ROUTE in permalink and permalink.rstrip("/").split("/")[-1] == slug:
+                return permalink
+        return None
 
     _EVENT_HINTS = (
         "presentano",
