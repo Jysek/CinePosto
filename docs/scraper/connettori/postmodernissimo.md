@@ -1,8 +1,8 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `6fff83b` (`2026-09-26`): connettore, test e ordine delle fonti di testo
-> confrontati col codice. Il markup del sito osservato l'ultima volta in una run reale non è
-> stato ri-verificato in questa sessione (nessuno scraping live).
+> Verificato su `aa3be46` (`2026-11-20`): risoluzione del permalink `/extra/` sulla pagina
+> `/films/`, riparazione dei JSON dell'ultima run. Il markup del sito è stato osservato in una run
+> reale del 2026-11-20; nessuna richiesta live in questa sessione.
 
 > **Stato**: 🟢 in produzione, connettore storico · Perugia (PG) · Nessuna autenticazione.
 > Il comportamento tecnico generale è in [`../architecture.md`](../architecture.md#postmodernissimo);
@@ -43,6 +43,17 @@ finestre di ricerca, estrae:
 Lo stesso `permalink` può comparire più volte nello stream: gli show si accumulano senza
 duplicati e, per la `content`, si tiene la variante **più completa** (mai una più corta o tronca).
 
+**Route `/extra/` (dal 2026-11-10 circa non esiste più).** Il sito espone le proiezioni delle
+rassegne anche sotto `…/extra/<slug>`, che risponde 404, dentro un record che porta un oggetto
+`movie` annidato con il permalink buono `…/films/<slug>`. Il parser risolve quindi il permalink
+**prima** di usarlo come chiave: se contiene `/extra/` prende il primo permalink `/films/`
+successivo al match con lo stesso slug, altrimenti il record resta senza link. Effetti: le due
+voci dello stesso film (una `/extra/`, una `/films/`) si fondono in un solo film con gli show
+accumulati; `source_url` punta sempre a una pagina che risponde 200; nessuna richiesta parte
+mai verso `/extra/`, quindi la run non produce più due errori `detail` spurii. Gli orari restano
+anche quando la pagina film non c'è: la proiezione esce con `source_url` assente, perché gli
+orari sono veri e altrimenti persi.
+
 ## 4. Fonte secondaria: card HTML
 
 `_parse_film_cards` legge `ul.movie-container > li.movie-item` per i poster (`<img>`) e come
@@ -54,7 +65,8 @@ della run precedente). I poster non sono nel RSC.
 La pagina di dettaglio è la fonte canonica degli **orari** (la homepage passa da una edge-cache
 che può restare indietro di ore). `_reconcile_with_detail` confronta la firma degli show e
 sostituisce quelli della homepage se differiscono; se il dettaglio non è disponibile si tengono
-i dati della homepage.
+i dati della homepage. Il dettaglio si chiede solo a un permalink che risponde 200: un record
+senza link (vedi §3, route `/extra/`) viene saltato, non inseguito.
 
 ## 6. Sinossi: ordine delle fonti (dal più completo al più debole)
 
@@ -77,7 +89,9 @@ sovrascrive con una meta description troncata.
 
 ## 8. Test
 
-- `scraper/tests/test_postmodernissimo.py` — parsing RSC, direttore, filtri evento/weekend;
+- `scraper/tests/test_postmodernissimo.py` — parsing RSC, direttore, filtri evento/weekend,
+  risoluzione del permalink `/extra/` (fusione delle due voci, record senza pagina film tenuto con
+  `source_url` assente, nessuna richiesta verso `/extra/`, slug non combaciante non risolto);
 - `scraper/tests/test_postmodernissimo_description.py` — ordine delle fonti di testo, non-degrado,
   dettaglio che fallisce senza rompere la run;
 - `scraper/tests/test_postmod_detail_reconcile.py` — il dettaglio vince sulla homepage per gli orari.

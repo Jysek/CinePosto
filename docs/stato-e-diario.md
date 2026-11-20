@@ -292,3 +292,15 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   dall'API). Allineati i conteggi dei test dichiarati alla realtà misurata — 95 backend, 186 scraper
   (di cui 1 `xfail`, il sequel con numeri romani), 281 totali — in `Makefile`, `AGENTS.md`,
   `README.md`, `panoramica.md` e nella tabella «Stato attuale». Nessun cambiamento di codice.
+- **2026-11-20** — PostModernissimo: la route `/extra/` non esiste più e il connettore la inseguiva.
+  Il payload RSC porta le proiezioni delle rassegne anche sotto `…/extra/<slug>` (404 da almeno dieci
+  giorni: gli stessi errori erano nel log del 10/11), in un record che annida la pagina buona
+  `…/films/<slug>`; il filtro esistente scartava solo `/eventi/`. Due conseguenze: due errori
+  `detail` a ogni run e due proiezioni con `buy_url` su una pagina 404. Ora
+  `_resolve_film_permalink` risolve il permalink `/extra/` sul primo `/films/` successivo con lo
+  stesso slug, **prima** della chiave di deduplica: le due voci dello stesso film si fondono
+  («Prince of Broadway» 23 e 24/11 in una scheda), `source_url` punta sempre a una pagina 200 e
+  nessuna richiesta parte verso `/extra/`. Senza pagina film gli orari si tengono e `source_url`
+  resta assente. Riparati anche i quattro JSON dell'ultima run (link su `/films/`, via i due 404 da
+  `movies.json`, `errors.json` in `.gitignore`). Test: **189 scraper + 1 xfail (190)**, **95
+  backend**, 285 totali; `make lint` e `make test-scraper` verdi.

@@ -1,7 +1,8 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su fase-19 (2026-10-03): campo `maps_place_url` in `CINEMA_LOCATIONS` e in `cinemas.json`.
-> Precedente: `6fff83b` (`2026-09-26`) — capitolo PostModernissimo e ordine delle fonti di testo.
+> Verificato su `aa3be46` (`2026-11-20`): risoluzione del permalink `/extra/` nel connettore
+> PostModernissimo. Precedente: fase-19 (2026-10-03) — campo `maps_place_url` in `CINEMA_LOCATIONS`
+> e in `cinemas.json`.
 
 ## Indice
 
@@ -216,7 +217,7 @@ PostModernissimo usa Next.js 13 con React Server Components. Il payload dati è 
 
 1. `GET /` — scarica la homepage
 2. `_parse_rsc_payload(html)` — estrae il chunk più grande dal pattern `self.__next_f.push([1,"..."])` e lo unescapa (solo `\"` e `\\`)
-3. Regex `{"id":N,"title":"...","slug":"...","permalink":"..."}` trova tutti i film nel payload
+3. Regex `{"id":N,"title":"...","slug":"...","permalink":"..."}` trova tutti i film nel payload. Un permalink che contiene `/extra/` (route rimossa dal sito, risponde 404) viene **risolto** sul primo permalink `/films/` successivo al match con lo stesso slug; se non esiste, il record resta senza link e le sue proiezioni escono con `source_url` assente. La risoluzione avviene prima della chiave di deduplica, quindi la voce `/extra/` e la voce `/films/` dello stesso film si fondono in un solo film
 4. Per ogni film: `_extract_shows(text, pos)` cerca il blocco `"shows":[...]` entro 5000 caratteri dall'inizio del film; `_extract_details(text, pos)` cerca `"details":{...}` entro 3000 caratteri; `_extract_content(text, pos)` cerca la sinossi intera in `"content":"..."` nella stessa finestra (scartata se nel frattempo è iniziata un'altra voce film)
 5. `_is_event_stub(movie)` filtra eventi non-film (parole chiave: "ospiti", "rassegna", "concerto", ecc.)
 6. Filtra gli show per `target_date_ints` e `opzioni != "noprog"`
