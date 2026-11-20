@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.config import get_settings
 from app.database import get_db
 from app.models import Cinema, Film, Showing
+from app.repositories import dataset_meta_repo
 from app.seed_from_json import seed_from_json
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -56,7 +57,13 @@ def dataset_info(db: Session = Depends(get_db)):
     cinemas_count = db.scalar(select(func.count()).select_from(Cinema))
     films_count = db.scalar(select(func.count()).select_from(Film))
     showings_count = db.scalar(select(func.count()).select_from(Showing))
-    latest_scraped = db.scalar(select(func.max(Showing.scraped_at)))
+    # Stessa fonte dell'API pubblica (`dataset_service`): due endpoint con lo stesso
+    # nome di campo non possono avere due significati. Il fallback su
+    # `max(Showing.scraped_at)` serve solo a un DB non ancora seedato, dove la meta
+    # non esiste: li' l'istante di insert e' l'unica data disponibile.
+    latest_scraped = dataset_meta_repo.get_generated_at(db)
+    if latest_scraped is None:
+        latest_scraped = db.scalar(select(func.max(Showing.scraped_at)))
 
     return {
         "cinemas": cinemas_count,

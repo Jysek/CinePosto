@@ -10,6 +10,7 @@ from app.config import get_settings
 from app.models.cinema import Cinema
 from app.models.film import Film
 from app.models.showing import Showing
+from app.repositories import dataset_meta_repo
 
 # ============ /health ============
 
@@ -170,6 +171,12 @@ def _add_showing(session, cinema, film, scraped_at: datetime, day_offset: int = 
     return showing
 
 
+def _set_generated_at(session, generated_at: datetime) -> None:
+    """Scrive la meta come fa il seed: e' la fonte della freschezza."""
+    dataset_meta_repo.upsert_generated_at(session, generated_at)
+    session.commit()
+
+
 def test_dataset_info_is_public_and_returns_counts(client, session, sample_cinema, sample_film):
     """GET /dataset senza token → 200 e conteggi coerenti con le righe inserite."""
     _add_showing(session, sample_cinema, sample_film, _naive_utc(), day_offset=0)
@@ -218,3 +225,39 @@ def test_dataset_info_reports_the_configured_threshold(client):
     """La soglia nella risposta è quella di Settings, non un numero cablato nel router."""
     body = client.get("/api/v1/dataset").json()
     assert body["stale_after_hours"] == get_settings().dataset_stale_after_hours
+
+
+def test_dataset_info_is_not_stale_when_run_inserted_no_new_showings(client, session, sample_cinema, sample_film):
+    """Run che non inserisce righe nuove: showings di 10 giorni fa, run di adesso.
+
+    L'istante che conta è quello della run: le righe non vengono reinserite perché
+    il palinsesto non è cambiato, quindi `scraped_at` resta vecchio e non è la fonte.
+    """
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=240), day_offset=0)
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=240), day_offset=1)
+    _set_generated_at(session, _naive_utc())
+
+    body = client.get("/api/v1/dataset").json()
+    assert body["is_stale"] is False
+    assert body["age_hours"] < 1
+
+
+def test_dataset_info_is_stale_when_seeded_from_old_json(client, session, sample_cinema, sample_film):
+    """Seed su JSON vecchi: righe appena inserite, ma la run è di 48 h fa → stale."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc())
+    _set_generated_at(session, _naive_utc(hours_ago=48))
+
+    body = client.get("/api/v1/dataset").json()
+    assert body["is_stale"] is True
+    assert body["age_hours"] > body["stale_after_hours"]
+
+
+def test_dataset_info_falls_back_to_max_scraped_at_without_meta(client, session, sample_cinema, sample_film):
+    """Senza meta (DB seedato prima della tabella) resta la semantica di prima: max(scraped_at)."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=48), day_offset=0)
+    newest = _naive_utc(hours_ago=2)
+    _add_showing(session, sample_cinema, sample_film, newest, day_offset=1)
+
+    body = client.get("/api/v1/dataset").json()
+    assert body["latest_scraped_at"] == newest.replace(tzinfo=UTC).isoformat()
+    assert body["is_stale"] is False
