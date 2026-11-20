@@ -1,6 +1,7 @@
 # CinePosto — Contratto API (v1)
 
-> Verificato su fase-7 (2026-10-03): nuovo endpoint pubblico `GET /dataset` (§4.10).
+> Verificato su feat/backend-dataset-meta (2026-11-19): `latest_scraped_at` viene dalla run di scraping, non dall'insert (§4.10).
+> Precedente: fase-7 (2026-10-03) — nuovo endpoint pubblico `GET /dataset` (§4.10).
 > Precedente: fase-19 (2026-10-03) — campo `maps_place_url` in `Cinema`/`CinemaWithCount` (§4.1, §4.2).
 > Precedente: `a360d5a` (`2026-09-25`) — semantica dei film/spettacoli archiviati (§2, §4.6, §5).
 
@@ -374,7 +375,7 @@ admin `/admin/dataset-info` resta protetto e **separato**: non è questo.
 
 | Campo | Tipo | Significato |
 |---|---|---|
-| `latest_scraped_at` | `string \| null` | istante della run di scraping che ha prodotto i dati oggi nel DB, ISO **con offset UTC**; `null` se non c'è nessun dato |
+| `latest_scraped_at` | `string \| null` | istante della run di scraping che ha prodotto i dati oggi nel DB: il `generated_at` di `showings.json`, ISO **con offset UTC**; `null` se non c'è nessun dato |
 | `age_hours` | `number \| null` | ore trascorse da `latest_scraped_at`; `null` se non c'è nessun dato |
 | `is_stale` | `boolean` | `true` se non c'è nessun dato **oppure** `age_hours > stale_after_hours`. La regola di dominio è calcolata dal backend: l'app la mostra e basta |
 | `stale_after_hours` | `number` | soglia applicata, esplicita (oggi 36: `Settings.dataset_stale_after_hours`) — il client non la indovina |
@@ -386,10 +387,10 @@ admin `/admin/dataset-info` resta protetto e **separato**: non è questo.
 curl http://localhost:8000/api/v1/dataset
 ```
 
-**Esempio risposta** (200 OK, dati freschi):
+**Esempio risposta** (200 OK, dati freschi — run delle 11:17 UTC):
 ```json
 {
-  "latest_scraped_at": "2026-10-03T11:41:42.954477+00:00",
+  "latest_scraped_at": "2026-10-03T11:17:44.649380+00:00",
   "age_hours": 0.0,
   "is_stale": false,
   "stale_after_hours": 36,
@@ -398,10 +399,10 @@ curl http://localhost:8000/api/v1/dataset
 }
 ```
 
-**Esempio risposta** (200 OK, dati vecchi — dopo 48 h senza scraping):
+**Esempio risposta** (200 OK, dati vecchi — ultima run 48 h fa, anche se il seed è appena girato):
 ```json
 {
-  "latest_scraped_at": "2026-10-01T11:40:41.097430+00:00",
+  "latest_scraped_at": "2026-10-01T11:17:44.649380+00:00",
   "age_hours": 48.0,
   "is_stale": true,
   "stale_after_hours": 36,
@@ -420,12 +421,21 @@ l'ora italiana senza calcoli dal lato app).
 possono essere già pubblicati alle 09:00 di ieri. La regola vive **solo** nel backend
 (`dataset_service`): nell'app non c'è nessuna soglia duplicata.
 
-**⚠️ Limite noto sulla fonte del timestamp**: oggi `latest_scraped_at` = `max(Showing.scraped_at)`,
-cioè l'istante in cui la riga più recente è stata **inserita** nel DB, **non** l'istante della run
-che ha prodotto i dati: `showing_repo.upsert` non aggiorna `scraped_at` sulle righe già esistenti.
-Quindi una run che non inserisce righe nuove sembra «vecchia» anche se è appena riuscita, e un
-seed eseguito su JSON vecchi sembra fresco. La fonte corretta è il `generated_at` dei JSON
-persistito dal seed: è un'evoluzione tracciata in `docs/problemi-aperti.md`.
+**Da dove viene il timestamp**: dal `generated_at` di `showings.json`, cioè l'istante che la run
+dichiara quando produce il palinsesto. Il seed lo scrive nella tabella `dataset_meta` e l'endpoint
+lo restituisce in UTC. Ne segue che una run che non inserisce righe nuove resta **fresca**, e un
+seed eseguito su JSON vecchi risulta **vecchio** anche se le righe sono appena state scritte.
+L'anagrafica (`cinemas.json`, `films.json`) non entra in questa data: a misurare la freschezza è
+il palinsesto, non il fatto che il seed sia stato lanciato.
+
+**Fallback su DB legacy**: se `dataset_meta` è vuota — DB seedato prima che la tabella esistesse —
+l'endpoint usa `max(Showing.scraped_at)` e lascia un warning nei log a ogni risposta che passa di
+lì. Non è equivalente: quel valore è l'istante di **insert** della riga più recente, non quello
+della run, e `upsert` non aggiorna `scraped_at` sulle righe già esistenti; la freschezza può
+quindi risultare più vecchia (la riga non è stata reinserita) o più recente (righe vecchie
+inserite adesso) di quella reale. Serve solo a non mostrare un banner falso su un DB legacy, e la
+finestra si chiude al primo seed: **dopo un deploy lancia `make seed`**, oppure aspetta la run
+notturna delle 03:00 (timer systemd: scraper e poi seed).
 
 **Errori**: nessun errore dedicato. Un DB vuoto è uno stato **legittimo**, non un 500: risponde
 200 con `is_stale: true`, `latest_scraped_at: null`, `age_hours: null` e conteggi a 0.
