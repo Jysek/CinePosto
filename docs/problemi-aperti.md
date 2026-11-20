@@ -1,9 +1,8 @@
 # CinePosto — Problemi aperti
 
-> Verificato su fase-7 (`2026-10-03`): cancellata la voce «L'app non avverte quando i dati sono
-> vecchi» (risolta con l'endpoint pubblico `GET /api/v1/dataset` + banner `StaleDataBanner`),
-> aggiunta la voce sulla fonte di `latest_scraped_at`. Le altre voci non sono state ricontrollate
-> in questa sessione.
+> Verificato su feat/backend-dataset-meta (`2026-11-19`): cancellata la voce «La fonte di
+> `latest_scraped_at` è l'istante di insert, non quello della run di scraping» (risolta con la
+> tabella `dataset_meta`). Le altre voci non sono state ricontrollate in questa sessione.
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
 coperto, con la prova che lo dimostra. Quando un problema si risolve, **la voce si cancella**:
@@ -47,16 +46,3 @@ La tab bar di React Navigation 7 la passa ancora come prop (`pointerEvents={isTa
 'auto'}`), quindi la console web del dev server mostra un warning che non viene dal nostro codice:
 l'istanza nostra (`app/src/screens/FilmsTab.js`) è stata corretta nella stessa data. Si risolve con un
 upgrade di react-navigation che converta la prop in stile; non si patcha `node_modules`.
-
-### La fonte di `latest_scraped_at` è l'istante di insert, non quello della run di scraping
-**Dove**: `backend/app/services/dataset_service.py` (`get_dataset_info`) · **Prova**: `make seed` il
-2026-10-03 alle 11:28 (run riuscita) + `curl localhost:8000/api/v1/dataset` →
-`"latest_scraped_at": "2026-10-03T11:17:50+00:00"`: la run non ha inserito righe nuove e il
-timestamp è rimasto quello dell'import precedente · **Data**: `2026-10-03`
-`max(Showing.scraped_at)` registra quando la riga è stata **inserita** (`showing_repo.upsert` non
-aggiorna `scraped_at` sulle righe esistenti), non quando è girata la run che ha prodotto i dati:
-una run senza righe nuove sembra «dati vecchi» e un seed eseguito su JSON vecchi sembra fresco. La
-fonte giusta è il `generated_at` dei JSON (`scraper/output/showings.json`) persistito dal seed in
-una tabella `dataset_meta` (disegno del dato in `pianificazione/fase-12-seed-autorevole.md` §5.1):
-quando esiste, `GET /api/v1/dataset` va ricollegato a quella. Fino ad allora il limite è dichiarato
-nel docstring di `get_dataset_info` e in `docs/backend/api.md` §4.10.

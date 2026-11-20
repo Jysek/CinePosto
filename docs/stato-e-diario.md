@@ -269,3 +269,16 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   con essa diventa obsoleto lo `stash@{0}` della run del 30/09. Allineati i conteggi dei test
   dichiarati alla realtà misurata: **84 backend, 185 scraper (269 totali)** in `Makefile`,
   `AGENTS.md` e `README.md`.
+- **2026-11-19** — **ciclo `dataset_meta`**: la freschezza di `GET /api/v1/dataset` viene dall'istante
+  della run, non dall'insert. Nuova tabella `dataset_meta` (una riga: `generated_at` + `seeded_at`) con
+  modello e repository; il seed legge il `generated_at` di `showings.json` **prima** di ogni scrittura
+  (normalizzato in UTC naive; `ValueError` se manca, è senza offset o non è parsabile) e lo persiste
+  nella stessa transazione degli showings, quindi un rollback lascia la data della run precedente;
+  `dataset_service` la rilegge e `admin/dataset-info` usa la stessa fonte. Fallback dichiarato su
+  `max(Showing.scraped_at)` solo per un DB seedato prima della tabella, con warning nei log: dopo un
+  deploy va lanciato `make seed` (oppure si aspetta la run notturna delle 03:00). Il nome del campo API
+  resta `latest_scraped_at`: cambia la fonte, non il contratto. Tappi ai buchi: test di contratto lato
+  scraper (`generated_at` nei quattro output), conversione UTC sotto test, riga unica idempotente,
+  zero scritture quando il file non dichiara la run. Docs: `schema-mapping.md` §3.1, `architecture.md`,
+  `api.md` §4.10 (via il «limite noto»), voce cancellata da `problemi-aperti.md`. Test: **92 backend**,
+  **185 scraper + 1 xfail**.
