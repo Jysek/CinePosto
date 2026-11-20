@@ -1,7 +1,8 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su fase-19 (2026-10-03): campo `maps_place_url` nel JSON e nella tabella `cinemas` (§1).
-> Precedente: `056f04f` (`2026-09-26`) — non-degrado di `synopsis` in `upsert_from_scraper`.
+> Verificato su feat/backend-dataset-meta (2026-11-19): tabella `dataset_meta` (§3.1) e ordine del
+> seed (§4, §5).
+> Precedente: fase-19 (`2026-10-03`) — campo `maps_place_url` nel JSON e nella tabella `cinemas` (§1).
 
 > **Riferimento autorevole** per lo script di seed e per qualsiasi futura modifica al mapping.
 > Allineato alle decisioni L1-L5 e D1-D5 (tabella in [`panoramica.md`](../panoramica.md) §6).
@@ -242,6 +243,34 @@ per ogni (key, agg) in aggregated:
     # SELECT by (film_id, cinema_slug, date) → UPDATE times/language/screen/buy_url, oppure INSERT
 ```
 
+### 3.1 `generated_at` di `showings.json` → tabella `dataset_meta`
+
+Non è un mapping record → record: dall'intestazione di `showings.json` il seed ricava l'**istante
+della run** e lo persiste in una tabella a riga unica.
+
+| JSON | DB column | Note |
+|------|-----------|------|
+| `generated_at` (ISO con offset, es. `"2026-10-03T13:17:44.649380+02:00"`) | `generated_at` (datetime NOT NULL) | convertito in **UTC naive** (`astimezone(UTC)` → `11:17:44`): SQLite non conserva il fuso, e un naive non convertito verrebbe riletto come ora locale |
+| — | `seeded_at` | default `now()`: quando la riga è stata scritta. Distingue «run vecchia riletta dopo giorni» da «seed appena eseguito», che `generated_at` da solo non racconta |
+| — | `id` | PK fissata a `1` (`SINGLETON_ID`): una riga sola, upsert |
+
+**Perché una riga sola**: la tabella descrive il dataset di oggi, non la storia delle importazioni
+(la storia sta nei JSON e nei log). `dataset_meta_repo.upsert_generated_at` fa `get` sull'id fisso e
+poi `update` o `insert`, quindi due seed lasciano una riga con il valore più recente e l'idempotenza
+del seed resta vera anche per la freschezza.
+
+**Stessa transazione degli showings**: la meta si scrive dentro il `commit` che chiude il seed. Se
+una scrittura fallisce e si fa `rollback`, il DB conserva la data dell'ultima run riuscita: nessun
+caso in cui la data dichiarata è più nuova dei dati atterrati.
+
+**Lettura e fallback**: `dataset_service.get_dataset_info` legge questa riga e la restituisce ISO con
+offset UTC nel campo `latest_scraped_at`. Se `dataset_meta` è vuota (DB seedato prima che la tabella
+esistesse) il service ripiega su `max(Showing.scraped_at)` lasciando un `warning` nei log. Il ripiego
+**non è equivalente**: `scraped_at` è l'istante di **insert** della riga più recente e l'upsert degli
+showings non lo aggiorna sulle righe esistenti — una run che non inserisce righe nuove sembra vecchia,
+e un seed su JSON vecchi sembra fresco. Serve solo a non mostrare un banner falso su un DB legacy: al
+primo seed la fonte torna `generated_at`.
+
 ---
 
 ## 4. Ordine d'esecuzione del seed
@@ -254,8 +283,13 @@ L'ordine è vincolato dalle FK. **Sempre questo ordine**:
                      COSTRUISCI title_to_id        (lookup string → int)
 3. showings.json  →  upsert in `showings`,
                      USA title_to_id per film_id intero
-4. riconciliazione →  ARCHIVIA i residui (`removed_at`), riattiva ciò che ricompare
+4. dataset_meta   →  upsert della riga unica `id=1` con il `generated_at` di showings.json
+                     (naive UTC), nella STESSA transazione degli showings
+5. riconciliazione →  ARCHIVIA i residui (`removed_at`), riattiva ciò che ricompare
 ```
+
+Il `generated_at` si valida **prima** del punto 1: un file che non lo dichiara non tocca il DB
+(§5). Per il resto del mapping di questa tabella vedi §3.1.
 
 ### 4.1 Riconciliazione: si archivia, mai si cancella
 
@@ -290,6 +324,7 @@ Interruttore dell'archiviazione: `seed_archive_enabled` nella config del backend
 |----------|---------------|
 | File JSON mancante | abort: errore esplicito, exit code != 0 |
 | `showings.json` senza `date_from`/`date_to` (o finestra invertita) | abort: errore esplicito (la finestra delimita dove archiviare: senza non si decide nulla) |
+| `showings.json` con `generated_at` mancante, senza offset o non parsabile | abort **prima di ogni scrittura**: `ValueError` esplicito con il valore grezzo, DB intatto (una run che non sa dichiarare la propria età non è una run) |
 | Cinema con slug duplicato dentro lo stesso JSON | log warning, ultima vince |
 | Film senza `title` o senza `id` | skip record + log error |
 | Showing con `film_id` che non matcha `title_to_id` | skip record + log warning (può capitare se films.json e showings.json sono incoerenti) |

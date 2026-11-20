@@ -1,9 +1,9 @@
 # Backend — Architettura tecnica
 
-> Verificato su fase-7 (2026-10-03): endpoint pubblico `GET /api/v1/dataset` con
+> Verificato su feat/backend-dataset-meta (2026-11-19): tabella `dataset_meta` nel modello dati e
+> freschezza pubblica presa dalla run nel seed.
+> Precedente: fase-7 (`2026-10-03`) — endpoint pubblico `GET /api/v1/dataset` con
 > `dataset_service`/`dataset_repo` nel rispetto del layering (12 endpoint).
-> Precedente: `20ca1bb` (`2026-09-25`) — invariante "un film = una riga", guardia di identità del
-> seed, coppie del report pronte per `--merge`.
 
 Vedi setup e avvio in [backend/README.md](../../backend/README.md).
 Per le decisioni di design e il quadro d'insieme vedi [panoramica.md](../panoramica.md).
@@ -104,6 +104,25 @@ UNIQUE(film_id, cinema_slug, date)
 INDEX  ix_showings_date, ix_showings_film, ix_showings_cinema
 ```
 
+### DatasetMeta (`dataset_meta`)
+PK fissata a **`1`** (`SINGLETON_ID`): una riga sola, che descrive il dataset di oggi e non la
+storia delle importazioni.
+
+```
+id            INTEGER PK            -- sempre 1
+generated_at  datetime NOT NULL     -- `generated_at` di showings.json, naive UTC
+seeded_at     datetime default now  -- quando questa riga è stata scritta dal seed
+```
+
+> **Perché UTC naive**: l'offset dello scraper (`+02:00`) non sopravvive a SQLite, quindi il seed
+> converte in UTC all'ingresso e il service rimette l'offset in uscita (`_as_utc` + `isoformat`).
+> Dentro il DB c'è un naive UTC e nient'altro; nessuna conversione vive nel repository.
+
+> **Perché una riga sola**: aggregare per insert produrrebbe una storia di importazioni e chi legge
+> dovrebbe indovinare «quale riga è quella buona». `dataset_meta_repo.upsert_generated_at` aggiorna
+> la riga con id fisso, quindi due seed lasciano una riga con il valore più recente. `seeded_at`
+> distingue «run vecchia riletta dopo giorni» da «seed appena eseguito».
+
 ---
 
 ## Endpoint
@@ -144,8 +163,18 @@ scraper/output/showings.json → tabella showings
    in [schema-mapping.md](schema-mapping.md) §2: mai `IntegrityError`, mai doppione quando i due
    segnali discordano); costruisci lookup `{titolo_stringa_JSON: id_intera_DB}`
 3. showings → usa lookup per risolvere `film_id` intera; upsert per (film_id, cinema_slug, date)
-4. riconciliazione → le righe non più nei JSON dell'ultima importazione si **archiviano**
+4. dataset_meta → upsert della riga unica `id=1` con il `generated_at` di showings.json normalizzato
+   in UTC naive, **nella stessa transazione degli showings**: il rollback lascia la data della run
+   precedente. Il `generated_at` si valida prima di ogni scrittura: se manca, è senza offset o non
+   è parsabile il seed aborta con `ValueError` e zero righe toccate
+5. riconciliazione → le righe non più nei JSON dell'ultima importazione si **archiviano**
    (`removed_at`), quelle che ricompaiono si riattivano. **Mai `DELETE`**: il DB conserva lo storico.
+
+La **freschezza pubblica** (`GET /api/v1/dataset`, campo `latest_scraped_at`) viene dal punto 4: è
+l'istante della run che ha prodotto i dati oggi nel DB, non l'istante di insert delle righe. Il
+service legge `dataset_meta` e usa `max(Showing.scraped_at)` solo se la tabella è vuota, con un
+`warning` nei log: è un ripiego per un DB seedato prima di questa tabella, non una fonte equivalente
+(vedi [schema-mapping.md](schema-mapping.md) §3.1).
 
 La riconciliazione (finestra coperta dai JSON, guardia anti-fonte-rotta per cinema, report
 `archived_*`/`reactivated_*`/`skipped_cinemas`) è descritta in [schema-mapping.md](schema-mapping.md)
