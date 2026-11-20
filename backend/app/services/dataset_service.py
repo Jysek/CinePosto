@@ -5,11 +5,14 @@ freschezza (`is_stale`) vive qui e solo qui: l'app si limita a mostrarla.
 """
 
 from datetime import UTC, datetime
+import logging
 
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.repositories import cinema_repo, showing_repo
+from app.repositories import cinema_repo, dataset_meta_repo, showing_repo
+
+logger = logging.getLogger(__name__)
 
 
 def _as_utc(moment: datetime) -> datetime:
@@ -25,13 +28,18 @@ def _as_utc(moment: datetime) -> datetime:
 def get_dataset_info(db: Session) -> dict:
     """Riepilogo pubblico: quanti dati ci sono e quanto sono vecchi.
 
-    ⚠️ Fonte del timestamp (limite noto): `max(Showing.scraped_at)` è l'istante
-    in cui la riga più recente è stata **inserita**, non l'istante della run di
-    scraping che ha prodotto i dati (`showing_repo.upsert` non aggiorna
-    `scraped_at` sulle righe esistenti). La semantica desiderata — «istante
-    della run che ha prodotto i dati oggi nel DB» — richiede il `generated_at`
-    dei JSON persistito dal seed (evoluzione `dataset_meta`, vedi
-    docs/backend/api.md §4.10 e docs/problemi-aperti.md).
+    `latest_scraped_at` è l'istante della **run** che ha prodotto i dati oggi nel
+    DB, non l'istante di insert delle righe: è il `generated_at` di showings.json,
+    che il seed scrive in `dataset_meta` (normalizzato in UTC all'ingresso) e che
+    questo service rilegge, restituendolo ISO con offset.
+
+    Fallback dichiarato: se `dataset_meta` è vuota (DB seedato prima che la tabella
+    esistesse) si usa `max(Showing.scraped_at)` e si lascia un warning nei log. Non è
+    equivalente: è l'istante di insert della riga più recente e `showing_repo.upsert`
+    non lo aggiorna sulle righe esistenti, quindi la freschezza può sembrare più
+    vecchia (riga non reinserita) o più recente (dati vecchi inseriti adesso) di
+    quella della run reale. Serve solo a non mostrare a tutti un banner falso su un
+    DB legacy: al primo seed la fonte torna la run.
 
     Ritorna un dict nuovo (nessuna mutazione) con i campi dello schema
     `DatasetInfo`: `latest_scraped_at` (ISO con offset UTC), `age_hours`,
@@ -40,7 +48,13 @@ def get_dataset_info(db: Session) -> dict:
     settings = get_settings()
     stale_after_hours = settings.dataset_stale_after_hours
 
-    latest = showing_repo.latest_scraped_at(db)
+    latest = dataset_meta_repo.get_generated_at(db)
+    if latest is None:
+        logger.warning(
+            "dataset_meta assente: fallback su max(Showing.scraped_at), "
+            "la freschezza tornera' dalla run al prossimo seed"
+        )
+        latest = showing_repo.latest_scraped_at(db)
     latest_utc = _as_utc(latest) if latest is not None else None
 
     age_hours: float | None = None
