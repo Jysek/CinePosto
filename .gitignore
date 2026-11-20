@@ -69,3 +69,4 @@ backend/data/*
 
 # Dati di produzione (DB + JSON live): stanno fuori dal repo, come i segreti
 /data/
+scraper/output/errors.json
