@@ -4,7 +4,9 @@ Ordine di esecuzione (vincoli di FK):
 1. cinemas.json  -> upsert per slug
 2. films.json    -> upsert per (title_normalized, year), costruisci lookup {titolo_str_JSON: id_int_DB}
 3. showings.json -> risolvi film_id (stringa) -> id (intero) via lookup; upsert per UNIQUE(film_id, cinema_slug, date)
-4. riconciliazione -> le righe non più nei JSON dell'ultima importazione si ARCHIVIANO
+4. dataset_meta  -> upsert della riga unica con il `generated_at` di showings.json (naive UTC),
+   nella STESSA transazione degli showings: il rollback lascia la data della run precedente
+5. riconciliazione -> le righe non più nei JSON dell'ultima importazione si ARCHIVIANO
    (`removed_at`), quelle che ricompaiono si riattivano. Mai DELETE: il DB conserva
    lo storico (decisione dell'utente, 2026-09-25).
 
@@ -16,7 +18,7 @@ Puo' essere eseguito:
 from __future__ import annotations
 
 from collections.abc import Iterable
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from itertools import combinations
 import json
 import logging
@@ -31,7 +33,7 @@ from app.database import Base, SessionLocal, engine
 from app.maintenance.migrate_maps_place_url import ensure_maps_place_url_column
 from app.maintenance.migrate_removed_at import ensure_removed_at_columns
 from app.models import Cinema, Film, Showing  # noqa: F401
-from app.repositories import cinema_repo, film_repo, showing_repo
+from app.repositories import cinema_repo, dataset_meta_repo, film_repo, showing_repo
 
 logger = logging.getLogger(__name__)
 
@@ -288,6 +290,26 @@ def _parse_window(showings_data: dict) -> tuple[date, date]:
     return date_from, date_to
 
 
+def _parse_generated_at(showings_data: dict) -> datetime:
+    """Istante dichiarato dalla run (`generated_at` di showings.json), naive UTC.
+
+    Fail fast come `_parse_window`: una run che non sa dichiarare la propria età non
+    è una run, e questa data è l'unica fonte della freschezza del palinsesto. Il fuso
+    si normalizza qui, al confine d'ingresso (SQLite non lo conserva).
+    """
+    raw = showings_data.get("generated_at")
+    if not raw:
+        raise ValueError("showings.json senza generated_at: la run non dichiara la propria eta'")
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"generated_at non parsabile in showings.json: {raw!r}") from exc
+    if parsed.tzinfo is None:
+        # Senza offset l'età della run sarebbe un'ipotesi: meglio fermare il seed.
+        raise ValueError(f"generated_at senza fuso orario in showings.json: {raw!r}")
+    return parsed.astimezone(UTC).replace(tzinfo=None)
+
+
 def _reconcile_archive(
     db: Session,
     film_keys: set[tuple[str, int | None]],
@@ -385,6 +407,8 @@ def seed_from_json(
     cinemas_data = _load_json(output_dir / "cinemas.json")
     films_data = _load_json(output_dir / "films.json")
     showings_data = _load_json(output_dir / "showings.json")
+    # Prima di qualsiasi scrittura: un file che non dichiara la run non tocca il DB.
+    generated_at = _parse_generated_at(showings_data)
 
     report: dict[str, int | list[str]] = {
         "archived_films": 0,
@@ -401,6 +425,8 @@ def seed_from_json(
         n_films, film_lookup, film_keys = _seed_films(db, films_data)
         report["identity_conflicts"] = _identity_conflicts(db, films_data, film_lookup)
         n_showings, showing_keys = _seed_showings(db, showings_data, film_lookup)
+        # Stessa transazione degli showings: meta e dati non si separano mai.
+        meta = dataset_meta_repo.upsert_generated_at(db, generated_at)
         if archive_enabled:
             date_from, date_to = _parse_window(showings_data)
             cinema_slugs = [entry["slug"] for entry in cinemas_data.get("cinemas", [])]
@@ -416,6 +442,11 @@ def seed_from_json(
         raise
 
     logger.info("Seed completato: %d cinema, %d film, %d showings", n_cinemas, n_films, n_showings)
+    logger.info(
+        "dataset_meta: run del %s UTC, seed scritto il %s UTC",
+        generated_at.isoformat(),
+        meta.seeded_at,
+    )
     logger.info(
         "Archiviazione: film %d archiviati / %d riattivati, showings %d archiviati / %d riattivati, "
         "cinema saltati: %s",
