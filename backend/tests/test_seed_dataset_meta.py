@@ -9,12 +9,13 @@ data dell'ultima run riuscita. Gli helper della run di test sono quelli di
 
 from datetime import datetime, timedelta
 import json
+import time
 
 import pytest
 from sqlalchemy import select
 
 from app.models import DatasetMeta, Film, Showing
-from app.repositories import dataset_meta_repo
+from app.repositories import dataset_meta_repo, film_repo
 from app.seed_from_json import seed_from_json
 from tests.test_seed_archive import WINDOW_FROM, _film_entry, _showing_entry, _write_run
 
@@ -51,13 +52,57 @@ def test_second_seed_updates_the_single_row(session, tmp_path):
         generated_at="2026-10-01T08:00:00+00:00",
     )
     seed_from_json(session, tmp_path)
+    first_seeded_at = session.get(DatasetMeta, 1).seeded_at
 
+    # Due seed possono cadere nello stesso tick dell'orologio di Windows (~15 ms).
+    time.sleep(0.02)
     _write_run_with(tmp_path, [_showing_entry("Film", WINDOW_FROM + timedelta(days=1))])
     seed_from_json(session, tmp_path)
 
     rows = session.scalars(select(DatasetMeta)).all()
     assert len(rows) == 1
     assert rows[0].generated_at == RUN_GENERATED_AT_UTC
+    # `seeded_at` dice quando e' girato il seed, non quando e' stata creata la riga.
+    assert rows[0].seeded_at > first_seeded_at
+
+
+def test_last_seeded_run_wins_even_if_it_is_older(session, tmp_path):
+    """Un JSON piu' vecchio seedato dopo: vince l'ultima seedata, perche' il DB ha quei dati."""
+    _write_run_with(tmp_path, [_showing_entry("Film", WINDOW_FROM)])
+    seed_from_json(session, tmp_path)
+
+    _write_run_with(
+        tmp_path,
+        [_showing_entry("Film", WINDOW_FROM)],
+        generated_at="2026-10-01T08:00:00+00:00",
+    )
+    seed_from_json(session, tmp_path)
+
+    assert dataset_meta_repo.get_generated_at(session) == datetime(2026, 10, 1, 8, 0, 0)
+
+
+def test_failed_seed_rolls_back_meta_and_showings(session, tmp_path, monkeypatch):
+    """Errore dopo la scrittura della meta: la transazione si annulla, resta la run precedente.
+
+    E' il tappo vero: senza questo test, il rollback resterebbe una promessa della docstring
+    (gli altri casi di errore si fermano prima di qualsiasi scrittura).
+    """
+    _write_run_with(tmp_path, [_showing_entry("Film", WINDOW_FROM)])
+    seed_from_json(session, tmp_path)
+    previous_generated_at = dataset_meta_repo.get_generated_at(session)
+    showings_before = len(session.scalars(select(Showing)).all())
+
+    def _explode(*args, **kwargs):
+        raise RuntimeError("fonte rotta")
+
+    monkeypatch.setattr(film_repo, "archive_not_in", _explode)
+    _write_run_with(tmp_path, [_showing_entry("Film", WINDOW_FROM + timedelta(days=1))])
+
+    with pytest.raises(RuntimeError, match="fonte rotta"):
+        seed_from_json(session, tmp_path, archive_enabled=True)
+
+    assert dataset_meta_repo.get_generated_at(session) == previous_generated_at
+    assert len(session.scalars(select(Showing)).all()) == showings_before
 
 
 def test_seed_without_generated_at_writes_nothing(session, tmp_path):

@@ -427,6 +427,9 @@ def seed_from_json(
         n_showings, showing_keys = _seed_showings(db, showings_data, film_lookup)
         # Stessa transazione degli showings: meta e dati non si separano mai.
         meta = dataset_meta_repo.upsert_generated_at(db, generated_at)
+        # Letto prima del commit: dopo, l'oggetto e' scaduto e servirebbe una query
+        # di refresh per una riga di log.
+        seeded_at = meta.seeded_at
         if archive_enabled:
             date_from, date_to = _parse_window(showings_data)
             cinema_slugs = [entry["slug"] for entry in cinemas_data.get("cinemas", [])]
@@ -445,11 +448,10 @@ def seed_from_json(
     logger.info(
         "dataset_meta: run del %s UTC, seed scritto il %s UTC",
         generated_at.isoformat(),
-        meta.seeded_at,
+        seeded_at,
     )
     logger.info(
-        "Archiviazione: film %d archiviati / %d riattivati, showings %d archiviati / %d riattivati, "
-        "cinema saltati: %s",
+        "Archiviazione: film %d/%d, showings %d/%d (archiviati/riattivati), cinema saltati: %s",
         report["archived_films"],
         report["reactivated_films"],
         report["archived_showings"],
