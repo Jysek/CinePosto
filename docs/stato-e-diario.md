@@ -303,4 +303,9 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   nessuna richiesta parte verso `/extra/`. Senza pagina film gli orari si tengono e `source_url`
   resta assente. Riparati anche i quattro JSON dell'ultima run (link su `/films/`, via i due 404 da
   `movies.json`, `errors.json` in `.gitignore`). Test: **189 scraper + 1 xfail (190)**, **95
-  backend**, 285 totali; `make lint` e `make test-scraper` verdi.
+  backend**, 285 totali; `make lint` e `make test-scraper` verdi. Review a tre angoli
+  (correttezza, sicurezza/dati, coerenza col brief): tre verdetti `ok`, un P2 accolto — la chiave
+  di deduplica e' lo slug, non il permalink, cosi' due voci dello stesso film non si sdoppiano
+  quando una delle due non ha pagina film. Restano due P2 noti, non toccati: la finestra di
+  `_extract_shows` dipende dall'ordine dei campi nel payload, e l'accumulo degli show non guarda
+  `opzioni`.

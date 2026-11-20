@@ -71,7 +71,7 @@ parole-spia del sito: nessun secondo file di codice da toccare.
 - 3. Ripulire i JSON di output della run di prova: `source_url` dei due record `/extra/` portato su `/films/<slug>`, via le due voci di errore 404 da `movies.json`, `errors.json` cancellato e messo in `.gitignore` | files: scraper/output/showings.json,scraper/output/movies.json,.gitignore | done: `grep -c "postmodernissimo.com/extra/" scraper/output/showings.json scraper/output/movies.json` = 0/0; `git diff --stat` limitato a quei file | Stato: DONE
 - 4. Allineare la doc del connettore alla nuova regola: come si risolve il permalink e cosa succede quando la pagina film non c'è, più la verifica in testa | files: docs/scraper/connettori/postmodernissimo.md,docs/scraper/architecture.md | done: le due pagine descrivono la risoluzione `/extra/` -> `/films/` e il caso senza pagina film; intestazione `Verificato su <commit>` aggiornata | Stato: DONE
 - 5. Riga di diario e conteggi dei test dichiarati | files: docs/stato-e-diario.md,AGENTS.md,README.md | done: riga in coda a `stato-e-diario.md` datata 2026-11-20 con esito e conteggi reali; ogni "186" ora non più vero è allineato al numero misurato | Stato: DONE
-- 6. Review a contesto fresco, tre angoli (correttezza, sicurezza/dati, coerenza col brief) | files: nessuno (sola lettura) | done: P0/P1/P2 con `file:riga` e verdetto merge per angolo | Stato: TODO
+- 6. Review a contesto fresco, tre angoli (correttezza, sicurezza/dati, coerenza col brief) | files: nessuno (sola lettura) | done: P0/P1/P2 con `file:riga` e verdetto merge per angolo | Stato: DONE
 
 ## Lanes
 

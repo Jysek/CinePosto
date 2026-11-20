@@ -207,7 +207,7 @@ class PostModernissimoConnector(BaseConnector):
 
         movie_re = re.compile(r'\{"id":(\d+),"title":"([^"]+)","slug":"([^"]+)","permalink":"([^"]+)"')
 
-        candidates_by_permalink: dict[str, dict] = {}
+        candidates_by_slug: dict[str, dict] = {}
 
         for m in movie_re.finditer(unescaped):
             mid, title, slug, permalink = m.groups()
@@ -218,16 +218,14 @@ class PostModernissimoConnector(BaseConnector):
                 # `/films/` dello stesso film si fondono in un solo candidato.
                 permalink = self._resolve_film_permalink(unescaped, m.start(), slug)
 
-            # Senza pagina film la chiave è lo slug: due film diversi, entrambi senza
-            # link, non devono fondersi in un solo candidato.
-            permalink_key = permalink or slug
-
             shows = self._extract_shows(unescaped, m.start())
             details = self._extract_details(unescaped, m.start())
 
-            existing = candidates_by_permalink.get(permalink_key)
+            # Chiave lo slug, non il permalink: due voci dello stesso film devono fondersi
+            # anche quando una delle due non ha una pagina film da cui prendere il link.
+            existing = candidates_by_slug.get(slug)
             if existing is None:
-                candidates_by_permalink[permalink_key] = {
+                candidates_by_slug[slug] = {
                     "id": mid,
                     "title": title,
                     "slug": slug,
@@ -239,7 +237,7 @@ class PostModernissimoConnector(BaseConnector):
                 }
                 continue
 
-            # Accumulate shows from all occurrences of this permalink
+            # Accumulate shows from all occurrences of this film
             existing_shows = existing.setdefault("shows", [])
             existing_keys = {(s.get("date"), s.get("orario")) for s in existing_shows}
             for s in shows:
@@ -255,9 +253,7 @@ class PostModernissimoConnector(BaseConnector):
             if m.start() > existing.get("_stream_pos", 0):
                 existing["_stream_pos"] = m.start()
 
-        return [
-            {k: v for k, v in m.items() if k != "_stream_pos"} for m in candidates_by_permalink.values() if m["shows"]
-        ]
+        return [{k: v for k, v in m.items() if k != "_stream_pos"} for m in candidates_by_slug.values() if m["shows"]]
 
     def _resolve_film_permalink(self, text: str, start: int, slug: str) -> str | None:
         """Permalink della pagina film per una voce nata sotto la route morta `/extra/`.
