@@ -29,7 +29,31 @@ criteri di successo, esclusioni). Le decisioni sono approvate: 1A/2A e le tre mi
 - 7. Docs lato dati: tabella `dataset_meta` e ordine del seed in `schema-mapping.md`; modello dati e sezione «Seed da JSON scraper» in `architecture.md` | files: `docs/backend/schema-mapping.md`, `docs/backend/architecture.md` | done: entrambi descrivono tabella, fonte `showings.json`, normalizzazione UTC, fallback; intestazione «Verificato su» aggiornata | Stato: DONE
 - 8. Docs contratto API: §4.10 senza «limite noto», semantica di `latest_scraped_at` = istante della run, fallback, DB vuoto e «dopo il deploy lancia il seed» | files: `docs/backend/api.md` | done: `grep -n "Limite noto sulla fonte" docs/backend/api.md` vuoto; tabella campi ed esempi coerenti | Stato: DONE
 - 9. Chiusura docs: voce cancellata da `problemi-aperti.md`, riga di sessione in coda a `stato-e-diario.md` | files: `docs/problemi-aperti.md`, `docs/stato-e-diario.md` | done: `grep -c "istante di insert" docs/problemi-aperti.md` = 0 e la voce non c'è più; ultima riga del diario è questa sessione con data e conteggi test reali | Stato: DONE
-- 10. Gate, review a tre angoli, push | files: — | done: `make lint` + `make test` + `make test-scraper` verdi su albero pulito; review correttezza/sicurezza/coerenza-brief senza P0/P1 aperti; push del branch su `origin` | Stato: TODO
+- 10. Gate, review a tre angoli, push | files: — | done: `make lint` + `make test` + `make test-scraper` verdi su albero pulito; review correttezza/sicurezza/coerenza-brief senza P0/P1 aperti; push del branch su `origin` | Stato: DONE
+
+## Review (passo 10)
+
+Tre angoli a contesto fresco: correttezza (`deepseek-v4.1-flash`), sicurezza e dati
+(`deepseek-v4.1-flash`), coerenza col brief (`glm-5.3-flash`). Verdetto 3/3 «ok con fix», zero P0.
+
+Accolti e corretti:
+
+- **P1, due revisori** — `seeded_at` non veniva aggiornato dopo il primo insert: log e doc dicevano
+  il falso. Ora l'upsert lo valorizza a ogni scrittura e il seed lo legge prima del commit.
+- **P1** — il rollback era promessa senza prova: i due test «resta la run precedente» si fermavano
+  prima di ogni scrittura. Aggiunto un test che forza un errore **dopo** `upsert_generated_at`.
+- **P2** — `admin/dataset-info` restituiva un naive senza offset e duplicava la query nel router:
+  ora legge `dataset_service.latest_run_at`, come l'API pubblica (fonte, formato e warning uguali).
+- **P2** — `reimport` lasciava passare il `ValueError` del seed come 500 opaco: ora espone il detail.
+- **P2** — mancava un caso discriminante per «vince l'ultima seedata» e il test del warning.
+
+Non applicati, con motivo:
+
+- `reportMissingImports` di pyright su `sqlalchemy`/`fastapi`/`pytest`: artefatto d'ambiente (nessun
+  venv né `pyrightconfig.json` nel repo). Prova: stessi errori su 8 file preesistenti non toccati,
+  import 5/5 OK nel container, `make lint` e `make test` verdi.
+- `IntegrityError` su due seed concorrenti: un seed al giorno, SQLite serializza gli scrittori, nota
+  e non blocco.
 
 ## Lanes
 

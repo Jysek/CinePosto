@@ -1,6 +1,6 @@
 # Backend — Architettura tecnica
 
-> Verificato su feat/backend-dataset-meta (2026-11-19): tabella `dataset_meta` nel modello dati e
+> Verificato su `cd3804c` (2026-11-19): tabella `dataset_meta` nel modello dati e
 > freschezza pubblica presa dalla run nel seed.
 > Precedente: fase-7 (`2026-10-03`) — endpoint pubblico `GET /api/v1/dataset` con
 > `dataset_service`/`dataset_repo` nel rispetto del layering (12 endpoint).
@@ -111,7 +111,7 @@ storia delle importazioni.
 ```
 id            INTEGER PK            -- sempre 1
 generated_at  datetime NOT NULL     -- `generated_at` di showings.json, naive UTC
-seeded_at     datetime default now  -- quando questa riga è stata scritta dal seed
+seeded_at     datetime default now  -- aggiornato a ogni seed: quando il seed ha scritto
 ```
 
 > **Perché UTC naive**: l'offset dello scraper (`+02:00`) non sopravvive a SQLite, quindi il seed
@@ -121,7 +121,8 @@ seeded_at     datetime default now  -- quando questa riga è stata scritta dal s
 > **Perché una riga sola**: aggregare per insert produrrebbe una storia di importazioni e chi legge
 > dovrebbe indovinare «quale riga è quella buona». `dataset_meta_repo.upsert_generated_at` aggiorna
 > la riga con id fisso, quindi due seed lasciano una riga con il valore più recente. `seeded_at`
-> distingue «run vecchia riletta dopo giorni» da «seed appena eseguito».
+> distingue «run vecchia riletta dopo giorni» da «seed appena eseguito»: per questo si valorizza a
+> ogni scrittura, non solo all'insert.
 
 ---
 

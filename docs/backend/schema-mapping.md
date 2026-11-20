@@ -1,6 +1,6 @@
 # Schema mapping — JSON scraper → DB backend
 
-> Verificato su feat/backend-dataset-meta (2026-11-19): tabella `dataset_meta` (§3.1) e ordine del
+> Verificato su `cd3804c` (2026-11-19): tabella `dataset_meta` (§3.1) e ordine del
 > seed (§4, §5).
 > Precedente: fase-19 (`2026-10-03`) — campo `maps_place_url` nel JSON e nella tabella `cinemas` (§1).
 
@@ -251,7 +251,7 @@ della run** e lo persiste in una tabella a riga unica.
 | JSON | DB column | Note |
 |------|-----------|------|
 | `generated_at` (ISO con offset, es. `"2026-10-03T13:17:44.649380+02:00"`) | `generated_at` (datetime NOT NULL) | convertito in **UTC naive** (`astimezone(UTC)` → `11:17:44`): SQLite non conserva il fuso, e un naive non convertito verrebbe riletto come ora locale |
-| — | `seeded_at` | default `now()`: quando la riga è stata scritta. Distingue «run vecchia riletta dopo giorni» da «seed appena eseguito», che `generated_at` da solo non racconta |
+| — | `seeded_at` | valorizzato a **ogni** seed (non un default d'insert): quando il seed ha scritto la riga. Distingue «run vecchia riletta dopo giorni» da «seed appena eseguito», che `generated_at` da solo non racconta |
 | — | `id` | PK fissata a `1` (`SINGLETON_ID`): una riga sola, upsert |
 
 **Perché una riga sola**: la tabella descrive il dataset di oggi, non la storia delle importazioni

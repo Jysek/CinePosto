@@ -1,6 +1,6 @@
 # CinePosto — Contratto API (v1)
 
-> Verificato su feat/backend-dataset-meta (2026-11-19): `latest_scraped_at` viene dalla run di scraping, non dall'insert (§4.10).
+> Verificato su `cd3804c` (2026-11-19): `latest_scraped_at` viene dalla run di scraping, non dall'insert (§4.10).
 > Precedente: fase-7 (2026-10-03) — nuovo endpoint pubblico `GET /dataset` (§4.10).
 > Precedente: fase-19 (2026-10-03) — campo `maps_place_url` in `Cinema`/`CinemaWithCount` (§4.1, §4.2).
 > Precedente: `a360d5a` (`2026-09-25`) — semantica dei film/spettacoli archiviati (§2, §4.6, §5).

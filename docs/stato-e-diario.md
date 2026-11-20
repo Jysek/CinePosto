@@ -280,5 +280,8 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   resta `latest_scraped_at`: cambia la fonte, non il contratto. Tappi ai buchi: test di contratto lato
   scraper (`generated_at` nei quattro output), conversione UTC sotto test, riga unica idempotente,
   zero scritture quando il file non dichiara la run. Docs: `schema-mapping.md` §3.1, `architecture.md`,
-  `api.md` §4.10 (via il «limite noto»), voce cancellata da `problemi-aperti.md`. Test: **92 backend**,
+  `api.md` §4.10 (via il «limite noto»), voce cancellata da `problemi-aperti.md`. Review a tre angoli
+  (correttezza, sicurezza/dati, coerenza col brief): due P1 accolti e corretti (`seeded_at` che si
+  aggiorna a ogni seed, test del rollback che forza un errore dopo la scrittura della meta), P2 su
+  admin/reimport/test di discriminazione chiusi; zero P0. Test: **95 backend**,
   **185 scraper + 1 xfail**.
