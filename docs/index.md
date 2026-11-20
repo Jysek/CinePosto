@@ -37,6 +37,7 @@ Nessuna registrazione utente.
 | `backend/schema-mapping.md` | Come ogni campo JSON diventa colonna (autorevole per il seed) | completo |
 | `backend/api.md` | Contratto API completo | completo |
 | `app/overview.md` | Stack, schermate, client API, avvio | completo |
+| `briefs/<slug>/plan-brief.md` + `plan.md` | Contratto e piano di un ciclo di lavoro (decisioni chiuse, passi, lane) | si aggiorna durante il ciclo |
 | `iss/*`, `presentazione-14-luglio.*`, `esposizione-discorsi.*` | Materiale d'esame del 14 luglio 2026 | archivio, non si aggiorna |
 
 ## Archivio: materiale d'esame (14 luglio 2026)
