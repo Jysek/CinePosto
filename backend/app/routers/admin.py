@@ -10,8 +10,8 @@ from sqlalchemy.orm import Session
 from app.config import get_settings
 from app.database import get_db
 from app.models import Cinema, Film, Showing
-from app.repositories import dataset_meta_repo
 from app.seed_from_json import seed_from_json
+from app.services import dataset_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -47,6 +47,10 @@ def reimport_json(db: Session = Depends(get_db)):
         stats = seed_from_json(db, output_dir)
     except FileNotFoundError as e:
         raise HTTPException(status_code=500, detail=str(e))
+    except ValueError as e:
+        # Contratto dei JSON violato (es. showings.json senza generated_at): il seed si e'
+        # rifiutato di scrivere, e chi ha chiamato deve sapere perche', non un 500 opaco.
+        raise HTTPException(status_code=500, detail=str(e))
 
     return {"status": "ok", "imported": stats}
 
@@ -57,17 +61,13 @@ def dataset_info(db: Session = Depends(get_db)):
     cinemas_count = db.scalar(select(func.count()).select_from(Cinema))
     films_count = db.scalar(select(func.count()).select_from(Film))
     showings_count = db.scalar(select(func.count()).select_from(Showing))
-    # Stessa fonte dell'API pubblica (`dataset_service`): due endpoint con lo stesso
-    # nome di campo non possono avere due significati. Il fallback su
-    # `max(Showing.scraped_at)` serve solo a un DB non ancora seedato, dove la meta
-    # non esiste: li' l'istante di insert e' l'unica data disponibile.
-    latest_scraped = dataset_meta_repo.get_generated_at(db)
-    if latest_scraped is None:
-        latest_scraped = db.scalar(select(func.max(Showing.scraped_at)))
+    # Stessa funzione dell'API pubblica: due endpoint con lo stesso nome di campo non
+    # possono avere due significati (ne' due formati: l'ISO esce con offset UTC).
+    latest_run = dataset_service.latest_run_at(db)
 
     return {
         "cinemas": cinemas_count,
         "films": films_count,
         "showings": showings_count,
-        "latest_scraped_at": latest_scraped.isoformat() if latest_scraped else None,
+        "latest_scraped_at": latest_run.isoformat() if latest_run else None,
     }

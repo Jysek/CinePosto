@@ -25,6 +25,24 @@ def _as_utc(moment: datetime) -> datetime:
     return moment.replace(tzinfo=UTC) if moment.tzinfo is None else moment
 
 
+def latest_run_at(db: Session) -> datetime | None:
+    """Istante (UTC aware) della run che ha prodotto i dati oggi nel DB.
+
+    Fonte unica per l'API pubblica e per l'endpoint admin: se la meta manca (DB seedato
+    prima della tabella) si usa `max(Showing.scraped_at)` con un warning nei log. Il
+    ripiego non e' equivalente — `scraped_at` e' l'istante di insert — e serve solo a non
+    mostrare un banner falso su un DB legacy: al primo seed la fonte torna la run.
+    """
+    latest = dataset_meta_repo.get_generated_at(db)
+    if latest is None:
+        logger.warning(
+            "dataset_meta assente: fallback su max(Showing.scraped_at), "
+            "la freschezza tornera' dalla run al prossimo seed"
+        )
+        latest = showing_repo.latest_scraped_at(db)
+    return _as_utc(latest) if latest is not None else None
+
+
 def get_dataset_info(db: Session) -> dict:
     """Riepilogo pubblico: quanti dati ci sono e quanto sono vecchi.
 
@@ -48,14 +66,7 @@ def get_dataset_info(db: Session) -> dict:
     settings = get_settings()
     stale_after_hours = settings.dataset_stale_after_hours
 
-    latest = dataset_meta_repo.get_generated_at(db)
-    if latest is None:
-        logger.warning(
-            "dataset_meta assente: fallback su max(Showing.scraped_at), "
-            "la freschezza tornera' dalla run al prossimo seed"
-        )
-        latest = showing_repo.latest_scraped_at(db)
-    latest_utc = _as_utc(latest) if latest is not None else None
+    latest_utc = latest_run_at(db)
 
     age_hours: float | None = None
     if latest_utc is not None:

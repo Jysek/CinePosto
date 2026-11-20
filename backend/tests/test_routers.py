@@ -5,6 +5,7 @@ con TestClient di FastAPI. Ogni test parte da un DB pulito.
 """
 
 from datetime import UTC, date, datetime, timedelta
+import logging
 
 from app.config import get_settings
 from app.models.cinema import Cinema
@@ -252,12 +253,29 @@ def test_dataset_info_is_stale_when_seeded_from_old_json(client, session, sample
     assert body["age_hours"] > body["stale_after_hours"]
 
 
-def test_dataset_info_falls_back_to_max_scraped_at_without_meta(client, session, sample_cinema, sample_film):
+def test_dataset_info_falls_back_to_max_scraped_at_without_meta(client, session, sample_cinema, sample_film, caplog):
     """Senza meta (DB seedato prima della tabella) resta la semantica di prima: max(scraped_at)."""
     _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=48), day_offset=0)
     newest = _naive_utc(hours_ago=2)
     _add_showing(session, sample_cinema, sample_film, newest, day_offset=1)
 
-    body = client.get("/api/v1/dataset").json()
+    with caplog.at_level(logging.WARNING, logger="app.services.dataset_service"):
+        body = client.get("/api/v1/dataset").json()
+
     assert body["latest_scraped_at"] == newest.replace(tzinfo=UTC).isoformat()
     assert body["is_stale"] is False
+    # Il ponte non e' silenzioso: chi guarda i log deve sapere che la fonte e' l'insert.
+    assert "fallback su max(Showing.scraped_at)" in caplog.text
+
+
+def test_admin_dataset_info_uses_the_same_source_and_format(client, session, sample_cinema, sample_film):
+    """L'admin legge la run come l'API pubblica e restituisce lo stesso ISO con offset."""
+    _add_showing(session, sample_cinema, sample_film, _naive_utc(hours_ago=240))
+    _set_generated_at(session, _naive_utc())
+
+    resp = client.get("/api/v1/admin/dataset-info", headers={"X-Admin-Token": get_settings().admin_token})
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["latest_scraped_at"].endswith("+00:00")
+    assert body["showings"] == 1
