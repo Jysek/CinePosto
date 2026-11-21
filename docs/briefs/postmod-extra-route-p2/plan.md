@@ -1,7 +1,7 @@
 # Brief + piano — P2 della review PostModernissimo `/extra/`
 
 > Verificato su `359b763` (`2026-11-21`). Classe `M`, stile `full`.
-> Origine: [review](../../reviews/postmodernissimo-extra-route-20261120.md), i sei P2 (il P1 e' gia' in
+> Origine: [review](../../reviews/postmodernissimo-extra-route-20261120.md), i cinque P2 (il P1 e' gia' in
 > `main` con `40464de`).
 
 ## Obiettivo
@@ -42,6 +42,13 @@ sul brief storico si allineano al codice e alla run che e' realmente avvenuta.
    usa un oggetto annidato con `permalink` **prima** degli altri campi: non combacia col regex, il
    link puo' arrivare solo dalla risoluzione dentro il record. Verificato rosso sul codice vecchio
    e verde sul nuovo.
+7. **Il fix della review ha aperto una regressione?** Si': una `}` dentro una sinossi chiude il
+   conteggio delle graffe in anticipo, e quel caso perdeva il link che la vecchia finestra fissa
+   trovava (P2 dell'angolo correttezza). -> se il confine di record non trova nulla, la ricerca
+   ripiega sulla finestra piatta di 3000 caratteri: comportamento mai peggiore di prima. Le altre
+   note della review (guard `/extra/` nei lettori di dettaglio, slug con query o fragment, test
+   dell'ordine non discriminante) restano fuori: le prime due vanno in `problemi-aperti.md`, la
+   terza e' una guardia di regressione dichiarata come tale.
 
 ## Criteri di successo
 
@@ -52,6 +59,8 @@ sul brief storico si allineano al codice e alla run che e' realmente avvenuta.
 - Il test "senza pagina film" non nomina piu' `yalla-parkour`.
 - `docs/briefs/postmod-extra-route/plan.md` non contraddice ne' il codice (posizione delle costanti)
   ne' i file realmente toccati dalla run (quattro fixture JSON).
+- Test nuovo: record `/extra/` con una `}` nella sinossi che chiude il confine in anticipo -> il link
+  si risolve comunque (ripiego sulla finestra piatta), e il test e' rosso senza il ripiego.
 - `make lint` e `make test-scraper` verdi; ogni conteggio dichiarato nei documenti e' quello
   misurato.
 
@@ -72,6 +81,7 @@ sul brief storico si allineano al codice e alla run che e' realmente avvenuta.
 - 6. Riga di stato nella review e riga di diario della sessione | files: docs/reviews/postmodernissimo-extra-route-20261120.md,docs/stato-e-diario.md | done: la review dichiara i P2 applicati con i `file:riga` risolti; il diario ha la riga datata con esito, conteggi e gate | Stato: DONE
 - 7. Gate completo: lint, test scraper, console ASCII, albero pulito | files: nessuno (sola lettura + git) | done: `make lint`, `make test-scraper` (193 test raccolti, 192 pass + 1 `xfail`, exit 0), `make check-console` verdi | Stato: DONE
 - 8. Push su `origin` | files: nessuno | done: `main` locale = `origin/main` | Stato: N/A — non eseguito: `main` locale era gia' avanti di 12 commit sulle sessioni precedenti, il push si decide in chiusura
+- 9. Review a contesto fresco, tre angoli (correttezza `deepseek`, dati/sicurezza `deepseek`, coerenza col contratto `glm`), e chiusura del finding che riguardava questo ciclo: ripiego sulla finestra piatta quando il confine di record e' falsato da una graffa nella sinossi, con test rosso senza il ripiego | files: scraper/scraper/connectors/postmodernissimo.py,scraper/tests/test_postmodernissimo.py | done: `python -m pytest tests/ -q` -> 193 passed, 1 xfailed (194 raccolti); `make lint` e `make check-console` verdi | Stato: DONE
 
 ## Lanes
 

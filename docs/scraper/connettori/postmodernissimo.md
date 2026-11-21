@@ -1,8 +1,8 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `570cbc4` (`2026-11-21`): la risoluzione del permalink `/extra/` cerca dentro il
-> record (brace-matching, non più finestra fissa di caratteri) e la fusione per slug completa il
-> permalink dalla voce `/films/` successiva quando la risoluzione fallisce (P1-P2 di
+> Verificato su `4c18aa7` (`2026-11-21`): la risoluzione del permalink `/extra/` cerca dentro il
+> record (brace-matching, con la finestra piatta come rete di sicurezza) e la fusione per slug
+> completa il permalink dalla voce `/films/` successiva quando la risoluzione fallisce (P1-P2 di
 > [`../../reviews/postmodernissimo-extra-route-20261120.md`](../../reviews/postmodernissimo-extra-route-20261120.md)).
 > Nessuna richiesta live in questa sessione; markup osservato in una run reale del 2026-11-20.
 
@@ -51,7 +51,9 @@ rassegne anche sotto `…/extra/<slug>`, che risponde 404, dentro un record che 
 **prima** di usarlo come chiave: se contiene `/extra/` prende il primo permalink `/films/`
 successivo al match, con lo stesso slug, **dentro lo stesso record** (la ricerca si ferma alla `}`
 che chiude il record, non a una finestra fissa: una sinossi lunga prima dell'oggetto annidato non
-la fa uscire); se la risoluzione fallisce ma lo stesso slug ricompare
+la fa uscire; se quella `}` cade dentro una stringa e chiude il conteggio in anticipo, la ricerca
+ripiega sulla vecchia finestra di 3000 caratteri, così il link non si perde); se la risoluzione
+fallisce ma lo stesso slug ricompare
 più avanti come record `/films/`, la fusione completa il permalink dal record successivo,
 altrimenti il record resta senza link. Effetti: le due
 voci dello stesso film (una `/extra/`, una `/films/`) si fondono in un solo film con gli show
@@ -99,8 +101,9 @@ sovrascrive con una meta description troncata.
   risoluzione del permalink `/extra/` (fusione delle due voci nei due ordini possibili, descrizione
   più completa tenuta dalla fusione, record senza pagina film tenuto con `source_url` assente,
   nessuna richiesta verso `/extra/`, slug non combaciante non risolto, sinossi lunga prima
-  dell'oggetto annidato che risolve, risoluzione fuori record completata dalla fusione con il
-  record `/films/` successivo);
+  dell'oggetto annidato che risolve, graffa dentro la sinossi che manda la ricerca sul ripiego a
+  finestra piatta, risoluzione fuori record completata dalla fusione con il record `/films/`
+  successivo);
 - `scraper/tests/test_postmodernissimo_description.py` — ordine delle fonti di testo, non-degrado,
   dettaglio che fallisce senza rompere la run;
 - `scraper/tests/test_postmod_detail_reconcile.py` — il dettaglio vince sulla homepage per gli orari.

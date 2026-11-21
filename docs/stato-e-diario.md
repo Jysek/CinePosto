@@ -340,3 +340,11 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   modulo, quattro fixture rigenerati) e i conteggi a 193 scraper (192 pass + 1 `xfail`) e 288 totali.
   Gate verdi: `make lint`, `make test-scraper`, `make check-console`. Push non eseguito: `main`
   locale era gia' avanti di 12 commit su `origin/main`.
+- **2026-11-21** — Review a contesto fresco del ciclo P2 (tre angoli: correttezza, dati/sicurezza,
+  coerenza col contratto): nessun P0/P1. Un finding riguardava il ciclo: una `}` dentro una sinossi
+  chiude il brace-matching del confine di record e faceva perdere il link che la vecchia finestra
+  fissa trovava. Chiuso in `4c18aa7` con ripiego sulla finestra piatta (comportamento mai peggiore
+  di prima) e test rosso senza il ripiego. Le altre note — assenza di un guard esplicito `/extra/`
+  nei lettori di dettaglio e confronto dello slug che si rompe con query o fragment — sono latenti
+  e sono finite in `problemi-aperti.md` con la prova. Conteggi a 194 scraper (193 pass + 1 `xfail`) e
+  289 totali. Gate verdi: `make lint`, `make test-scraper`, `make check-console`.
