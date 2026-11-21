@@ -20,7 +20,7 @@ cineposto/
 ```
 
 Una pipeline in tre stadi collegati da **contratti espliciti**: file JSON tra scraper e backend,
-API REST tra backend e app. Ogni stadio si testa da solo — **289 test** (194 scraper, 95 backend).
+API REST tra backend e app. Ogni stadio si testa da solo — **292 test** (197 scraper, 95 backend).
 Uno dei test dello scraper è marcato `xfail`: documenta un limite noto ([`docs/problemi-aperti.md`](docs/problemi-aperti.md)) e diventa passante quando il limite si chiude.
 
 | Componente | Tecnologie | Cosa fa |

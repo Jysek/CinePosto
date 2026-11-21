@@ -58,7 +58,11 @@ più avanti come record `/films/`, la fusione completa il permalink dal record s
 altrimenti il record resta senza link. Effetti: le due
 voci dello stesso film (una `/extra/`, una `/films/`) si fondono in un solo film con gli show
 accumulati; `source_url` punta sempre a una pagina che risponde 200; nessuna richiesta parte
-mai verso `/extra/`, quindi la run non produce più due errori `detail` spurii. Gli orari restano
+mai verso `/extra/` — i due lettori di dettaglio hanno il guard esplicito su `/extra/` (gemello di
+quello su `/eventi/`), quindi la promessa non dipende dal solo filtro del parser — quindi la run non
+produce più due errori `detail` spurii. Lo slug dei permalink si ricava dal **path** dell'URL
+(`urlparse`): una query (`?fbclid=…`) o un fragment (`#trailer`) in coda non rendono
+irriconoscibile il film da risolvere. Gli orari restano
 anche quando la pagina film non c'è: la proiezione esce con `source_url` assente, perché gli
 orari sono veri e altrimenti persi.
 
@@ -103,7 +107,8 @@ sovrascrive con una meta description troncata.
   nessuna richiesta verso `/extra/`, slug non combaciante non risolto, sinossi lunga prima
   dell'oggetto annidato che risolve, graffa dentro la sinossi che manda la ricerca sul ripiego a
   finestra piatta, risoluzione fuori record completata dalla fusione con il record `/films/`
-  successivo);
+  successivo, slug confrontato sul path dell'URL con query o fragment, nessuna richiesta verso
+  `/extra/` dai due lettori di dettaglio);
 - `scraper/tests/test_postmodernissimo_description.py` — ordine delle fonti di testo, non-degrado,
   dettaglio che fallisce senza rompere la run;
 - `scraper/tests/test_postmod_detail_reconcile.py` — il dettaglio vince sulla homepage per gli orari.

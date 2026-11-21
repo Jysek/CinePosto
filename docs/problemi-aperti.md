@@ -48,21 +48,3 @@ La tab bar di React Navigation 7 la passa ancora come prop (`pointerEvents={isTa
 l'istanza nostra (`app/src/screens/FilmsTab.js`) è stata corretta nella stessa data. Si risolve con un
 upgrade di react-navigation che converta la prop in stile; non si patcha `node_modules`.
 
-### Il confronto dello slug del permalink si rompe con query o fragment
-**Dove**: `scraper/scraper/connectors/postmodernissimo.py` (`_first_films_permalink`) · **Prova**:
-`_first_films_permalink('"permalink":"https://www.postmodernissimo.com/films/x?fbclid=1"', 0, 200,
-'x')` → `None` · **Data**: `2026-11-21`
-Lo slug si ricava con `rstrip("/").split("/")[-1]` sulla stringa grezza: se il payload porta
-query o fragment (`?fbclid=…`, `#trailer`) il segmento non combacia e la risoluzione fallisce in
-silenzio (film con `source_url` assente, nessun log). Oggi i fixture e i dati committati hanno URL
-puliti, quindi è latente. Fix: `urlparse(permalink).path` prima dello split.
-
-### I lettori di dettaglio non hanno un guard esplicito su `/extra/`
-**Dove**: `scraper/scraper/connectors/postmodernissimo.py` (`fetch_film_detail`,
-`_fetch_detail_shows`) · **Prova**: `grep -n "_EXTRA_ROUTE" scraper/scraper/connectors/postmodernissimo.py`
-→ solo in `_parse_rsc_payload` · **Data**: `2026-11-21`
-Nessuna richiesta verso la route morta parte oggi, perché il permalink è già filtrato a monte (e
-`_fetch_detail_shows` ha il guard gemello per `/eventi/`). La promessa “mai una GET verso
-`/extra/`” dipende da quel solo punto: una futura modifica che conservi un permalink `/extra/`
-farebbe partire una 404 registrata come errore `detail`. Fix: le due righe gemelle del guard
-`/eventi/`.

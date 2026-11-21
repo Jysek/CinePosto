@@ -10,7 +10,7 @@
 - Albero: `main` pulito su `fefe097`, 0 commit avanti su `origin/main`. Branch di lavoro:
   `fix/scraper-postmod-guard-slug`.
 - Gate: `make lint` e `make test-scraper` (Docker, albero pulito richiesto). Atteso dopo i due test
-  nuovi: 195 pass + 1 `xfail` (196 raccolti), totale 291.
+  nuovi: 195 pass + 1 `xfail` (197 raccolti), totale 292.
 - Il blocco 0 e' il commit di questo file: senza di lui non si riparte.
 - Primo blocco da eseguire: il primo `Stato: TODO` con condizione vera (`grep '| Stato: TODO'`).
 - Trappola: `scraper/scraper/connectors/postmodernissimo.py` ha tre punti che ricavano lo slug con
@@ -47,7 +47,7 @@ partire verso la route morta `/extra/` per sola fiducia nel filtro a monte.
 
 - I due test nuovi falliscono sul codice pre-fix e passano dopo (verificato con `git stash` o su
   copia del file, non a memoria).
-- `make lint` e `make test-scraper` verdi, 196 test scraper raccolti.
+- `make lint` e `make test-scraper` verdi, 197 test scraper raccolti.
 - Nessuna occorrenza residua della ricetta `rstrip("/").split("/")[-1]` nel file del connettore.
 - Le due voci spariscono da `docs/problemi-aperti.md` (non barrate: cancellate).
 - Riga in coda a `docs/stato-e-diario.md`.
@@ -59,12 +59,12 @@ partire verso la route morta `/extra/` per sola fiducia nel filtro a monte.
 
 ## Piano
 
-- 0. Commit del contratto e del piano | files: docs/briefs/postmod-guard-slug/plan.md | done: commit esiste e l'albero e' pulito | Stato: TODO
-- 1. Funzione `_url_slug(url)` (via `urlparse(...).path`) e uso nei tre punti: confronto del permalink film, slug bersaglio della sinossi di dettaglio, slug delle card HTML | files: scraper/scraper/connectors/postmodernissimo.py | done: nessun `rstrip("/").split("/")[-1]` residuo nel file; `ruff check` pulito | Stato: TODO
-- 2. Guard gemelli di `/eventi/`: `fetch_film_detail` esce con `None` e `_fetch_detail_shows` con `[]` quando l'URL contiene `/extra/`, senza log ne' errore | files: scraper/scraper/connectors/postmodernissimo.py | done: `grep -n "_EXTRA_ROUTE"` mostra quattro occorrenze (costante, parser, due lettori) | Stato: TODO
-- 3. Due test rossi-prima-verdi-dopo: slug del permalink con query e con fragment; nessuna richiesta HTTP verso `/extra/` per entrambi i lettori (`responses.calls` vuoto) | files: scraper/tests/test_postmodernissimo.py | done: i due test falliscono sul codice dei blocchi 1-2 assenti e passano; `make test-scraper` -> 195 passed, 1 xfailed | Stato: TODO
-- 4. Cancellare le due voci da `docs/problemi-aperti.md` | files: docs/problemi-aperti.md | done: le due intestazioni sullo slug e sul guard non esistono piu'; il resto del file e' intatto | Stato: TODO
-- 5. Allineare i conteggi a 196 scraper e 291 totali | files: AGENTS.md,README.md,docs/panoramica.md,docs/development-windows.md | done: `grep -rn "194\|289"` sui documenti vivi non trova piu' i conteggi dei test | Stato: TODO
+- 0. Commit del contratto e del piano | files: docs/briefs/postmod-guard-slug/plan.md | done: commit esiste e l'albero e' pulito | Stato: DONE
+- 1. Funzione `_url_slug(url)` (via `urlparse(...).path`) e uso nei tre punti: confronto del permalink film, slug bersaglio della sinossi di dettaglio, slug delle card HTML | files: scraper/scraper/connectors/postmodernissimo.py | done: nessun `rstrip("/").split("/")[-1]` residuo nel file; `ruff check` pulito | Stato: DONE
+- 2. Guard gemelli di `/eventi/`: `fetch_film_detail` esce con `None` e `_fetch_detail_shows` con `[]` quando l'URL contiene `/extra/`, senza log ne' errore | files: scraper/scraper/connectors/postmodernissimo.py | done: `grep -n "_EXTRA_ROUTE"` mostra quattro occorrenze (costante, parser, due lettori) | Stato: DONE
+- 3. Due test rossi-prima-verdi-dopo: slug del permalink con query e con fragment; nessuna richiesta HTTP verso `/extra/` per entrambi i lettori (`responses.calls` vuoto) | files: scraper/tests/test_postmodernissimo.py | done: i due test falliscono sul codice dei blocchi 1-2 assenti e passano; `make test-scraper` -> 196 passed, 1 xfailed | Stato: DONE
+- 4. Cancellare le due voci da `docs/problemi-aperti.md` | files: docs/problemi-aperti.md | done: le due intestazioni sullo slug e sul guard non esistono piu'; il resto del file e' intatto | Stato: DONE
+- 5. Allineare i conteggi a 197 scraper e 292 totali | files: AGENTS.md,README.md,docs/panoramica.md,docs/development-windows.md | done: `grep -rn "194\|289"` sui documenti vivi non trova piu' i conteggi dei test | Stato: DONE
 - 6. Riga di diario della sessione | files: docs/stato-e-diario.md | done: riga in coda con data, fix, conteggi e gate verdi | Stato: TODO
 - 7. Gate completi e review a contesto fresco, due angoli (correttezza `deepseek-v4.1-flash`, coerenza col brief `glm-5.3-flash`) | files: docs/briefs/postmod-guard-slug/plan.md | done: `make lint` + `make test-scraper` + `make check-console` verdi, findings P0/P1 chiusi o annotati | Stato: TODO
 - 8. Push del branch di lavoro `fix/scraper-postmod-guard-slug` su `origin` | files: nessuno | done: `git status --porcelain` vuoto e branch pubblicato su `origin` | Stato: TODO
