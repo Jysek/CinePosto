@@ -309,3 +309,10 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   quando una delle due non ha pagina film. Restano due P2 noti, non toccati: la finestra di
   `_extract_shows` dipende dall'ordine dei campi nel payload, e l'accumulo degli show non guarda
   `opzioni`.
+- **2026-11-20** — Review (sola lettura) del lavoro sulla route `/extra/`: referto in
+  [`reviews/postmodernissimo-extra-route-20261120.md`](reviews/postmodernissimo-extra-route-20261120.md).
+  Gate verde (`189 passed, 1 xfailed`, ruff pulito su scraper e backend), verdetto `PASS con nits`:
+  un P1 — se la voce `/extra/` precede quella `/films/` dello stesso film e la risoluzione non trova
+  la pagina film, il ramo di fusione non aggiorna il permalink e il link buono si perde — e sei P2
+  su finestra di ricerca, test e allineamento del brief. Nessun codice scritto: le fix passano da
+  `/ship` col referto come brief.

@@ -38,6 +38,7 @@ Nessuna registrazione utente.
 | `backend/api.md` | Contratto API completo | completo |
 | `app/overview.md` | Stack, schermate, client API, avvio | completo |
 | `briefs/<slug>/plan-brief.md` + `plan.md` | Contratto e piano di un ciclo di lavoro (decisioni chiuse, passi, lane) | si aggiorna durante il ciclo |
+| `reviews/<slug>-<data>.md` | Referto di una review: verdetto, oggetto, gate, finding P0-P2 con `file:riga` | un file per review, non si aggiorna |
 | `iss/*`, `presentazione-14-luglio.*`, `esposizione-discorsi.*` | Materiale d'esame del 14 luglio 2026 | archivio, non si aggiorna |
 
 ## Archivio: materiale d'esame (14 luglio 2026)
