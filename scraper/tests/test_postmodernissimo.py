@@ -221,12 +221,115 @@ def test_extra_permalink_resolves_to_film_page_and_merges_shows():
 
 
 @responses.activate
+def test_extra_record_with_long_synopsis_before_nested_movie_resolves_film_page():
+    # Arrange: la voce /extra/ porta ~4000 caratteri di sinossi prima dell'oggetto
+    # `movie` annidato, che è l'unico a portare il permalink /films/.
+    long_synopsis = "Sinossi intera del film. " * 150
+    extra_record = {
+        "id": 41204,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _EXTRA_PERMALINK,
+        "content": long_synopsis,
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "21:30")]},
+        "movie": {
+            # `permalink` prima degli altri campi: un oggetto annidato in quest'ordine non
+            # combacia col regex dei record, quindi il link può arrivare solo dalla
+            # risoluzione dentro il record, che senza confine di record si fermava a 3000.
+            "permalink": _FILMS_PERMALINK,
+            "id": 30500,
+            "title": "Prince of Broadway",
+            "slug": "prince-of-broadway",
+            "content": "Sinossi del film.",
+            "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+            "programmazione": {"spazio_prog": "postmod", "shows": []},
+        },
+    }
+    rsc_push = _build_rsc_push([extra_record])
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    # Pagina del film: senza payload RSC di show, la riconciliazione tiene i dati homepage.
+    responses.add(
+        responses.GET,
+        _FILMS_PERMALINK,
+        body="<html><body></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23"])
+
+    # Assert: la pagina film viene risolta nonostante la sinossi lunga, e interrogata.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert [s.date for s in film.present_in] == ["2026-11-23"]
+    assert film.present_in[0].times == ["21:30"]
+    assert {s.source_url for s in film.present_in} == {_FILMS_PERMALINK}
+    requested = [call.request.url or "" for call in responses.calls]
+    assert _FILMS_PERMALINK in requested, requested
+    assert result.errors == []
+
+
+@responses.activate
+def test_films_record_before_extra_record_yields_single_film_with_full_description():
+    # Arrange: il record /films/ precede quello /extra/ dello stesso slug, e i due
+    # portano varianti di `content` di lunghezza diversa.
+    full_synopsis = "Sinossi intera dalla pagina del film. " * 10
+    films_record = {
+        "id": 30500,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _FILMS_PERMALINK,
+        "content": full_synopsis,
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261124", "21:00")]},
+    }
+    extra_record = {
+        "id": 41205,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _EXTRA_PERMALINK,
+        "content": "Proiezione unica in lingua originale.",
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "21:30")]},
+    }
+    rsc_push = _build_rsc_push([films_record, extra_record])
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    # Pagina del film: senza payload RSC di show, la riconciliazione tiene i dati homepage.
+    responses.add(
+        responses.GET,
+        _FILMS_PERMALINK,
+        body="<html><body></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23", "2026-11-24"])
+
+    # Assert: una sola voce, date di entrambi i record e sinossi più completa conservata.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert film.title == "Prince of Broadway"
+    assert [s.date for s in film.present_in] == ["2026-11-23", "2026-11-24"]
+    assert film.present_in[0].times == ["21:30"]
+    assert film.present_in[1].times == ["21:00"]
+    assert {s.source_url for s in film.present_in} == {_FILMS_PERMALINK}
+    assert film.description == full_synopsis
+    assert result.errors == []
+
+
+@responses.activate
 def test_unresolved_extra_record_takes_permalink_from_later_film_record():
-    # Arrange: la voce /extra/ arriva prima e la risoluzione torna None (la pagina film
-    # sta oltre la finestra di ricerca): il permalink buono del record /films/ successivo
-    # deve completare il record nato dalla fusione, non essere scartato.
-    # "content" lungo abbastanza da spostare il record /films/ oltre i 3000 caratteri
-    # della finestra di risoluzione.
+    # Arrange: la voce /extra/ arriva prima e non porta la pagina film (il suo unico
+    # permalink è la route morta `/extra/`, nessun `movie` annidato): la risoluzione
+    # torna None e il permalink buono del record /films/ successivo deve completare il
+    # record nato dalla fusione, non essere scartato.
+    # Il `content` lungo serve a mostrare che la lunghezza del record non entra nella
+    # risoluzione.
     extra_record = {
         "id": 41202,
         "title": "Prince of Broadway",
@@ -275,11 +378,11 @@ def test_extra_record_without_film_page_keeps_shows_without_source_url():
         [
             {
                 "id": 41201,
-                "title": "Yalla Parkour",
-                "slug": "yalla-parkour",
-                "permalink": "https://www.postmodernissimo.com/extra/yalla-parkour",
+                "title": "Documentario Senza Pagina",
+                "slug": "documentario-senza-pagina",
+                "permalink": "https://www.postmodernissimo.com/extra/documentario-senza-pagina",
                 "content": "",
-                "details": {"regia": "Areej Mahmoud", "genere": "Documentario", "durata": "85"},
+                "details": {"regia": "Regista Inventato", "genere": "Documentario", "durata": "85"},
                 "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "19:00")]},
             }
         ]
@@ -290,7 +393,7 @@ def test_extra_record_without_film_page_keeps_shows_without_source_url():
     # responses.calls (invece di sollevare) e l'asserzione finale la vedrebbe.
     responses.add(
         responses.GET,
-        "https://www.postmodernissimo.com/extra/yalla-parkour",
+        "https://www.postmodernissimo.com/extra/documentario-senza-pagina",
         body="<html><body></body></html>",
         status=200,
     )
@@ -302,7 +405,7 @@ def test_extra_record_without_film_page_keeps_shows_without_source_url():
     # Assert
     assert len(result.films) == 1
     film = result.films[0]
-    assert film.title == "Yalla Parkour"
+    assert film.title == "Documentario Senza Pagina"
     assert film.present_in[0].date == "2026-11-23"
     assert film.present_in[0].times == ["19:00"]
     assert film.present_in[0].source_url is None

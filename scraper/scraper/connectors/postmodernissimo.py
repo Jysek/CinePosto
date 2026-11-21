@@ -38,6 +38,11 @@ _MOVIE_START_RE = re.compile(r'\{"id":(\d+),"title":"([^"]*)","slug":"([^"]+)","
 # Qualsiasi coppia "permalink":"..." nel payload unescapato (per risolvere le route morte).
 _PERMALINK_VALUE_RE = re.compile(r'"permalink":"([^"]+)"')
 
+# Tetto di scansione di un singolo record film: una sinossi lunga spinge l'oggetto
+# `movie` annidato ben oltre i 3000 caratteri, ma oltre questo limite un payload
+# malformato non deve far scandire tutto il documento.
+_RECORD_SCAN_LIMIT = 20000
+
 # Route del sito: `/films/` è la pagina del film, `/extra/` è una route morta (404) che il
 # payload porta ancora per le proiezioni fuori cartellone.
 _FILMS_ROUTE = "/films/"
@@ -259,15 +264,40 @@ class PostModernissimoConnector(BaseConnector):
 
         return [{k: v for k, v in m.items() if k != "_stream_pos"} for m in candidates_by_slug.values() if m["shows"]]
 
+    def _record_end(self, text: str, start: int) -> int:
+        """Indice subito dopo la `}` che chiude l'oggetto aperto a *start*.
+
+        Stesso brace-matching naive di `_extract_details`/`_extract_shows`: il payload
+        è un JSON solo parzialmente unescaped, quindi una graffa dentro una stringa
+        può falsare il conteggio. Il tetto `_RECORD_SCAN_LIMIT` tiene comunque la
+        scansione dentro i confini ragionevoli di un record e, se il conteggio non
+        torna a zero, si restituisce quel tetto.
+        """
+        limit = min(len(text), start + _RECORD_SCAN_LIMIT)
+        depth = 0
+        i = start
+        while i < limit:
+            if text[i] == "{":
+                depth += 1
+            elif text[i] == "}":
+                depth -= 1
+                if depth == 0:
+                    return i + 1
+            i += 1
+
+        return limit
+
     def _resolve_film_permalink(self, text: str, start: int, slug: str) -> str | None:
         """Permalink della pagina film per una voce nata sotto la route morta `/extra/`.
 
-        Il payload annida la pagina `/films/` poco dopo la voce `/extra/`, quindi si
-        cerca solo nella finestra utile (3000 caratteri, come `_extract_content`) per
-        non agganciare il film successivo. `None` se la pagina film non c'è: gli orari
-        restano, il link no.
+        Il payload annida la pagina `/films/` dentro lo stesso record, dopo la voce
+        `/extra/`: la ricerca si ferma alla fine di quell'oggetto (`_record_end`) e non
+        a una distanza fissa, perché una sinossi lunga spinge l'oggetto `movie`
+        annidato ben oltre i 3000 caratteri, mentre il record successivo resta escluso.
+        `None` se la pagina film non c'è: gli orari restano, il link no.
         """
-        for m in _PERMALINK_VALUE_RE.finditer(text, start, start + 3000):
+        end = self._record_end(text, start)
+        for m in _PERMALINK_VALUE_RE.finditer(text, start, end):
             permalink = m.group(1)
             if _FILMS_ROUTE in permalink and permalink.rstrip("/").split("/")[-1] == slug:
                 return permalink
