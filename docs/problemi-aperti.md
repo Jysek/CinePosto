@@ -1,8 +1,9 @@
 # CinePosto — Problemi aperti
 
-> Verificato su `4c18aa7` (`2026-11-21`): aggiunte le due voci sul confronto dello slug del
-> permalink e sui guard `/extra/` nei lettori di dettaglio; le altre voci non sono state
-> ricontrollate in questa sessione. Precedente: feat/backend-dataset-meta (`2026-11-19`, voce di
+> Verificato su `87d06e2` (`2026-11-21`): le due voci sul confronto dello slug del permalink e sui
+> guard `/extra/` nei lettori di dettaglio sono state **cancellate perché risolte**; aggiunta la voce
+> sullo stesso taglio grezzo dello slug in `thespace.py`. Le altre voci non sono state ricontrollate
+> in questa sessione. Precedente: feat/backend-dataset-meta (`2026-11-19`, voce di
 > `latest_scraped_at` cancellata perché risolta).
 
 **Come si usa questo file.** Qui finisce tutto ciò che **oggi non funziona** o non è ancora
@@ -48,3 +49,10 @@ La tab bar di React Navigation 7 la passa ancora come prop (`pointerEvents={isTa
 l'istanza nostra (`app/src/screens/FilmsTab.js`) è stata corretta nella stessa data. Si risolve con un
 upgrade di react-navigation che converta la prop in stile; non si patcha `node_modules`.
 
+### Anche thespace ricava lo slug tagliando la stringa grezza dell'URL
+**Dove**: `scraper/scraper/connectors/thespace.py:245` · **Prova**:
+`data.get("filmUrl", "").rstrip("/").split("/")[-1]` · **Data**: `2026-11-21`
+Stessa ricetta corretta in PostModernissimo in questa sessione: se `filmUrl` portasse una query o un
+fragment, lo slug usato per costruire la pagina di dettaglio sarebbe `x?fbclid=…`. Oggi l'API
+restituisce percorsi puliti, quindi è latente e nessun test lo copre. Fix: leggerlo da
+`urlparse(filmUrl).path`, con la stessa funzione di PostModernissimo (o una condivisa).

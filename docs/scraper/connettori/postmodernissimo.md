@@ -1,6 +1,7 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `4c18aa7` (`2026-11-21`): la risoluzione del permalink `/extra/` cerca dentro il
+> Verificato su `87d06e2` (`2026-11-21`): slug ricavato dal path (`urlparse`) e guard espliciti su
+> `/extra/` nei lettori di dettaglio. La risoluzione del permalink `/extra/` cerca dentro il
 > record (brace-matching, con la finestra piatta come rete di sicurezza) e la fusione per slug
 > completa il permalink dalla voce `/films/` successiva quando la risoluzione fallisce (P1-P2 di
 > [`../../reviews/postmodernissimo-extra-route-20261120.md`](../../reviews/postmodernissimo-extra-route-20261120.md)).

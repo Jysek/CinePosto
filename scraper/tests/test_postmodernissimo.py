@@ -555,6 +555,10 @@ def test_detail_readers_never_request_the_dead_extra_route():
     """La promessa "mai una GET verso /extra/" non deve dipendere dal solo filtro del parser."""
     connector = PostModernissimoConnector()
     connector._homepage_session = requests.Session()
+    # Sentinella: se una richiesta partisse davvero, `responses` la servirebbe e la registrerebbe.
+    # Senza registrazione l'URL non combacia e il ConnectionError verrebbe inghiottito dai lettori:
+    # il test passerebbe anche senza guard.
+    responses.add(responses.GET, _EXTRA_PERMALINK, body="<html><body></body></html>", status=200)
 
     # Act
     description = connector.fetch_film_detail(_EXTRA_PERMALINK)

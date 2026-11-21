@@ -9,8 +9,8 @@
 
 - Albero: `main` pulito su `fefe097`, 0 commit avanti su `origin/main`. Branch di lavoro:
   `fix/scraper-postmod-guard-slug`.
-- Gate: `make lint` e `make test-scraper` (Docker, albero pulito richiesto). Atteso dopo i due test
-  nuovi: 195 pass + 1 `xfail` (197 raccolti), totale 292.
+- Gate: `make lint` e `make test-scraper` (Docker, albero pulito richiesto). Atteso dopo i tre test
+  nuovi: 196 pass + 1 `xfail` (197 raccolti), totale 292.
 - Il blocco 0 e' il commit di questo file: senza di lui non si riparte.
 - Primo blocco da eseguire: il primo `Stato: TODO` con condizione vera (`grep '| Stato: TODO'`).
 - Trappola: `scraper/scraper/connectors/postmodernissimo.py` ha tre punti che ricavano lo slug con
