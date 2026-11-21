@@ -273,6 +273,52 @@ def test_extra_record_with_long_synopsis_before_nested_movie_resolves_film_page(
 
 
 @responses.activate
+def test_extra_record_with_brace_in_synopsis_keeps_film_page_link():
+    # Arrange: la sinossi contiene una `}` che chiude il conteggio delle graffe in anticipo,
+    # quindi il confine trovato non arriva all'oggetto `movie` annidato: la finestra piatta
+    # resta come rete di sicurezza e il link non si perde.
+    extra_record = {
+        "id": 41206,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _EXTRA_PERMALINK,
+        "content": "Sinossi con una graffa } chiusa a metà frase.",
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "21:30")]},
+        "movie": {
+            # `permalink` prima degli altri campi: l'oggetto annidato non combacia col regex
+            # dei record, quindi il link può arrivare solo dalla risoluzione.
+            "permalink": _FILMS_PERMALINK,
+            "id": 30500,
+            "title": "Prince of Broadway",
+            "slug": "prince-of-broadway",
+            "content": "",
+            "details": {},
+            "programmazione": {"spazio_prog": "postmod", "shows": []},
+        },
+    }
+    rsc_push = _build_rsc_push([extra_record])
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    responses.add(
+        responses.GET,
+        _FILMS_PERMALINK,
+        body="<html><body></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23"])
+
+    # Assert: il link si risolve anche con il confine falsato dalla graffa nella sinossi.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert {s.source_url for s in film.present_in} == {_FILMS_PERMALINK}
+    assert result.errors == []
+
+
+@responses.activate
 def test_films_record_before_extra_record_yields_single_film_with_full_description():
     # Arrange: il record /films/ precede quello /extra/ dello stesso slug, e i due
     # portano varianti di `content` di lunghezza diversa.

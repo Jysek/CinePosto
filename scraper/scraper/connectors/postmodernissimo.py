@@ -43,6 +43,11 @@ _PERMALINK_VALUE_RE = re.compile(r'"permalink":"([^"]+)"')
 # malformato non deve far scandire tutto il documento.
 _RECORD_SCAN_LIMIT = 20000
 
+# Rete di sicurezza della risoluzione del permalink: la vecchia finestra piatta, usata
+# solo quando il confine del record non ha dato nulla (una `}` dentro una sinossi lo
+# chiude in anticipo). Non è una scelta arbitraria: è la copertura che c'era prima.
+_FALLBACK_WINDOW = 3000
+
 # Route del sito: `/films/` è la pagina del film, `/extra/` è una route morta (404) che il
 # payload porta ancora per le proiezioni fuori cartellone.
 _FILMS_ROUTE = "/films/"
@@ -294,9 +299,20 @@ class PostModernissimoConnector(BaseConnector):
         `/extra/`: la ricerca si ferma alla fine di quell'oggetto (`_record_end`) e non
         a una distanza fissa, perché una sinossi lunga spinge l'oggetto `movie`
         annidato ben oltre i 3000 caratteri, mentre il record successivo resta escluso.
+        Resta però la vecchia finestra piatta come rete di sicurezza: una `}` dentro
+        una sinossi chiude il conteggio in anticipo, e quel caso non deve perdere il
+        link che la versione a finestra fissa trovava.
         `None` se la pagina film non c'è: gli orari restano, il link no.
         """
         end = self._record_end(text, start)
+        found = self._first_films_permalink(text, start, end, slug)
+        if found or end >= min(len(text), start + _FALLBACK_WINDOW):
+            return found
+        return self._first_films_permalink(text, start, min(len(text), start + _FALLBACK_WINDOW), slug)
+
+    @staticmethod
+    def _first_films_permalink(text: str, start: int, end: int, slug: str) -> str | None:
+        """Primo `permalink` in `[start, end)` che è la pagina `/films/` di *slug*."""
         for m in _PERMALINK_VALUE_RE.finditer(text, start, end):
             permalink = m.group(1)
             if _FILMS_ROUTE in permalink and permalink.rstrip("/").split("/")[-1] == slug:
