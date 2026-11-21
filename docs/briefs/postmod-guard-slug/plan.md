@@ -65,9 +65,9 @@ partire verso la route morta `/extra/` per sola fiducia nel filtro a monte.
 - 3. Due test rossi-prima-verdi-dopo: slug del permalink con query e con fragment; nessuna richiesta HTTP verso `/extra/` per entrambi i lettori (`responses.calls` vuoto) | files: scraper/tests/test_postmodernissimo.py | done: i due test falliscono sul codice dei blocchi 1-2 assenti e passano; `make test-scraper` -> 196 passed, 1 xfailed | Stato: DONE
 - 4. Cancellare le due voci da `docs/problemi-aperti.md` | files: docs/problemi-aperti.md | done: le due intestazioni sullo slug e sul guard non esistono piu'; il resto del file e' intatto | Stato: DONE
 - 5. Allineare i conteggi a 197 scraper e 292 totali | files: AGENTS.md,README.md,docs/panoramica.md,docs/development-windows.md | done: `grep -rn "194\|289"` sui documenti vivi non trova piu' i conteggi dei test | Stato: DONE
-- 6. Riga di diario della sessione | files: docs/stato-e-diario.md | done: riga in coda con data, fix, conteggi e gate verdi | Stato: TODO
-- 7. Gate completi e review a contesto fresco, due angoli (correttezza `deepseek-v4.1-flash`, coerenza col brief `glm-5.3-flash`) | files: docs/briefs/postmod-guard-slug/plan.md | done: `make lint` + `make test-scraper` + `make check-console` verdi, findings P0/P1 chiusi o annotati | Stato: TODO
-- 8. Push del branch di lavoro `fix/scraper-postmod-guard-slug` su `origin` | files: nessuno | done: `git status --porcelain` vuoto e branch pubblicato su `origin` | Stato: TODO
+- 6. Riga di diario della sessione | files: docs/stato-e-diario.md | done: riga in coda con data, fix, conteggi e gate verdi | Stato: DONE
+- 7. Gate completi e review a contesto fresco, due angoli (correttezza `deepseek-v4.1-flash`, coerenza col brief `glm-5.3-flash`) | files: docs/briefs/postmod-guard-slug/plan.md | done: `make lint` + `make test-scraper` + `make check-console` verdi, findings P0/P1 chiusi o annotati | Stato: DONE
+- 8. Push del branch di lavoro `fix/scraper-postmod-guard-slug` su `origin` | files: nessuno | done: `git status --porcelain` vuoto e branch pubblicato su `origin` | Stato: DONE
 
 ## Lanes
 

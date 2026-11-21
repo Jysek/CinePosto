@@ -348,3 +348,15 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   nei lettori di dettaglio e confronto dello slug che si rompe con query o fragment — sono latenti
   e sono finite in `problemi-aperti.md` con la prova. Conteggi a 194 scraper (193 pass + 1 `xfail`) e
   289 totali. Gate verdi: `make lint`, `make test-scraper`, `make check-console`.
+- **2026-11-21** — Chiuse le due voci latenti di PostModernissimo. Lo slug del permalink si ricava ora
+  dal path (`urlparse`), quindi una query o un fragment non rompono piu' la risoluzione: un solo
+  helper copre i tre punti che ripetevano il taglio grezzo (`_first_films_permalink`, sinossi dal
+  payload di dettaglio, card HTML). `fetch_film_detail` e `_fetch_detail_shows` hanno il guard
+  esplicito su `/extra/`, gemello di `/eventi/`: nessuna GET verso la route morta dipende piu' dal
+  solo filtro del parser. Tre test nuovi (query, fragment, nessuna richiesta verso `/extra/`),
+  rossi prima su un worktree senza guard e verdi dopo. Review a due angoli: un P1 sul test del guard
+  — senza una sentinella servita da `responses` la richiesta unmatched non entra in `calls` e il test
+  passava anche senza fix — chiuso con la sentinella; P2 di documenti chiusi (intestazioni di
+  verifica, aritmetica del piano) e una voce nuova registrata per la stessa ricetta grezza in
+  `thespace.py`. Conteggi a 197 scraper (196 pass + 1 `xfail`) e 292 totali. Gate verdi:
+  `make lint`, `make test-scraper`, `make check-console`.
