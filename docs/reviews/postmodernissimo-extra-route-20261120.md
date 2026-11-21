@@ -1,6 +1,7 @@
 # Review — PostModernissimo: route `/extra/` morta
 
 **Verdetto**: `PASS con nits` (zero P0, un P1)
+**Stato (2026-11-21)**: P1 applicato (`40464de`, test RED/GREEN); i P2 restano aperti.
 **Oggetto**: diff `origin/main...HEAD`, 13 file (5 commit): connettore, test, quattro fixture JSON,
 documentazione, `.gitignore`. Patch materializzate in `%TEMP%/cineposto-review-20261120/`.
 **Gate**: verde — `make lint` (ruff check + format, scraper e backend) e `make test-scraper`

@@ -1,8 +1,9 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `aa3be46` (`2026-11-20`): risoluzione del permalink `/extra/` sulla pagina
-> `/films/`, riparazione dei JSON dell'ultima run. Il markup del sito è stato osservato in una run
-> reale del 2026-11-20; nessuna richiesta live in questa sessione.
+> Verificato su `cbaf9d0` (`2026-11-21`): la fusione per slug completa il permalink dalla voce
+> `/films/` successiva quando la risoluzione `/extra/` fallisce (P1 di
+> [`../reviews/postmodernissimo-extra-route-20261120.md`](../reviews/postmodernissimo-extra-route-20261120.md)).
+> Nessuna richiesta live in questa sessione; markup osservato in una run reale del 2026-11-20.
 
 > **Stato**: 🟢 in produzione, connettore storico · Perugia (PG) · Nessuna autenticazione.
 > Il comportamento tecnico generale è in [`../architecture.md`](../architecture.md#postmodernissimo);

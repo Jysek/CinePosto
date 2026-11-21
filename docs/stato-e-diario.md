@@ -316,3 +316,14 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   la pagina film, il ramo di fusione non aggiorna il permalink e il link buono si perde — e sei P2
   su finestra di ricerca, test e allineamento del brief. Nessun codice scritto: le fix passano da
   `/ship` col referto come brief.
+- **2026-11-21** — Applicato il P1 di
+  [`reviews/postmodernissimo-extra-route-20261120.md`](reviews/postmodernissimo-extra-route-20261120.md):
+  nel ramo di fusione per slug il permalink si completa dalla voce `/films/` successiva quando la
+  risoluzione `/extra/` torna `None` (prima le date uscivano senza link pur avendo la pagina film),
+  con test RED/GREEN che fallisce senza il fix. In piu': cast sui valori attributo bs4 e coalescenza
+  sull'url nel test (allineamento ai tipi di pyright), `except: pass` su `close_browser()` in
+  `scraper/main.py` sostituito da un warning, conteggi dei test allineati a 191 scraper (di cui 1
+  `xfail`) e 286 totali in `AGENTS.md`, `README.md`, `panoramica.md` e
+  `development-windows.md`, intestazioni di verifica aggiornate su `architecture.md` e sulla scheda
+  connettore, nota di stato nel referto. Gate verdi: `make lint`, `make test-scraper` (190 pass + 1
+  xfail), `make check-console`. I sei P2 del referto non sono toccati.
