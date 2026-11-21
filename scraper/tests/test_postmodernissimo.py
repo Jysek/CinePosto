@@ -221,6 +221,54 @@ def test_extra_permalink_resolves_to_film_page_and_merges_shows():
 
 
 @responses.activate
+def test_unresolved_extra_record_takes_permalink_from_later_film_record():
+    # Arrange: la voce /extra/ arriva prima e la risoluzione torna None (la pagina film
+    # sta oltre la finestra di ricerca): il permalink buono del record /films/ successivo
+    # deve completare il record nato dalla fusione, non essere scartato.
+    # "content" lungo abbastanza da spostare il record /films/ oltre i 3000 caratteri
+    # della finestra di risoluzione.
+    extra_record = {
+        "id": 41202,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _EXTRA_PERMALINK,
+        "content": "X" * 4000,
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261123", "21:30")]},
+    }
+    films_record = {
+        "id": 30500,
+        "title": "Prince of Broadway",
+        "slug": "prince-of-broadway",
+        "permalink": _FILMS_PERMALINK,
+        "content": "",
+        "details": {"regia": "Sean Baker", "genere": "Commedia, Drammatico", "durata": "98"},
+        "programmazione": {"spazio_prog": "postmod", "shows": [_show("20261124", "21:00")]},
+    }
+    rsc_push = _build_rsc_push([extra_record, films_record])
+    homepage_html = f"<html><body><script>{rsc_push}</script></body></html>"
+    responses.add(responses.GET, POSTMOD_CINEMA_URL, body=homepage_html, status=200)
+    # Pagina del film: con il permalink completato la riconciliazione la interroga.
+    responses.add(
+        responses.GET,
+        _FILMS_PERMALINK,
+        body="<html><body></body></html>",
+        status=200,
+    )
+
+    # Act
+    connector = PostModernissimoConnector()
+    result = connector.scrape("2026-11-23", dates=["2026-11-23", "2026-11-24"])
+
+    # Assert: una sola voce, date di entrambi i record, link della pagina film su tutte.
+    assert len(result.films) == 1
+    film = result.films[0]
+    assert [s.date for s in film.present_in] == ["2026-11-23", "2026-11-24"]
+    assert {s.source_url for s in film.present_in} == {_FILMS_PERMALINK}
+    assert result.errors == []
+
+
+@responses.activate
 def test_extra_record_without_film_page_keeps_shows_without_source_url():
     # Arrange: nessun permalink /films/ in tutta la pagina, quindi niente da risolvere.
     rsc_push = _build_rsc_push(

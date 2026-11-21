@@ -47,7 +47,9 @@ duplicati e, per la `content`, si tiene la variante **più completa** (mai una p
 rassegne anche sotto `…/extra/<slug>`, che risponde 404, dentro un record che porta un oggetto
 `movie` annidato con il permalink buono `…/films/<slug>`. Il parser risolve quindi il permalink
 **prima** di usarlo come chiave: se contiene `/extra/` prende il primo permalink `/films/`
-successivo al match con lo stesso slug, altrimenti il record resta senza link. Effetti: le due
+successivo al match con lo stesso slug; se la risoluzione fallisce ma lo stesso slug ricompare
+più avanti come record `/films/`, la fusione completa il permalink dal record successivo,
+altrimenti il record resta senza link. Effetti: le due
 voci dello stesso film (una `/extra/`, una `/films/`) si fondono in un solo film con gli show
 accumulati; `source_url` punta sempre a una pagina che risponde 200; nessuna richiesta parte
 mai verso `/extra/`, quindi la run non produce più due errori `detail` spurii. Gli orari restano
@@ -91,7 +93,8 @@ sovrascrive con una meta description troncata.
 
 - `scraper/tests/test_postmodernissimo.py` — parsing RSC, direttore, filtri evento/weekend,
   risoluzione del permalink `/extra/` (fusione delle due voci, record senza pagina film tenuto con
-  `source_url` assente, nessuna richiesta verso `/extra/`, slug non combaciante non risolto);
+  `source_url` assente, nessuna richiesta verso `/extra/`, slug non combaciante non risolto,
+  risoluzione fuori finestra completata dalla fusione con il record `/films/` successivo);
 - `scraper/tests/test_postmodernissimo_description.py` — ordine delle fonti di testo, non-degrado,
   dettaglio che fallisce senza rompere la run;
 - `scraper/tests/test_postmod_detail_reconcile.py` — il dettaglio vince sulla homepage per gli orari.

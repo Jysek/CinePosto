@@ -247,6 +247,9 @@ class PostModernissimoConnector(BaseConnector):
                     existing_keys.add(key)
             if details and not existing.get("details"):
                 existing["details"] = details
+            # La voce /extra/ con risoluzione fallita non deve scartare il permalink
+            # buono del record successivo dello stesso slug: si completa solo se manca.
+            existing["permalink"] = existing.get("permalink") or permalink
             existing["content"] = (
                 pick_fuller_description(existing.get("content"), self._extract_content(unescaped, m.start())) or ""
             )
