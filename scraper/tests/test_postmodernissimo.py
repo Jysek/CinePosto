@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+import requests
 import responses
 
 from scraper.config import POSTMOD_CINEMA_URL
@@ -525,3 +526,42 @@ def test_extra_record_with_mismatched_film_slug_stays_unresolved():
     film = result.films[0]
     assert film.present_in[0].times == ["18:00"]
     assert film.present_in[0].source_url is None
+
+
+def test_permalink_slug_ignores_query_string_when_comparing_slugs():
+    """Lo slug si legge dal path: una query sul permalink non deve rompere il confronto."""
+    text = '"permalink":"https://www.postmodernissimo.com/films/prince-of-broadway?fbclid=abc"'
+
+    # Act
+    found = PostModernissimoConnector._first_films_permalink(text, 0, len(text), "prince-of-broadway")
+
+    # Assert: si restituisce il permalink intero, con la sua query, non uno slug troncato.
+    assert found == "https://www.postmodernissimo.com/films/prince-of-broadway?fbclid=abc"
+
+
+def test_permalink_slug_ignores_fragment_when_comparing_slugs():
+    """Un fragment in coda al permalink non deve impedire la risoluzione della pagina film."""
+    text = '"permalink":"https://www.postmodernissimo.com/films/prince-of-broadway#trailer"'
+
+    # Act
+    found = PostModernissimoConnector._first_films_permalink(text, 0, len(text), "prince-of-broadway")
+
+    # Assert
+    assert found == "https://www.postmodernissimo.com/films/prince-of-broadway#trailer"
+
+
+@responses.activate
+def test_detail_readers_never_request_the_dead_extra_route():
+    """La promessa "mai una GET verso /extra/" non deve dipendere dal solo filtro del parser."""
+    connector = PostModernissimoConnector()
+    connector._homepage_session = requests.Session()
+
+    # Act
+    description = connector.fetch_film_detail(_EXTRA_PERMALINK)
+    shows = connector._fetch_detail_shows(_EXTRA_PERMALINK)
+
+    # Assert: nessuna richiesta registrata. Senza guard ne partirebbe una, registrata come
+    # errore `detail` su una route che risponde 404.
+    assert description is None
+    assert shows == []
+    assert not responses.calls, [call.request.url for call in responses.calls]

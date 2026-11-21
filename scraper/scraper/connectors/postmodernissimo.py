@@ -72,6 +72,16 @@ def _normalize(label: str | None) -> str | None:
     return label
 
 
+def _url_slug(url: str) -> str:
+    """Ultimo segmento del *path* di un URL, senza query ne' fragment.
+
+    Il taglio sulla stringa grezza (`rstrip("/").split("/")[-1]`) restituiva
+    `x?fbclid=1` al posto di `x`: il confronto con lo slug del payload falliva in
+    silenzio. `urlparse` separa prima il path, cosi' l'ultimo segmento e' lo slug.
+    """
+    return urlparse(url).path.rstrip("/").split("/")[-1]
+
+
 class PostModernissimoConnector(BaseConnector):
     """Connettore PostModernissimo — sito Next.js, dati nel payload RSC della homepage.
 
@@ -315,7 +325,7 @@ class PostModernissimoConnector(BaseConnector):
         """Primo `permalink` in `[start, end)` che è la pagina `/films/` di *slug*."""
         for m in _PERMALINK_VALUE_RE.finditer(text, start, end):
             permalink = m.group(1)
-            if _FILMS_ROUTE in permalink and permalink.rstrip("/").split("/")[-1] == slug:
+            if _FILMS_ROUTE in permalink and _url_slug(permalink) == slug:
                 return permalink
         return None
 
@@ -354,7 +364,7 @@ class PostModernissimoConnector(BaseConnector):
         if not matches:
             return ""
         unescaped = max(matches, key=len).replace('\\"', '"').replace("\\\\", "\\")
-        target_slug = film_url.rstrip("/").split("/")[-1]
+        target_slug = _url_slug(film_url)
         for m in _MOVIE_START_RE.finditer(unescaped):
             if m.group(3) == target_slug:
                 return self._extract_content(unescaped, m.start())
@@ -443,6 +453,8 @@ class PostModernissimoConnector(BaseConnector):
         """
         if not film_url or not film_url.startswith("http"):
             return None
+        if _EXTRA_ROUTE in film_url:
+            return None  # route morta: nessuna GET, nessun errore registrato
         try:
             session = requests.Session()
             session.headers.update({"User-Agent": DEFAULT_USER_AGENT, "Accept-Language": "it-IT,it;q=0.9"})
@@ -480,13 +492,15 @@ class PostModernissimoConnector(BaseConnector):
             return []
         if "/eventi/" in permalink:
             return []  # dettaglio evento, non rilevante per film
+        if _EXTRA_ROUTE in permalink:
+            return []  # route morta: nessuna GET, nessun errore registrato
         try:
             resp = retry_request("get", permalink, self._homepage_session, label="POSTMOD")
             movies_detail = self._parse_rsc_payload(resp.text)
             for m in movies_detail:
                 permalink_in_detail = m.get("permalink", "")
                 slug_in_detail = m.get("slug", "")
-                target_slug = permalink.rstrip("/").split("/")[-1]
+                target_slug = _url_slug(permalink)
                 if permalink_in_detail == permalink or slug_in_detail == target_slug:
                     return [s for s in m.get("shows", []) if s.get("orario")]
         except Exception as exc:
@@ -583,7 +597,7 @@ class PostModernissimoConnector(BaseConnector):
                     continue
                 detail_url = link.get("href", "")
                 # I stub bs4 ammettono anche le liste: a runtime l'href è una stringa.
-                slug = cast(str, detail_url).rstrip("/").split("/")[-1]
+                slug = _url_slug(cast(str, detail_url))
 
                 if slug in seen_slugs:
                     continue
