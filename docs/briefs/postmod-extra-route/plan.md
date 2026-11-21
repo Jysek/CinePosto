@@ -47,8 +47,8 @@ del record. Se non c'è, il record resta con `permalink` vuoto/None: gli orari s
 descrizione e gli show di dettaglio non si chiedono (le funzioni di dettaglio escono già per
 permalink falsy). La risoluzione avviene **prima** della chiave di deduplica, così il record
 `/extra/` e il record `/films/` dello stesso film si fondono: show accumulati, `content` più
-completo. Le due costanti di route stanno accanto a `_EVENT_HINTS` nel connettore, come le altre
-parole-spia del sito: nessun secondo file di codice da toccare.
+completo. Le due costanti di route (`_FILMS_ROUTE`, `_EXTRA_ROUTE`) sono costanti di modulo, accanto
+ai regex del payload in testa al connettore: nessun secondo file di codice da toccare.
 
 **Criteri di successo**
 - `grep -c "postmodernissimo.com/extra/" scraper/output/*.json` restituisce 0 su `showings.json` e
@@ -68,7 +68,7 @@ parole-spia del sito: nessun secondo file di codice da toccare.
 - 0. Commit del contratto e del piano | files: docs/briefs/postmod-extra-route/plan.md | done: commit su `main` che contiene solo questo file, albero del resto invariato | Stato: DONE
 - 1. Risolvere il permalink `/extra/` sul `/films/` corrispondente nel parser RSC, senza mai chiedere il dettaglio di una route morta | files: scraper/scraper/connectors/postmodernissimo.py | done: `ruff check` + `ruff format --check` verdi; leggi il file e verifica che la risoluzione avvenga prima della chiave di deduplica e che `source_url` resti `None` quando non c'è pagina film | Stato: DONE
 - 2. Test di comportamento sul payload annidato: link risolto e una sola voce per film, record senza pagina film tenuto con `source_url` assente, nessuna richiesta HTTP verso `/extra/`, `/eventi/` ancora scartato | files: scraper/tests/test_postmodernissimo.py | done: `python3 -m pytest tests/test_postmodernissimo.py -q` verde con i nuovi test, suite scraper intera verde | Stato: DONE
-- 3. Ripulire i JSON di output della run di prova: `source_url` dei due record `/extra/` portato su `/films/<slug>`, via le due voci di errore 404 da `movies.json`, `errors.json` cancellato e messo in `.gitignore` | files: scraper/output/showings.json,scraper/output/movies.json,.gitignore | done: `grep -c "postmodernissimo.com/extra/" scraper/output/showings.json scraper/output/movies.json` = 0/0; `git diff --stat` limitato a quei file | Stato: DONE
+- 3. Ripulire i JSON di output della run di prova: `source_url` dei due record `/extra/` portato su `/films/<slug>`, via le due voci di errore 404 da `movies.json`, `errors.json` cancellato e messo in `.gitignore` | files: scraper/output/showings.json,scraper/output/movies.json,scraper/output/cinemas.json,scraper/output/films.json,.gitignore | done: `grep -c "postmodernissimo.com/extra/" scraper/output/showings.json scraper/output/movies.json` = 0/0; `git diff --stat` limitato ai quattro fixture rigenerati (`showings.json`, `movies.json`, `cinemas.json`, `films.json`) e a `.gitignore` | Stato: DONE
 - 4. Allineare la doc del connettore alla nuova regola: come si risolve il permalink e cosa succede quando la pagina film non c'è, più la verifica in testa | files: docs/scraper/connettori/postmodernissimo.md,docs/scraper/architecture.md | done: le due pagine descrivono la risoluzione `/extra/` -> `/films/` e il caso senza pagina film; intestazione `Verificato su <commit>` aggiornata | Stato: DONE
 - 5. Riga di diario e conteggi dei test dichiarati | files: docs/stato-e-diario.md,AGENTS.md,README.md | done: riga in coda a `stato-e-diario.md` datata 2026-11-20 con esito e conteggi reali; ogni "186" ora non più vero è allineato al numero misurato | Stato: DONE
 - 6. Review a contesto fresco, tre angoli (correttezza, sicurezza/dati, coerenza col brief) | files: nessuno (sola lettura) | done: P0/P1/P2 con `file:riga` e verdetto merge per angolo | Stato: DONE

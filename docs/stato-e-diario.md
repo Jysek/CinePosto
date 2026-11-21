@@ -327,3 +327,16 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   `development-windows.md`, intestazioni di verifica aggiornate su `architecture.md` e sulla scheda
   connettore, nota di stato nel referto. Gate verdi: `make lint`, `make test-scraper` (190 pass + 1
   xfail), `make check-console`. I sei P2 del referto non sono toccati.
+- **2026-11-21** — Applicati i cinque P2 di
+  [`reviews/postmodernissimo-extra-route-20261120.md`](reviews/postmodernissimo-extra-route-20261120.md)
+  (`570cbc4`): la risoluzione del permalink `/films/` di una voce nata sotto `/extra/` non usa piu'
+  una finestra fissa di 3000 caratteri ma il confine del record (`_record_end` con brace-matching,
+  tetto `_RECORD_SCAN_LIMIT`), cosi' una sinossi lunga prima dell'oggetto `movie` annidato non fa
+  uscire la ricerca; test per l'ordine inverso dei due record con la descrizione piu' completa
+  conservata, caso senza pagina film con slug inventato, commento del test "irrisolto" allineato al
+  vero motivo. Il test della sinossi lunga, scritto sulla fixture ovvia, passava anche col codice
+  vecchio (la fusione del P1 copriva il caso): riscritto con l'oggetto annidato che non combacia col
+  regex dei record, rosso prima e verde dopo. Allineati i due P2 del brief storico (costanti di
+  modulo, quattro fixture rigenerati) e i conteggi a 193 scraper (192 pass + 1 `xfail`) e 288 totali.
+  Gate verdi: `make lint`, `make test-scraper`, `make check-console`. Push non eseguito: `main`
+  locale era gia' avanti di 12 commit su `origin/main`.

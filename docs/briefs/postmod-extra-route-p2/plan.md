@@ -36,6 +36,12 @@ sul brief storico si allineano al codice e alla run che e' realmente avvenuta.
    (`documentario-senza-pagina`), nessun riferimento a un film reale, sentinella `responses`
    allineata.
 5. **Conteggi dei test**: due test nuovi -> 193 scraper (192 pass + 1 `xfail`), 288 totali.
+6. **Il test della sinossi lunga, com'e' venuto la prima volta, non provava niente**: il record
+   annidato `movie` combacia col regex dei record, quindi la fusione del P1 riempiva il permalink
+   anche con la vecchia finestra fissa (verificato: 10/10 verdi col codice vecchio). -> la fixture
+   usa un oggetto annidato con `permalink` **prima** degli altri campi: non combacia col regex, il
+   link puo' arrivare solo dalla risoluzione dentro il record. Verificato rosso sul codice vecchio
+   e verde sul nuovo.
 
 ## Criteri di successo
 
@@ -57,14 +63,15 @@ sul brief storico si allineano al codice e alla run che e' realmente avvenuta.
 
 ## Passi
 
-- 0. Commit del contratto e del piano | files: docs/briefs/postmod-extra-route-p2/plan.md | done: commit su `main` che contiene solo questo file | Stato: TODO
-- 1. La risoluzione del permalink cerca dentro il record, non entro 3000 caratteri fissi: `_record_end` con brace-matching e tetto `_RECORD_SCAN_LIMIT`, usata da `_resolve_film_permalink` | files: scraper/scraper/connectors/postmodernissimo.py | done: `ruff check` + `ruff format --check` verdi; il test esistente del caso irrisolto resta verde | Stato: TODO
-- 2. Test: sinossi lunga prima di `movie` annidato che risolve; ordine inverso `/films/` poi `/extra/` con assert su `description` piu' completa; slug inventato nel caso "senza pagina film"; commento del test "irrisolto" allineato al nuovo motivo | files: scraper/tests/test_postmodernissimo.py | done: `python -m pytest tests/ -q` da `scraper/` -> 192 passed, 1 xfailed | Stato: TODO
-- 3. Scheda connettore: §3 dice che la ricerca sta dentro il record (non "entro 3000 char"), §8 elenca i due test nuovi, intestazione `Verificato su <commit>` aggiornata al commit del passo 1 | files: docs/scraper/connettori/postmodernissimo.md | done: nessuna riga della scheda descrive una finestra fissa per il permalink | Stato: TODO
-- 4. Brief storico allineato ai fatti: il `done:` del passo 3 nomina i quattro fixture, il "Meccanismo deciso" dice che le costanti di route sono di modulo accanto ai regex (non "accanto a `_EVENT_HINTS`") | files: docs/briefs/postmod-extra-route/plan.md | done: `grep -n "_EVENT_HINTS" docs/briefs/postmod-extra-route/plan.md` vuoto; la riga dei file elenca i quattro fixture | Stato: TODO
-- 5. Conteggi reali nei documenti: 191 -> 193 scraper, 286 -> 288 totali | files: AGENTS.md,README.md,docs/panoramica.md,docs/development-windows.md | done: `grep -rn "191\|286" AGENTS.md README.md docs/ | grep -v stato-e-diario` vuoto | Stato: TODO
-- 6. Riga di stato nella review e riga di diario della sessione | files: docs/reviews/postmodernissimo-extra-route-20261120.md,docs/stato-e-diario.md | done: la review dichiara i P2 applicati con i `file:riga` risolti; il diario ha la riga datata con esito, conteggi e gate | Stato: TODO
-- 7. Gate completo e push sul branch di lavoro | files: nessuno (sola lettura + git) | done: `make lint`, `make test-scraper`, `make check-console` verdi; albero pulito; push su `origin` del branch | Stato: TODO
+- 0. Commit del contratto e del piano | files: docs/briefs/postmod-extra-route-p2/plan.md | done: commit su `main` che contiene solo questo file | Stato: DONE
+- 1. La risoluzione del permalink cerca dentro il record, non entro 3000 caratteri fissi: `_record_end` con brace-matching e tetto `_RECORD_SCAN_LIMIT`, usata da `_resolve_film_permalink` | files: scraper/scraper/connectors/postmodernissimo.py | done: `ruff check` + `ruff format --check` verdi; il test esistente del caso irrisolto resta verde | Stato: DONE
+- 2. Test: sinossi lunga prima di `movie` annidato che risolve; ordine inverso `/films/` poi `/extra/` con assert su `description` piu' completa; slug inventato nel caso "senza pagina film"; commento del test "irrisolto" allineato al nuovo motivo | files: scraper/tests/test_postmodernissimo.py | done: `python -m pytest tests/ -q` da `scraper/` -> 192 passed, 1 xfailed | Stato: DONE
+- 3. Scheda connettore: §3 dice che la ricerca sta dentro il record (non "entro 3000 char"), §8 elenca i due test nuovi, intestazione `Verificato su <commit>` aggiornata al commit del passo 1 | files: docs/scraper/connettori/postmodernissimo.md | done: nessuna riga della scheda descrive una finestra fissa per il permalink | Stato: DONE
+- 4. Brief storico allineato ai fatti: il `done:` del passo 3 nomina i quattro fixture, il "Meccanismo deciso" dice che le costanti di route sono di modulo accanto ai regex (non "accanto a `_EVENT_HINTS`") | files: docs/briefs/postmod-extra-route/plan.md | done: `grep -n "_EVENT_HINTS" docs/briefs/postmod-extra-route/plan.md` vuoto; la riga dei file elenca i quattro fixture | Stato: DONE
+- 5. Conteggi reali nei documenti: 191 -> 193 scraper, 286 -> 288 totali | files: AGENTS.md,README.md,docs/panoramica.md,docs/development-windows.md | done: `grep -rn "191\|286" AGENTS.md README.md docs/ | grep -v stato-e-diario` vuoto | Stato: DONE
+- 6. Riga di stato nella review e riga di diario della sessione | files: docs/reviews/postmodernissimo-extra-route-20261120.md,docs/stato-e-diario.md | done: la review dichiara i P2 applicati con i `file:riga` risolti; il diario ha la riga datata con esito, conteggi e gate | Stato: DONE
+- 7. Gate completo: lint, test scraper, console ASCII, albero pulito | files: nessuno (sola lettura + git) | done: `make lint`, `make test-scraper` (193 test raccolti, 192 pass + 1 `xfail`, exit 0), `make check-console` verdi | Stato: DONE
+- 8. Push su `origin` | files: nessuno | done: `main` locale = `origin/main` | Stato: N/A — non eseguito: `main` locale era gia' avanti di 12 commit sulle sessioni precedenti, il push si decide in chiusura
 
 ## Lanes
 

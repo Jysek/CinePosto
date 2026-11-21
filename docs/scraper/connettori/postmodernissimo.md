@@ -1,8 +1,9 @@
 # PostModernissimo — scheda connettore
 
-> Verificato su `cbaf9d0` (`2026-11-21`): la fusione per slug completa il permalink dalla voce
-> `/films/` successiva quando la risoluzione `/extra/` fallisce (P1 di
-> [`../reviews/postmodernissimo-extra-route-20261120.md`](../reviews/postmodernissimo-extra-route-20261120.md)).
+> Verificato su `570cbc4` (`2026-11-21`): la risoluzione del permalink `/extra/` cerca dentro il
+> record (brace-matching, non più finestra fissa di caratteri) e la fusione per slug completa il
+> permalink dalla voce `/films/` successiva quando la risoluzione fallisce (P1-P2 di
+> [`../../reviews/postmodernissimo-extra-route-20261120.md`](../../reviews/postmodernissimo-extra-route-20261120.md)).
 > Nessuna richiesta live in questa sessione; markup osservato in una run reale del 2026-11-20.
 
 > **Stato**: 🟢 in produzione, connettore storico · Perugia (PG) · Nessuna autenticazione.
@@ -48,7 +49,9 @@ duplicati e, per la `content`, si tiene la variante **più completa** (mai una p
 rassegne anche sotto `…/extra/<slug>`, che risponde 404, dentro un record che porta un oggetto
 `movie` annidato con il permalink buono `…/films/<slug>`. Il parser risolve quindi il permalink
 **prima** di usarlo come chiave: se contiene `/extra/` prende il primo permalink `/films/`
-successivo al match con lo stesso slug; se la risoluzione fallisce ma lo stesso slug ricompare
+successivo al match, con lo stesso slug, **dentro lo stesso record** (la ricerca si ferma alla `}`
+che chiude il record, non a una finestra fissa: una sinossi lunga prima dell'oggetto annidato non
+la fa uscire); se la risoluzione fallisce ma lo stesso slug ricompare
 più avanti come record `/films/`, la fusione completa il permalink dal record successivo,
 altrimenti il record resta senza link. Effetti: le due
 voci dello stesso film (una `/extra/`, una `/films/`) si fondono in un solo film con gli show
@@ -93,9 +96,11 @@ sovrascrive con una meta description troncata.
 ## 8. Test
 
 - `scraper/tests/test_postmodernissimo.py` — parsing RSC, direttore, filtri evento/weekend,
-  risoluzione del permalink `/extra/` (fusione delle due voci, record senza pagina film tenuto con
-  `source_url` assente, nessuna richiesta verso `/extra/`, slug non combaciante non risolto,
-  risoluzione fuori finestra completata dalla fusione con il record `/films/` successivo);
+  risoluzione del permalink `/extra/` (fusione delle due voci nei due ordini possibili, descrizione
+  più completa tenuta dalla fusione, record senza pagina film tenuto con `source_url` assente,
+  nessuna richiesta verso `/extra/`, slug non combaciante non risolto, sinossi lunga prima
+  dell'oggetto annidato che risolve, risoluzione fuori record completata dalla fusione con il
+  record `/films/` successivo);
 - `scraper/tests/test_postmodernissimo_description.py` — ordine delle fonti di testo, non-degrado,
   dettaglio che fallisce senza rompere la run;
 - `scraper/tests/test_postmod_detail_reconcile.py` — il dettaglio vince sulla homepage per gli orari.

@@ -28,7 +28,7 @@ L'ambiente primario è **Docker** (funziona uguale su Windows e macOS, e non ric
 | Avvia tutto (Docker + backend + app) | `make dev` |
 | Avvia il backend | `make up` |
 | Test backend (95) | `make test` |
-| Test scraper (191, 1 xfail) | `make test-scraper` |
+| Test scraper (193, 1 xfail) | `make test-scraper` |
 | Lint | `make lint` |
 | Messaggi di console ASCII | `make check-console` |
 | Seed DB dai JSON | `make seed` |
@@ -43,7 +43,7 @@ Senza Docker (fallback, richiede Python 3.12 locale), dal componente giusto:
 
 | Cosa | Comando |
 |---|---|
-| Test scraper | `python3 -m pytest tests/ -q` (191 test, di cui 1 `xfail`) |
+| Test scraper | `python3 -m pytest tests/ -q` (193 test, di cui 1 `xfail`) |
 | Lint scraper | `python3 -m ruff check scraper/ tests/` e `python3 -m ruff format --check scraper/ tests/` |
 | Run scraper (una volta) | `python3 -m scraper.main --once` |
 | Test backend | `python -m pytest tests/ -q` (95 test) |

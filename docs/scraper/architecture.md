@@ -1,8 +1,10 @@
 # DOCS — Documentazione tecnica CinePosto Scraper
 
-> Verificato su `cbaf9d0` (`2026-11-21`): flusso `/extra/` del PostModernissimo (la fusione per
-> slug completa il permalink dal record `/films/` successivo) e conteggi dei test. Precedente:
-> fase-19 (2026-10-03) — campo `maps_place_url` in `CINEMA_LOCATIONS` e in `cinemas.json`.
+> Verificato su `570cbc4` (`2026-11-21`): la risoluzione del permalink `/extra/` resta dentro il
+> record (confine con brace-matching, non più finestra fissa) e conteggi dei test. Precedente:
+> `cbaf9d0` (2026-11-21) — la fusione per slug completa il permalink dal record `/films/`
+> successivo; prima ancora fase-19 (2026-10-03) — campo `maps_place_url` in `CINEMA_LOCATIONS` e
+> in `cinemas.json`.
 
 ## Indice
 
@@ -217,7 +219,7 @@ PostModernissimo usa Next.js 13 con React Server Components. Il payload dati è 
 
 1. `GET /` — scarica la homepage
 2. `_parse_rsc_payload(html)` — estrae il chunk più grande dal pattern `self.__next_f.push([1,"..."])` e lo unescapa (solo `\"` e `\\`)
-3. Regex `{"id":N,"title":"...","slug":"...","permalink":"..."}` trova tutti i film nel payload. Un permalink che contiene `/extra/` (route rimossa dal sito, risponde 404) viene **risolto** sul primo permalink `/films/` successivo al match con lo stesso slug; se la risoluzione fallisce ma lo stesso slug ricompare più avanti come record `/films/`, è la fusione a completare il permalink, altrimenti il record resta senza link e le sue proiezioni escono con `source_url` assente. La risoluzione avviene prima della chiave di deduplica, quindi la voce `/extra/` e la voce `/films/` dello stesso film si fondono in un solo film
+3. Regex `{"id":N,"title":"...","slug":"...","permalink":"..."}` trova tutti i film nel payload. Un permalink che contiene `/extra/` (route rimossa dal sito, risponde 404) viene **risolto** sul primo permalink `/films/` successivo al match, con lo stesso slug, **dentro lo stesso record** (la ricerca si ferma alla `}` che chiude il record, non a una finestra fissa); se la risoluzione fallisce ma lo stesso slug ricompare più avanti come record `/films/`, è la fusione a completare il permalink, altrimenti il record resta senza link e le sue proiezioni escono con `source_url` assente. La risoluzione avviene prima della chiave di deduplica, quindi la voce `/extra/` e la voce `/films/` dello stesso film si fondono in un solo film
 4. Per ogni film: `_extract_shows(text, pos)` cerca il blocco `"shows":[...]` entro 5000 caratteri dall'inizio del film; `_extract_details(text, pos)` cerca `"details":{...}` entro 3000 caratteri; `_extract_content(text, pos)` cerca la sinossi intera in `"content":"..."` nella stessa finestra (scartata se nel frattempo è iniziata un'altra voce film)
 5. `_is_event_stub(movie)` filtra eventi non-film (parole chiave: "ospiti", "rassegna", "concerto", ecc.)
 6. Filtra gli show per `target_date_ints` e `opzioni != "noprog"`
