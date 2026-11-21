@@ -6,6 +6,7 @@ import html
 import json
 import logging
 import re
+from typing import cast
 from urllib.parse import parse_qs, urlparse
 
 from bs4 import BeautifulSoup
@@ -414,7 +415,8 @@ class PostModernissimoConnector(BaseConnector):
             # 3. Meta description: il CMS l'ha già troncata, si usa solo se non c'è altro.
             meta = soup.find("meta", attrs={"name": "description"})
             if meta and meta.get("content"):
-                return {"description": meta["content"].strip()}
+                # I stub bs4 ammettono anche le liste: a runtime è una stringa.
+                return {"description": cast(str, meta["content"]).strip()}
         except Exception as exc:
             logger.warning("POSTMOD failed to fetch detail %s: %s", film_url, exc)
             if errors is not None:
@@ -534,7 +536,8 @@ class PostModernissimoConnector(BaseConnector):
                 if not link:
                     continue
                 detail_url = link.get("href", "")
-                slug = detail_url.rstrip("/").split("/")[-1]
+                # I stub bs4 ammettono anche le liste: a runtime l'href è una stringa.
+                slug = cast(str, detail_url).rstrip("/").split("/")[-1]
 
                 if slug in seen_slugs:
                     continue
@@ -543,7 +546,8 @@ class PostModernissimoConnector(BaseConnector):
                 poster_url = None
                 img = li.select_one("img")
                 if img and img.get("src"):
-                    poster_url = _normalize(img["src"])
+                    # I stub bs4 ammettono anche le liste: a runtime src è una stringa.
+                    poster_url = _normalize(cast(str, img["src"]))
 
                 title_el = li.select_one("h2")
                 title = title_el.get_text(strip=True) if title_el else slug

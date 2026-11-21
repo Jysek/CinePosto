@@ -306,7 +306,9 @@ def test_extra_record_without_film_page_keeps_shows_without_source_url():
     assert film.present_in[0].date == "2026-11-23"
     assert film.present_in[0].times == ["19:00"]
     assert film.present_in[0].source_url is None
-    requested = [call.request.url for call in responses.calls]
+    # Negli stub di responses `request.url` è `str | None`: un'url assente non può
+    # contenere la route morta, quindi diventa stringa vuota.
+    requested = [call.request.url or "" for call in responses.calls]
     assert all("/extra/" not in url for url in requested), requested
 
 
