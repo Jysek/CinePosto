@@ -283,8 +283,10 @@ def run_scraper() -> None:
         from scraper.browser import close_browser
 
         close_browser()
-    except Exception:
-        pass
+    except Exception as exc:
+        # Mai silenzio su un errore: la pulizia del browser puo' fallire (processo
+        # gia' chiuso, browser mai avviato) e allora si logga e basta.
+        logger.warning("Browser cleanup failed: %s", exc)
 
     active = sum(1 for f in merged_films if f.status == "in_programmazione")
     removed = sum(1 for f in merged_films if f.status == "rimosso")
