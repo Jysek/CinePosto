@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T21:09:14.847355+01:00",
+  "generated_at": "2026-11-23T13:43:15.734094+01:00",
   "films": [
     {
       "id": "Fjord",
@@ -17,7 +17,25 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "Starlet",
+      "title": "Starlet",
+      "title_normalized": "Starlet",
+      "original_title": null,
+      "poster": "https://api.anonimaimpresasociale.com/images/movie-21.webp?width=1024&height=683",
+      "description": "<p><strong><em>Starlet</em></strong><em>. In concorso al </em><strong><em>Locarno Film Festival 65</em></strong><em>, </em><strong><em>Sean Baker</em></strong><em> mette in scena un rapporto che va oltre ogni pregiudizio e convenzione sociale.</em></p><p><strong>Introduzione critica a cura di Carlo Valeri (Sentieri Selvaggi)</strong></p><p>Jane è una giovane di ventun anni che conduce un’esistenza apparentemente senza direzione insieme ai suoi problematici coinquilini, mentre Sadie è un’anziana vedova solitaria che trascorre le giornate occupandosi del proprio giardino. Le loro vite si incrociano quando Jane acquista a un mercatino un vecchio thermos appartenente a Sadie e scopre al suo interno 10.000 dollari. Spinta dal senso di colpa e dalla curiosità, Jane cerca di avvicinarsi alla donna senza rivelarle immediatamente il ritrovamento. Tra diffidenza, incomprensioni e segreti nasce progressivamente un’improbabile e intensa amicizia intergenerazionale, capace di cambiare entrambe.</p>",
+      "genres": [
+        "Drammatico"
+      ],
+      "director": "Sean Baker",
+      "duration": "103 min",
+      "year": 2012,
+      "wikidata_id": "Q7602057",
+      "status": "in_programmazione",
+      "first_seen": "2026-11-23",
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Wild Horse Nine",
@@ -31,11 +49,11 @@
       ],
       "director": "Martin McDonagh",
       "duration": "118 min",
-      "year": 2026,
+      "year": null,
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Look Back",
@@ -49,11 +67,11 @@
       ],
       "director": "Hirokazu Kore’eda",
       "duration": "100 min",
-      "year": null,
-      "wikidata_id": null,
+      "year": 2026,
+      "wikidata_id": "Q137190293",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Prince of Broadway",
@@ -71,7 +89,7 @@
       "wikidata_id": "Q48674107",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Yalla Parkour",
@@ -89,25 +107,7 @@
       "wikidata_id": "Q131802622",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "storia infinita",
-      "title": "La storia infinita",
-      "title_normalized": "storia infinita",
-      "original_title": "The NeverEnding Story",
-      "poster": "https://api.anonimaimpresasociale.com/images/la_storia_infinita.webp?width=1024&height=676",
-      "description": "<p><strong><em>La storia infinita</em></strong><em>. Tratto dall'omonimo romanzo di </em><strong><em>Michael Ende</em></strong><em>, uno dei film cult di un'intera generazione torna al cinema nella </em><strong><em>versione restaurata</em></strong><em>.</em></p><p>Bastian, per sfuggire ai bulli, entra in una libreria dove il proprietario sta leggendo un libro misterioso. Bastian, incuriosito, \"prende in prestito\" il libro e si nasconde nell'attico della scuola per leggerlo. Il libro lo trasporta nel mondo di Fantàsia, dove l'Imperatrice Bambina è gravemente malata e il regno è minacciato dal Nulla, un'entità che cancella ogni cosa. Atreyu, un giovane guerriero, viene scelto per trovare una cura per l'Imperatrice e salvare Fantàsia.</p>",
-      "genres": [
-        "Fantastico"
-      ],
-      "director": "Wolfgang Petersen",
-      "duration": "94 min",
-      "year": 1984,
-      "wikidata_id": "Q316555",
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Hunger Games - L'alba sulla mietitura",
@@ -125,7 +125,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "SCROOGE E GLI SPIRITI DEL NATALE",
@@ -143,7 +143,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "SE DOMANI NON TORNO",
@@ -161,7 +161,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "UN WEEKEND ARTIFICIALE",
@@ -179,43 +179,7 @@
       "wikidata_id": "Q141907702",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "BALLATA DEL RE DELLE API",
-      "title": "LA BALLATA DEL RE DELLE API",
-      "title_normalized": "BALLATA DEL RE DELLE API",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/la-ballata-del-re-delle-api/locandina_laballatadelleapi.jpg?rev=68b6633170d0453faf93d27c2ad177db",
-      "description": "Con il premio Oscar® Matthew McConaughey e l'enigmatico Kurt Russell, arriva al cinema La ballata del re delle api, un emozionante e visivamente magnifico feel-good movie. Il carismatico Amziah King è un punto di riferimento per la sua comunità: apicoltore e musicista, guida un eccentrico gruppo di sbandati uniti dalla passione per le api e per la musica bluegrass. Quando Kateri, la figlia adottiva con cui aveva perso i contatti, ritorna in paese, l’uomo cerca di riallacciare i rapporti e insegnarle tutto quello che sa. ",
-      "genres": [
-        "dramma"
-      ],
-      "director": "Andrew Patterson",
-      "duration": "130 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "GODZILLA MINUS ZERO",
-      "title": "Godzilla Minus Zero",
-      "title_normalized": "GODZILLA MINUS ZERO",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/godzilla-minus-zero/locandina_godzillaminuszero.jpg?rev=6f9a6463fd594c1d82827156420c7574",
-      "description": "Ambientato nel 1949 e, con la Seconda Guerra Mondiale ormai alle spalle, il Giappone tenta ancora di rialzarsi dalle ferite lasciate dal conflitto e dall'ultima apparizione di Godzilla. Ma quando il mostro riemerge ancora più terrificante, la minaccia travolge nuovamente il Paese. L'ex pilota Koichi e Noriko si troveranno ancora una volta al centro di una disperata lotta per la sopravvivenza, mentre il re dei mostri semina distruzione su scala mai vista prima.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "avventura"
-      ],
-      "director": "Takashi Yamazaki",
-      "duration": "135 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "RUMORE DELLE COSE NUOVE",
@@ -233,7 +197,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "GATTO COL CAPPELLO",
@@ -248,209 +212,47 @@
       ],
       "director": "Alessandro Carloni, Erica Rivinoja",
       "duration": "105 min",
-      "year": 2026,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "Ti Presento i Fotter",
-      "title": "Ti Presento i Fotter",
-      "title_normalized": "Ti Presento i Fotter",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/ti-presento-i-fotter/locandina_tipresentoifotter.jpg?rev=7872ce8b628a4f8f82491fae9b177983",
-      "description": "Questo autunno, l’icona della commedia e vincitore di Emmy Ben Stiller e il due volte premio Oscar® Robert De Niro tornano a collaborare, affiancati dalla vincitrice di Grammy e candidata all’Oscar® Ariana Grande, in Ti presento i Fotter, un nuovo capitolo della fortunata saga Ti presento i miei.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "commedia"
-      ],
-      "director": "John Hamburg",
-      "duration": "106 min",
       "year": null,
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
-      "id": "DIO RIDE",
-      "title": "Dio ride",
-      "title_normalized": "DIO RIDE",
+      "id": "BALLATA DEL RE DELLE API",
+      "title": "LA BALLATA DEL RE DELLE API",
+      "title_normalized": "BALLATA DEL RE DELLE API",
       "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/dio-ride/locandina_dioride.jpg?rev=cd0e5c62702942ee9fd37ba278876a55",
-      "description": "Nel cuore del ‘600 c’è un uomo che parla di Dio come nessuno aveva fatto prima di lui: è Frate Leopoldo da Casamacchia. Mentre la Chiesa predica in latino, Fra Leopoldo racconta il Vangelo con una gioia contagiosa portando, a chi lo ascolta, sollievo e speranza. Parla di un Dio vicino agli uomini capace anche di ridere insieme a loro. Il suo messaggio si diffonde di villaggio in villaggio, conquistando il cuore di migliaia di persone che iniziano a seguirlo ovunque, mentre le chiese si svuotano. Quel clamore arriva fino a Roma e l’eco di quella voce ha un suono pericoloso per chi ormai governa attraverso la paura; il Papa decide di affidare il caso al cardinale Maculani, il più autorevole inquisitore del suo tempo. ",
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/la-ballata-del-re-delle-api/locandina_laballatadelleapi.jpg?rev=68b6633170d0453faf93d27c2ad177db",
+      "description": "Con il premio Oscar® Matthew McConaughey e l'enigmatico Kurt Russell, arriva al cinema La ballata del re delle api, un emozionante e visivamente magnifico feel-good movie. Il carismatico Amziah King è un punto di riferimento per la sua comunità: apicoltore e musicista, guida un eccentrico gruppo di sbandati uniti dalla passione per le api e per la musica bluegrass. Quando Kateri, la figlia adottiva con cui aveva perso i contatti, ritorna in paese, l’uomo cerca di riallacciare i rapporti e insegnarle tutto quello che sa. ",
       "genres": [
         "dramma"
       ],
-      "director": "Giovanni Veronesi",
-      "duration": "114 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-10-03",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "HOPE",
-      "title": "HOPE",
-      "title_normalized": "HOPE",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/hope/locandina_hope.jpg?rev=ba5a5c36b8a54eb1b8d0b7eea47abcb0",
-      "description": "Una comunità viene gettata nel caos quando il capo della polizia locale Bum-seok viene avvertito del possibile avvistamento di una tigre. Ciò che nasce come un’emergenza locale diventa presto un mistero più profondo e terrificante, che obbliga gli abitanti a confrontarsi con l’ignoto.",
-      "genres": [
-        "azione"
-      ],
-      "director": "Na Hong-jin",
-      "duration": "160 min",
+      "director": "Andrew Patterson",
+      "duration": "130 min",
       "year": null,
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
-      "id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "title": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "title_normalized": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
+      "id": "GODZILLA MINUS ZERO",
+      "title": "Godzilla Minus Zero",
+      "title_normalized": "GODZILLA MINUS ZERO",
       "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/extra/bts-world-tour-arirang/locandina_btsworldtourarirang.jpg?rev=ba15752c8b8f4630804af3060e1e9c42",
-      "description": "CONTENUTO ALTERNATIVOArriverà al cinema a novembre BTS World Tour ‘ARIRANG’ In Kaohsiung: Live Viewing, che porta nei cinema di tutto il mondo il gran finale del tour da record dei BTS. Il pubblico di tutto il mondo avrà l’opportunità di vivere le spettacolari performance dei BTS (RM, Jin, SUGA, j-hope, Jimin, V e Jung Kook) e l’energia elettrizzante del concerto completo negli stadi, trasmessi in diretta sul grande schermo. Con il caratteristico palco in-the-round a 360° che pone il pubblico al centro della performance, le dirette cinematografiche catturano la grandiosità produttiva del BTS WORLD TOUR ‘ARIRANG’.Si ricorda che il film inizia circa 15 minuti dopo l’orario di inizio proiezione comunicato",
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/godzilla-minus-zero/locandina_godzillaminuszero.jpg?rev=6f9a6463fd594c1d82827156420c7574",
+      "description": "Ambientato nel 1949 e, con la Seconda Guerra Mondiale ormai alle spalle, il Giappone tenta ancora di rialzarsi dalle ferite lasciate dal conflitto e dall'ultima apparizione di Godzilla. Ma quando il mostro riemerge ancora più terrificante, la minaccia travolge nuovamente il Paese. L'ex pilota Koichi e Noriko si troveranno ancora una volta al centro di una disperata lotta per la sopravvivenza, mentre il re dei mostri semina distruzione su scala mai vista prima.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
       "genres": [
-        "musica"
+        "avventura"
       ],
-      "director": "Jungjae HA",
-      "duration": "180 min",
+      "director": "Takashi Yamazaki",
+      "duration": "135 min",
       "year": null,
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "COME RAPINARE UNA BANCA",
-      "title": "COME RAPINARE UNA BANCA",
-      "title_normalized": "COME RAPINARE UNA BANCA",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/09/come-rapinare-una-banca/locandina_comerapinareunabanca.jpg?rev=c031e1fdeb694cf6895c8649fe2a99e4",
-      "description": "In Come rapinare una banca, una banda di ladri, esperti di social media, trasmette le proprie spettacolari rapine, ignara che la crescente fama virale li ha messi nel mirino di un agente veterano dell'FBI e di una brillante ingegnera informatica. ",
-      "genres": [
-        "azione"
-      ],
-      "director": "David Leitch",
-      "duration": "121 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "CLAYFACE",
-      "title": "CLAYFACE",
-      "title_normalized": "CLAYFACE",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/clayface/locandina_clayface.jpg?rev=72d70036a4fe4dfcad706a6e106bee8e",
-      "description": "Dai DC Studios arriva “Clayface”, un horror thriller diretto da James Watkins, con Tom Rhys Harries nel ruolo di uno dei villain più iconici dell’universo criminale di Gotham City. La brillante carriera di Matt, da ragazzo di strada a celebre star di Hollywood, viene stroncata quando un boss criminale lo sfigura atrocemente. Disperato e abbandonato dal suo entourage, Matt si sottopone a un miracoloso trattamento sperimentale. La cura gli restituisce il volto, ma compromette irreparabilmente la sua sanità mentale, trascinandolo in una violenta e inarrestabile spirale di vendetta. ",
-      "genres": [
-        "horror"
-      ],
-      "director": "James Watkins",
-      "duration": "109 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "title": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A.",
-      "title_normalized": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/shaun-vita-da-pecora/locandina_shaunvitadapecora.jpg?rev=fe799ba1518b4abc9234395506006b98",
-      "description": "Halloween è alle porte e il gregge si prepara a celebrare coltivando un magnifico campo di zucche. I piani vengono però stravolti quando il contadino scompare misteriosamente nel nulla e un mostruoso essere peloso emerge dal bosco. Tra esperimenti impazziti e colpi di scena inaspettati, Shaun e i suoi amici dovranno unire le forze per sconfiggere la creatura e ritrovare il loro padrone in tempo per il party. ",
-      "genres": [
-        "animazione"
-      ],
-      "director": "Steve Cox",
-      "duration": "91 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "title": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "title_normalized": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/un-tranquillo-funerale-di-famiglia/locandina_untranquillofuneraledifamiglia.jpg?rev=ae5c9e27d2384e3583c4149bd6e33fb4",
-      "description": "Nel giorno del funerale del patriarca della famiglia Mancuso, i due figli Daria e Riccardo, interpretati da Claudia Pandolfi e Pietro Sermonti, si ritrovano a fare i conti con rancori mai sopiti e segreti inconfessati. ",
-      "genres": [
-        "commedia"
-      ],
-      "director": "Massimiliano Bruno",
-      "duration": "98 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "title": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "title_normalized": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/02/agata-christian---delitto-sulle-nevi/locandina_agatachristiandelittosullenevi.jpg?rev=8330c6d28c27417ab798156e20db1685",
-      "description": "Agata Christian - Delitto sulle Nevi vede protagonista Christian Agata, un noto criminologo dal sarcasmo tagliente e dall'intuito infallibile. Un giorno accetta un curioso invito, trascorrere un fine settimana sulla neve ospite dei Cullman, dinastia miliardaria grazie ai giochi da tavolo. L’occasione è il lancio di una nuova edizione di Crime Castle, il gioco che ha reso la famiglia famosa in tutto il mondo. Christian dovrà prestare il proprio volto all'evento, trasformando una semplice operazione pubblicitaria in un elegante soggiorno in montagna, tra lussi ostentati e tensioni sotterranee. Ma la vacanza prende una piega inaspettata. Quando Carlo Cullman, patriarca e mente storica dell'azienda, annuncia di voler bloccare la vendita della società a una start-up aggressiva, la tensione esplode e i conflitti latenti emergono con forza. ",
-      "genres": [
-        "commedia"
-      ],
-      "director": "Eros Puglielli",
-      "duration": "109 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "JE SO' PAZZO",
-      "title": "JE SO' PAZZO",
-      "title_normalized": "JE SO' PAZZO",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/je-so-pazzo/locandina_jesopazzo.jpg?rev=a84188e1fd214f009a55b1e3e9d6f516",
-      "description": "Je so’ pazzo è un ritratto intenso di Pino Daniele, un’anima ribelle nata nei vicoli di Napoli, che ha rivoluzionato la musica italiana fondendo blues, jazz e tradizione partenopea. Il film racconta la sua ascesa, dagli anni difficili dell’infanzia segnata dall’abbandono, fino al leggendario concerto del 1981 davanti a 200.000 persone. Tra conflitti familiari, fragilità personali e amori profondi, Pino trova nella musica un linguaggio per esprimere ciò che non riesce a dire. ",
-      "genres": [
-        "biografia"
-      ],
-      "director": "Nicola Prosatore",
-      "duration": "104 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "PAW PATROL: MISSIONE DINOSAURI",
-      "title": "PAW PATROL: MISSIONE DINOSAURI",
-      "title_normalized": "PAW PATROL: MISSIONE DINOSAURI",
-      "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/09/paw-patrol-missione-dinosauri/locandina_pawpatrolmissionedinosauri.jpg?rev=28e02b56930b452faa3f65bd5086df3c",
-      "description": "Dopo essere stati travolti da una misteriosa tempesta, i cuccioli della PAW Patrol si ritrovano catapultati su un’isola tropicale inesplorata, un luogo fuori dal tempo dove i dinosauri dominano incontrastati. Qui incontrano Rex, un cucciolo rimasto isolato per anni, che ha trasformato la sopravvivenza in una missione, diventando il massimo esperto di quel mondo primordiale. Ma la tregua dura poco. Il loro storico rivale, il sindaco Humdinger, arriva sull’isola deciso a sfruttarne le risorse naturali senza alcun riguardo. Le sue azioni scatenano però una catastrofe: il risveglio di un gigantesco vulcano dormiente. Tra giungle selvagge, creature preistoriche e pericoli inarrestabili, la PAW Patrol si trova ad affrontare la sfida più grande di sempre. Una corsa contro il tempo, tra spettacolari missioni di salvataggio “formato dinosauro”, per fermare Humdinger e salvare l’isola prima che venga cancellata per sempre.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "animazione"
-      ],
-      "director": "Cal Brunker",
-      "duration": null,
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-09-17",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "MUSTANG",
@@ -468,7 +270,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "YOUR NAME",
@@ -486,25 +288,61 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
-      "id": "HEXE: il Regno delle Streghe",
-      "title": "HEXE: il Regno delle Streghe",
-      "title_normalized": "HEXE: il Regno delle Streghe",
+      "id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
+      "title": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
+      "title_normalized": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
       "original_title": null,
-      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/hexe/locandina_hexe.jpg?rev=0c94bfd9d1a34865bbd229278fa0d257",
-      "description": "La protagonista, Billie, è un'adolescente impulsiva e anticonformista che scopre di avere segrete doti magiche che una volta scatenate la catapultano fuori dalla periferia residenziale in cui vive, in uno spettacolare viaggio nel vasto regno delle streghe chiamato Hexe. Costretta a fare squadra con la iper-prudente madre Alice, scoprirà dei misteri di famiglia in grado di cambiare per sempre il magico mondo delle streghe.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/02/agata-christian---delitto-sulle-nevi/locandina_agatachristiandelittosullenevi.jpg?rev=8330c6d28c27417ab798156e20db1685",
+      "description": "Agata Christian - Delitto sulle Nevi vede protagonista Christian Agata, un noto criminologo dal sarcasmo tagliente e dall'intuito infallibile. Un giorno accetta un curioso invito, trascorrere un fine settimana sulla neve ospite dei Cullman, dinastia miliardaria grazie ai giochi da tavolo. L’occasione è il lancio di una nuova edizione di Crime Castle, il gioco che ha reso la famiglia famosa in tutto il mondo. Christian dovrà prestare il proprio volto all'evento, trasformando una semplice operazione pubblicitaria in un elegante soggiorno in montagna, tra lussi ostentati e tensioni sotterranee. Ma la vacanza prende una piega inaspettata. Quando Carlo Cullman, patriarca e mente storica dell'azienda, annuncia di voler bloccare la vendita della società a una start-up aggressiva, la tensione esplode e i conflitti latenti emergono con forza. ",
       "genres": [
-        "animazione"
+        "commedia"
       ],
-      "director": "Jason Hand, Josie Trinidad",
+      "director": "Eros Puglielli",
       "duration": "109 min",
       "year": null,
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "Ti Presento i Fotter",
+      "title": "Ti Presento i Fotter",
+      "title_normalized": "Ti Presento i Fotter",
+      "original_title": null,
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/ti-presento-i-fotter/locandina_tipresentoifotter.jpg?rev=7872ce8b628a4f8f82491fae9b177983",
+      "description": "Questo autunno, l’icona della commedia e vincitore di Emmy Ben Stiller e il due volte premio Oscar® Robert De Niro tornano a collaborare, affiancati dalla vincitrice di Grammy e candidata all’Oscar® Ariana Grande, in Ti presento i Fotter, un nuovo capitolo della fortunata saga Ti presento i miei.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
+      "genres": [
+        "commedia"
+      ],
+      "director": "John Hamburg",
+      "duration": "106 min",
+      "year": null,
+      "wikidata_id": null,
+      "status": "in_programmazione",
+      "first_seen": "2026-11-20",
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "DIO RIDE",
+      "title": "Dio ride",
+      "title_normalized": "DIO RIDE",
+      "original_title": null,
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/10/dio-ride/locandina_dioride.jpg?rev=cd0e5c62702942ee9fd37ba278876a55",
+      "description": "Nel cuore del ‘600 c’è un uomo che parla di Dio come nessuno aveva fatto prima di lui: è Frate Leopoldo da Casamacchia. Mentre la Chiesa predica in latino, Fra Leopoldo racconta il Vangelo con una gioia contagiosa portando, a chi lo ascolta, sollievo e speranza. Parla di un Dio vicino agli uomini capace anche di ridere insieme a loro. Il suo messaggio si diffonde di villaggio in villaggio, conquistando il cuore di migliaia di persone che iniziano a seguirlo ovunque, mentre le chiese si svuotano. Quel clamore arriva fino a Roma e l’eco di quella voce ha un suono pericoloso per chi ormai governa attraverso la paura; il Papa decide di affidare il caso al cardinale Maculani, il più autorevole inquisitore del suo tempo. ",
+      "genres": [
+        "dramma"
+      ],
+      "director": "Giovanni Veronesi",
+      "duration": "114 min",
+      "year": null,
+      "wikidata_id": null,
+      "status": "in_programmazione",
+      "first_seen": "2026-10-03",
+      "last_seen": "2026-11-23"
     },
     {
       "id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
@@ -522,7 +360,25 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "HEXE: il Regno delle Streghe",
+      "title": "HEXE: il Regno delle Streghe",
+      "title_normalized": "HEXE: il Regno delle Streghe",
+      "original_title": null,
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/hexe/locandina_hexe.jpg?rev=0c94bfd9d1a34865bbd229278fa0d257",
+      "description": "La protagonista, Billie, è un'adolescente impulsiva e anticonformista che scopre di avere segrete doti magiche che una volta scatenate la catapultano fuori dalla periferia residenziale in cui vive, in uno spettacolare viaggio nel vasto regno delle streghe chiamato Hexe. Costretta a fare squadra con la iper-prudente madre Alice, scoprirà dei misteri di famiglia in grado di cambiare per sempre il magico mondo delle streghe.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
+      "genres": [
+        "animazione"
+      ],
+      "director": "Jason Hand, Josie Trinidad",
+      "duration": "109 min",
+      "year": null,
+      "wikidata_id": null,
+      "status": "in_programmazione",
+      "first_seen": "2026-11-20",
+      "last_seen": "2026-11-23"
     },
     {
       "id": "YOU CAN SEE EVERYTHING - Lingua originale",
@@ -540,7 +396,43 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "PAW PATROL: MISSIONE DINOSAURI",
+      "title": "PAW PATROL: MISSIONE DINOSAURI",
+      "title_normalized": "PAW PATROL: MISSIONE DINOSAURI",
+      "original_title": null,
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/09/paw-patrol-missione-dinosauri/locandina_pawpatrolmissionedinosauri.jpg?rev=28e02b56930b452faa3f65bd5086df3c",
+      "description": "Dopo essere stati travolti da una misteriosa tempesta, i cuccioli della PAW Patrol si ritrovano catapultati su un’isola tropicale inesplorata, un luogo fuori dal tempo dove i dinosauri dominano incontrastati. Qui incontrano Rex, un cucciolo rimasto isolato per anni, che ha trasformato la sopravvivenza in una missione, diventando il massimo esperto di quel mondo primordiale. Ma la tregua dura poco. Il loro storico rivale, il sindaco Humdinger, arriva sull’isola deciso a sfruttarne le risorse naturali senza alcun riguardo. Le sue azioni scatenano però una catastrofe: il risveglio di un gigantesco vulcano dormiente. Tra giungle selvagge, creature preistoriche e pericoli inarrestabili, la PAW Patrol si trova ad affrontare la sfida più grande di sempre. Una corsa contro il tempo, tra spettacolari missioni di salvataggio “formato dinosauro”, per fermare Humdinger e salvare l’isola prima che venga cancellata per sempre.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
+      "genres": [
+        "animazione"
+      ],
+      "director": "Cal Brunker",
+      "duration": null,
+      "year": null,
+      "wikidata_id": null,
+      "status": "in_programmazione",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-11-23"
+    },
+    {
+      "id": "KEN IL GUERRIERO - IL FILM",
+      "title": "Ken il guerriero - Il film C.A.",
+      "title_normalized": "KEN IL GUERRIERO - IL FILM",
+      "original_title": null,
+      "poster": "https://www.thespacecinema.it/-/media/the-space-cinema/schede-film/2026/11/extra/ken-il-guerriero/locandina_ken.jpg?rev=54ab9698b3cb49a6a02d93c2f00a3772",
+      "description": "CONTENUTO ALTERNATIVOI fan potranno radunarsi al cinema e rivivere la leggenda di Hokuto con il film originale del 1986. Il 30 novembre, 1 e 2 dicembre, a 40 anni dall’uscita nelle sale del 1986, arriverà infatti al cinema KEN IL GUERRIERO – IL FILM in una nuova edizione rimasterizzata, con proiezioni anche in lingua originale giapponese sottotitolata in italiano. Il film ripercorre la storia del guerriero della scuola di Hokuto, inserendo però importanti differenze nella trama e nel trattamento dei personaggi. Inalterato il senso generale del racconto, che vede Ken, maestro della scuola di Hokuto, percorrere le terre devastate dall’olocausto atomico alla ricerca della donna amata e dell’uomo che l’ha rapita, Shin. Le vicende porteranno Ken anche ad incrociare il suo cammino con Rei, guerriero della scuola di Nanto, con il quale stringerà una forte amicizia, ma anche ad affrontare i suoi fratelli: prima il subdolo Jagi e poi il gigantesco fratello maggiore Raoul, il più temibile e ambizioso guerriero della scuola di Hokuto. Si ricorda che il film inizia circa 15 minuti dopo l’orario di inizio proiezione comunicato",
+      "genres": [
+        "animazione"
+      ],
+      "director": "Toyoo Ashida",
+      "duration": "110 min",
+      "year": null,
+      "wikidata_id": null,
+      "status": "in_programmazione",
+      "first_seen": "2026-11-23",
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Whalefall",
@@ -558,63 +450,7 @@
       "wikidata_id": "Q134876629",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "I Swear",
-      "title": "I Swear",
-      "title_normalized": "I Swear",
-      "original_title": null,
-      "poster": "https://storage.googleapis.com/uci-infrastructure-bucket/Common/Movies/Posters/oLnB0mbAb1r2Mj46z6Bn516EXVM45m6h3pZ4MkOx_resized_at_20261117184747.jpg",
-      "description": "A quindici anni, John Davidson riceve una diagnosi di sindrome di Tourette. Sfidando ogni difficoltà, affronta un'adolescenza complicata e il passaggio all'età adulta, trovando nella gentilezza degli altri la forza e l'ispirazione necessarie per scoprire il suo vero scopo nella vita.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "Dramma",
-        "Storia"
-      ],
-      "director": "Kirk Jones",
-      "duration": "120 min",
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "Ramayana: La nascita di una leggenda",
-      "title": "Ramayana: La nascita di una leggenda",
-      "title_normalized": "Ramayana: La nascita di una leggenda",
-      "original_title": "Ramayana: Rise of a Legend",
-      "poster": "https://storage.googleapis.com/uci-infrastructure-bucket/Common/Movies/Posters/0wqxQpkSKUvjT8h3rvJA8RDBwTGW5Cb5Ob1mFZ60_resized_at_20261112094359.jpg",
-      "description": "Oltre alla versione doppiata in italiano (2h e 47min), il pubblico potrà assistere ad una versione estesa del film. Alcune sale selezionate proietteranno l'esclusiva Director’s Cut da 3h e 13min, un'esperienza integrale presentata in lingua originale Hindi con sottotitoli in italiano.In un’epoca di dèi e re, il destino di interi mondi è in bilico. Rama, principe votato al dovere, al sacrificio e alla rettitudine, deve affrontare Ravana, sovrano immortale accecato dall’orgoglio e dalla sete di vendetta, tanto potente da poter frantumare il cosmo.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "Fantasy",
-        "Azione"
-      ],
-      "director": "Nitesh Tiwari",
-      "duration": null,
-      "year": 2026,
-      "wikidata_id": "Q135196186",
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
-    },
-    {
-      "id": "Zustissia",
-      "title": "Zustissia",
-      "title_normalized": "Zustissia",
-      "original_title": null,
-      "poster": "https://storage.googleapis.com/uci-infrastructure-bucket/Common/Movies/Posters/XAI31LLjxsETsp7nswO9YU3Jw6qaPBbWF7Zuxy2L_resized_at_20261013162534.jpg",
-      "description": "Nel 1991, un triplice omicidio commesso sui monti del Sud Sardegna porta alla rapida condanna di un uomo innocente: Beniamino Zuncheddu. Tre gradi di giudizio in un anno per infliggere un ergastolo. Venticinque anni dopo, un giovane avvocato decide di lottare – pro bono – per restituirgli la libertà. Zustìssia è la storia di una vita rubata dal più lungo errore giudiziario della storia italiana: 33 anni di ingiusta detenzione. Ed è anche la storia dell'emozionante battaglia che l'avvocato Mauro Trogu e altri alleati hanno ingaggiato per arrivare alla revisione del processo e all'assoluzione, giunta il 26 gennaio 2024.È un film d'inchiesta, d'impegno civile, d'amicizia e d'amore. Amore per \"sa zustìssia\", amore per la verità e amore per le montagne, quei meravigliosi monti da cui Beniamino è stato tenuto lontano tutta una vita... e dove ora, finalmente, è tornato.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
-      "genres": [
-        "Dramma"
-      ],
-      "director": null,
-      "duration": null,
-      "year": null,
-      "wikidata_id": null,
-      "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "Ragione e sentimento",
@@ -636,6 +472,25 @@
       "last_seen": "2026-11-20"
     },
     {
+      "id": "Ramayana: La nascita di una leggenda",
+      "title": "Ramayana: La nascita di una leggenda",
+      "title_normalized": "Ramayana: La nascita di una leggenda",
+      "original_title": "Ramayana: Rise of a Legend",
+      "poster": "https://storage.googleapis.com/uci-infrastructure-bucket/Common/Movies/Posters/0wqxQpkSKUvjT8h3rvJA8RDBwTGW5Cb5Ob1mFZ60_resized_at_20261112094359.jpg",
+      "description": "Oltre alla versione doppiata in italiano (2h e 47min), il pubblico potrà assistere ad una versione estesa del film. Alcune sale selezionate proietteranno l'esclusiva Director’s Cut da 3h e 13min, un'esperienza integrale presentata in lingua originale Hindi con sottotitoli in italiano.In un’epoca di dèi e re, il destino di interi mondi è in bilico. Rama, principe votato al dovere, al sacrificio e alla rettitudine, deve affrontare Ravana, sovrano immortale accecato dall’orgoglio e dalla sete di vendetta, tanto potente da poter frantumare il cosmo.Si ricorda che il film inizia circa 25 minuti dopo l’orario di inizio proiezione comunicato",
+      "genres": [
+        "Fantasy",
+        "Azione"
+      ],
+      "director": "Nitesh Tiwari",
+      "duration": null,
+      "year": 2026,
+      "wikidata_id": "Q135196186",
+      "status": "in_programmazione",
+      "first_seen": "2026-11-20",
+      "last_seen": "2026-11-23"
+    },
+    {
       "id": "notte delle fragole",
       "title": "La notte delle fragole",
       "title_normalized": "notte delle fragole",
@@ -651,7 +506,7 @@
       "wikidata_id": null,
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "fuoco che ti porti dentro",
@@ -667,7 +522,7 @@
       "wikidata_id": "Q140965602",
       "status": "in_programmazione",
       "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "last_seen": "2026-11-23"
     },
     {
       "id": "tempo e l'acqua",
@@ -686,20 +541,20 @@
       "last_seen": "2026-11-20"
     },
     {
-      "id": "PARIS, TEXAS",
-      "title": "PARIS, TEXAS",
-      "title_normalized": "PARIS, TEXAS",
-      "original_title": null,
-      "poster": "https://www.cineconcordia.it/wp-content/uploads/2026/11/images-3-360x530.jpg",
-      "description": "L'ultimo film del periodo 'americano' di Wenders. Un'opera capolavoro del cinema on the road.",
+      "id": "INCONTRI RAVVICINATI DEL TERZO TIPO",
+      "title": "INCONTRI RAVVICINATI DEL TERZO TIPO",
+      "title_normalized": "INCONTRI RAVVICINATI DEL TERZO TIPO",
+      "original_title": "Close Encounters of the Third Kind",
+      "poster": "https://commons.wikimedia.org/wiki/Special:FilePath/Mother Ship Model - Close Encounters of the Third Kind.jpg",
+      "description": "L'incontro tra Spielberg e Truffaut in un film che ha segnato e forgiato un'epoca.",
       "genres": [],
-      "director": " Wim Wenders",
-      "duration": "150 min",
-      "year": 1984,
-      "wikidata_id": "Q160946",
+      "director": "Steven Spielberg",
+      "duration": "135 min",
+      "year": 1977,
+      "wikidata_id": "Q320588",
       "status": "in_programmazione",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20"
+      "first_seen": "2026-11-23",
+      "last_seen": "2026-11-23"
     }
   ]
 }

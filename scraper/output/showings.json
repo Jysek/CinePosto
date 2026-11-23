@@ -1,30 +1,8 @@
 {
-  "generated_at": "2026-11-20T21:09:14.860814+01:00",
-  "date_from": "2026-11-20",
-  "date_to": "2026-11-27",
+  "generated_at": "2026-11-23T13:43:15.751852+01:00",
+  "date_from": "2026-11-23",
+  "date_to": "2026-11-30",
   "showings": [
-    {
-      "film_id": "Fjord",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-21",
-      "times": [
-        "16:15",
-        "19:00",
-        "21:30"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/fjord"
-    },
-    {
-      "film_id": "Fjord",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-22",
-      "times": [
-        "16:15",
-        "19:00",
-        "21:30"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/fjord"
-    },
     {
       "film_id": "Fjord",
       "cinema_slug": "postmodernissimo",
@@ -57,36 +35,6 @@
         "21:30"
       ],
       "source_url": "https://www.postmodernissimo.com/films/fjord"
-    },
-    {
-      "film_id": "Fjord",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "18:25"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/fjord",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Fjord",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "18:10"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/fjord",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
     },
     {
       "film_id": "Fjord",
@@ -136,9 +84,9 @@
     {
       "film_id": "Fjord",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
+      "date": "2026-11-23",
       "times": [
-        "21:20"
+        "21:30"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/fjord/",
@@ -147,47 +95,22 @@
     {
       "film_id": "Fjord",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
+      "date": "2026-11-25",
       "times": [
-        "18:40",
-        "20:20"
+        "21:40"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/fjord/",
       "language": "ITA"
     },
     {
-      "film_id": "Fjord",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "19:00"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/fjord/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "Wild Horse Nine",
+      "film_id": "Starlet",
       "cinema_slug": "postmodernissimo",
-      "date": "2026-11-21",
+      "date": "2026-11-30",
       "times": [
-        "16:00",
-        "18:45",
-        "21:15"
+        "21:30"
       ],
-      "source_url": "https://www.postmodernissimo.com/films/wild-horse-nine"
-    },
-    {
-      "film_id": "Wild Horse Nine",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-22",
-      "times": [
-        "16:00",
-        "18:45",
-        "21:15"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/wild-horse-nine"
+      "source_url": "https://www.postmodernissimo.com/films/starlet"
     },
     {
       "film_id": "Wild Horse Nine",
@@ -220,36 +143,6 @@
         "21:15"
       ],
       "source_url": "https://www.postmodernissimo.com/films/wild-horse-nine"
-    },
-    {
-      "film_id": "Wild Horse Nine",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "23:35"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/wild-horse-nine",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Wild Horse Nine",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "18:00"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/wild-horse-nine",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
     },
     {
       "film_id": "Wild Horse Nine",
@@ -282,46 +175,6 @@
       ]
     },
     {
-      "film_id": "Wild Horse Nine",
-      "cinema_slug": "cinema-teatro-concordia",
-      "date": "2026-11-21",
-      "times": [
-        "18:30"
-      ],
-      "source_url": "https://www.cineconcordia.it/films/wild-horse-nine-2/"
-    },
-    {
-      "film_id": "Wild Horse Nine",
-      "cinema_slug": "cinema-teatro-concordia",
-      "date": "2026-11-22",
-      "times": [
-        "18:30"
-      ],
-      "source_url": "https://www.cineconcordia.it/films/wild-horse-nine-2/"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-21",
-      "times": [
-        "16:00",
-        "18:45",
-        "21:15"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/look-back"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-22",
-      "times": [
-        "16:00",
-        "18:45",
-        "21:15"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/look-back"
-    },
-    {
       "film_id": "Look Back",
       "cinema_slug": "postmodernissimo",
       "date": "2026-11-23",
@@ -352,55 +205,6 @@
         "21:15"
       ],
       "source_url": "https://www.postmodernissimo.com/films/look-back"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "13:40"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/look-back/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "15:45"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/look-back/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "16:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/look-back/"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-21",
-      "times": [
-        "16:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/look-back/"
-    },
-    {
-      "film_id": "Look Back",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-22",
-      "times": [
-        "17:30"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/look-back/"
     },
     {
       "film_id": "Look Back",
@@ -440,15 +244,6 @@
       "source_url": "https://www.postmodernissimo.com/films/prince-of-broadway"
     },
     {
-      "film_id": "Prince of Broadway",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-24",
-      "times": [
-        "21:00"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/prince-of-broadway"
-    },
-    {
       "film_id": "Yalla Parkour",
       "cinema_slug": "postmodernissimo",
       "date": "2026-11-24",
@@ -456,302 +251,6 @@
         "21:00"
       ],
       "source_url": "https://www.postmodernissimo.com/films/yalla-parkour"
-    },
-    {
-      "film_id": "Yalla Parkour",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-21",
-      "times": [
-        "11:00"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/yalla-parkour"
-    },
-    {
-      "film_id": "storia infinita",
-      "cinema_slug": "postmodernissimo",
-      "date": "2026-11-21",
-      "times": [
-        "11:00"
-      ],
-      "source_url": "https://www.postmodernissimo.com/films/la-storia-infinita"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "21:00"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "21:45"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "11:25",
-        "17:30",
-        "21:00"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "12:45"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "15:50",
-        "19:20"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "16:20",
-        "19:50"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "18:20"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "20:20"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "21:45"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "22:30"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "23:00"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:10"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "LINGUA ORIGINALE",
-      "session_attributes": [
-        "LINGUA ORIGINALE",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "13:25",
-        "16:55",
-        "20:35"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "15:45"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "17:30",
-        "21:00"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "18:10",
-        "21:30"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "19:20"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "20:05"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
@@ -898,7 +397,7 @@
       "cinema_slug": "the-space-corciano",
       "date": "2026-11-24",
       "times": [
-        "21:30"
+        "21:25"
       ],
       "screen": "Sala 1",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
@@ -990,7 +489,7 @@
       "cinema_slug": "the-space-corciano",
       "date": "2026-11-25",
       "times": [
-        "21:35"
+        "21:30"
       ],
       "screen": "Sala 2",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
@@ -1034,12 +533,13 @@
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-28",
       "times": [
-        "21:00"
+        "17:20",
+        "20:50"
       ],
-      "screen": "Sala 5",
+      "screen": "Sala 3",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
       "language": "ITALIANO",
       "session_attributes": [
@@ -1049,108 +549,12 @@
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "21:40"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:30",
-        "17:30",
-        "21:00"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "13:15",
-        "16:45",
-        "20:20"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "15:30",
-        "19:00",
-        "22:30"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "21:45"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
       "times": [
         "11:10"
       ],
-      "screen": "Sala 7",
+      "screen": "Sala 6",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
       "language": "LINGUA ORIGINALE",
       "session_attributes": [
@@ -1160,14 +564,13 @@
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
       "times": [
-        "13:10",
-        "16:45",
-        "20:30"
+        "17:20",
+        "20:50"
       ],
-      "screen": "Sala 8",
+      "screen": "Sala 3",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
       "language": "ITALIANO",
       "session_attributes": [
@@ -1177,59 +580,13 @@
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-30",
       "times": [
-        "15:45",
-        "21:40"
+        "17:20",
+        "20:50"
       ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "17:30",
-        "21:00"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "18:35"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "20:05"
-      ],
-      "screen": "Sala 7",
+      "screen": "Sala 3",
       "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
       "language": "ITALIANO",
       "session_attributes": [
@@ -1516,36 +873,122 @@
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-28",
       "times": [
-        "21:10",
-        "22:00",
-        "22:40"
+        "17:20"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
-      "language": "ITA"
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-28",
+      "times": [
+        "20:50"
+      ],
+      "screen": "Sala 3",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
+      "times": [
+        "11:10"
+      ],
+      "screen": "Sala 8",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "LINGUA ORIGINALE",
+      "session_attributes": [
+        "LINGUA ORIGINALE",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
+      "times": [
+        "17:20"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
+      "times": [
+        "20:50"
+      ],
+      "screen": "Sala 3",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-30",
+      "times": [
+        "17:20"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Hunger Games - L'alba sulla mietitura",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-30",
+      "times": [
+        "20:50"
+      ],
+      "screen": "Sala 3",
+      "source_url": "https://www.thespacecinema.it/film/hunger-games-l-alba-sulla-mietitura",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
+      "date": "2026-11-23",
       "times": [
-        "10:30",
-        "12:10",
-        "13:00",
-        "14:15",
-        "15:00",
-        "15:30",
-        "16:30",
+        "16:00",
         "17:40",
+        "18:00",
         "19:10",
-        "20:10",
+        "19:40",
         "21:10",
-        "22:10",
-        "22:50",
-        "23:50"
+        "21:40",
+        "22:10"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
@@ -1554,9 +997,8 @@
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
+      "date": "2026-11-23",
       "times": [
-        "11:30",
         "18:30"
       ],
       "screen": "2D",
@@ -1566,72 +1008,16 @@
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
+      "date": "2026-11-24",
       "times": [
-        "14:15",
-        "14:50",
-        "16:30",
+        "16:00",
         "17:40",
-        "18:15",
+        "18:00",
         "19:10",
         "20:30",
         "21:10",
-        "21:45",
-        "22:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "15:50"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
-      "language": "ENG"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
-      "times": [
-        "16:00",
-        "17:40",
-        "18:00",
-        "19:10",
-        "21:10",
-        "22:00"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
-      "times": [
-        "18:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
-      "language": "ENG"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-24",
-      "times": [
-        "16:00",
-        "17:40",
-        "18:00",
-        "19:10",
-        "21:10",
-        "22:00"
+        "21:40",
+        "22:10"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
@@ -1654,10 +1040,10 @@
       "date": "2026-11-25",
       "times": [
         "16:00",
-        "17:40",
+        "17:30",
         "18:00",
         "19:10",
-        "21:10",
+        "21:00",
         "22:00"
       ],
       "screen": "2D",
@@ -1674,35 +1060,6 @@
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/hunger-games-lalba-sulla-mietitura/",
       "language": "ENG"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "18:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/hunger-games-lalba-sulla-mietitura/"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-21",
-      "times": [
-        "18:00",
-        "20:30"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/hunger-games-lalba-sulla-mietitura/"
-    },
-    {
-      "film_id": "Hunger Games - L'alba sulla mietitura",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-22",
-      "times": [
-        "15:30",
-        "20:30"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/hunger-games-lalba-sulla-mietitura/"
     },
     {
       "film_id": "Hunger Games - L'alba sulla mietitura",
@@ -1725,174 +1082,6 @@
     {
       "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "22:00"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "12:55"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "16:05",
-        "18:55"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "17:05"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "20:25"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "22:00"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:05"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "13:55"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "15:40",
-        "18:30"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "17:15"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "19:15",
-        "22:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-corciano",
       "date": "2026-11-23",
       "times": [
         "16:05",
@@ -1926,7 +1115,7 @@
       "cinema_slug": "the-space-corciano",
       "date": "2026-11-23",
       "times": [
-        "22:15"
+        "22:00"
       ],
       "screen": "Sala 6",
       "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
@@ -1942,7 +1131,7 @@
       "date": "2026-11-24",
       "times": [
         "16:05",
-        "18:55"
+        "18:45"
       ],
       "screen": "Sala 1",
       "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
@@ -1987,9 +1176,9 @@
       "cinema_slug": "the-space-corciano",
       "date": "2026-11-25",
       "times": [
-        "16:45",
-        "19:35",
-        "22:25"
+        "16:35",
+        "19:25",
+        "22:15"
       ],
       "screen": "Sala 10",
       "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
@@ -2007,146 +1196,6 @@
         "21:20"
       ],
       "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "21:45"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:30",
-        "20:40"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "14:00",
-        "16:50",
-        "22:30"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "18:30"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "23:15"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "14:40"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "15:10",
-        "20:45"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "17:15"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "19:25",
-        "22:15"
-      ],
-      "screen": "Sala 6",
       "source_url": "https://www.thespacecinema.it/film/scrooge-e-gli-spiriti-del-natale",
       "language": "ITALIANO",
       "session_attributes": [
@@ -2279,57 +1328,12 @@
     {
       "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
-      "times": [
-        "21:50",
-        "22:40"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/scrooge-gli-spiriti-del-natale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "11:10",
-        "14:20",
-        "16:10",
-        "17:20",
-        "19:15",
-        "20:00",
-        "22:30",
-        "23:45"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/scrooge-gli-spiriti-del-natale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "14:30",
-        "16:10",
-        "19:15",
-        "19:50",
-        "21:30",
-        "22:20"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/scrooge-gli-spiriti-del-natale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
-        "16:20",
-        "19:20",
-        "22:30"
+        "16:15",
+        "19:00",
+        "19:50",
+        "22:40"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/scrooge-gli-spiriti-del-natale/",
@@ -2342,7 +1346,7 @@
       "times": [
         "16:20",
         "19:20",
-        "22:30"
+        "22:40"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/scrooge-gli-spiriti-del-natale/",
@@ -2363,54 +1367,6 @@
     },
     {
       "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "16:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-21",
-      "times": [
-        "16:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-22",
-      "times": [
-        "15:30",
-        "18:30"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "cinema-teatro-concordia",
-      "date": "2026-11-21",
-      "times": [
-        "16:30",
-        "21:15"
-      ],
-      "source_url": "https://www.cineconcordia.it/films/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "cinema-teatro-concordia",
-      "date": "2026-11-22",
-      "times": [
-        "16:30",
-        "21:15"
-      ],
-      "source_url": "https://www.cineconcordia.it/films/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
       "cinema_slug": "cinema-teatro-concordia",
       "date": "2026-11-23",
       "times": [
@@ -2426,24 +1382,6 @@
         "21:15"
       ],
       "source_url": "https://www.cineconcordia.it/films/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-21",
-      "times": [
-        "18:30"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/scrooge-e-gli-spiriti-del-natale/"
-    },
-    {
-      "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
-      "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-22",
-      "times": [
-        "21:00"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/scrooge-e-gli-spiriti-del-natale/"
     },
     {
       "film_id": "SCROOGE E GLI SPIRITI DEL NATALE",
@@ -2466,99 +1404,9 @@
     {
       "film_id": "SE DOMANI NON TORNO",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "21:55"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "13:35"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "15:50"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "18:45"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "15:20"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-corciano",
       "date": "2026-11-23",
       "times": [
-        "16:45"
+        "16:55"
       ],
       "screen": "Sala 6",
       "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
@@ -2646,66 +1494,6 @@
     {
       "film_id": "SE DOMANI NON TORNO",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "22:10"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "15:50"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "23:30"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "16:45"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/se-domani-non-torno",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "the-space-terni",
       "date": "2026-11-23",
       "times": [
         "17:40"
@@ -2782,47 +1570,10 @@
     {
       "film_id": "SE DOMANI NON TORNO",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
-      "times": [
-        "22:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "11:00",
-        "12:30",
-        "15:10",
-        "22:20"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "15:20",
-        "22:10"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
         "16:40",
-        "22:00"
+        "22:20"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
@@ -2834,8 +1585,8 @@
       "date": "2026-11-24",
       "times": [
         "16:40",
-        "19:20",
-        "22:00"
+        "19:30",
+        "22:15"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
@@ -2846,22 +1597,13 @@
       "cinema_slug": "uci-perugia",
       "date": "2026-11-25",
       "times": [
-        "16:40",
-        "19:20",
+        "16:30",
+        "19:30",
         "22:00"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/se-domani-non-torno/",
       "language": "ITA"
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-20",
-      "times": [
-        "18:45"
-      ],
-      "source_url": "https://cinemazenith.it/film/se-domani-non-torno/"
     },
     {
       "film_id": "SE DOMANI NON TORNO",
@@ -2880,15 +1622,6 @@
         "20:30"
       ],
       "source_url": "https://cinemazenith.it/film/se-domani-non-torno/"
-    },
-    {
-      "film_id": "SE DOMANI NON TORNO",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "18:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/se-domani-non-torno/"
     },
     {
       "film_id": "SE DOMANI NON TORNO",
@@ -2939,143 +1672,6 @@
     {
       "film_id": "UN WEEKEND ARTIFICIALE",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "21:30"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "22:30"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "16:15"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "18:15"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "20:05"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "22:40"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:15"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "15:20"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "16:20",
-        "18:45",
-        "21:10"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-corciano",
       "date": "2026-11-23",
       "times": [
         "16:00"
@@ -3108,7 +1704,7 @@
       "cinema_slug": "the-space-corciano",
       "date": "2026-11-23",
       "times": [
-        "22:10"
+        "22:05"
       ],
       "screen": "Sala 4",
       "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
@@ -3201,128 +1797,6 @@
         "22:30"
       ],
       "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "21:40"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "22:40"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "15:05"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "18:15"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "20:00"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "13:20",
-        "15:45"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "17:10",
-        "22:40"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "19:15"
-      ],
-      "screen": "Sala 2",
       "source_url": "https://www.thespacecinema.it/film/un-weekend-artificiale",
       "language": "ITALIANO",
       "session_attributes": [
@@ -3424,510 +1898,40 @@
     {
       "film_id": "UN WEEKEND ARTIFICIALE",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
-      "times": [
-        "22:10"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "00:50",
-        "11:15",
-        "14:00",
-        "16:20",
-        "22:00"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "14:10",
-        "16:40",
-        "17:10",
-        "22:40"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
-        "17:10"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-24",
-      "times": [
-        "17:10"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "UN WEEKEND ARTIFICIALE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-25",
-      "times": [
-        "17:00",
-        "22:10"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "21:45"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "21:20"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "20:50"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
-      "times": [
-        "19:25"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-24",
-      "times": [
-        "18:25"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "20:10"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "19:40"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-23",
-      "times": [
-        "22:10"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-24",
-      "times": [
-        "18:10"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BALLATA DEL RE DELLE API",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-25",
-      "times": [
-        "16:30"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-20",
-      "times": [
-        "22:00"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "14:05"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "17:25"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "12:00"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "14:50"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
-      "times": [
-        "17:20"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
-      "times": [
-        "21:55"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-24",
-      "times": [
-        "20:45"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-25",
-      "times": [
-        "18:40"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "12:40"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:30"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-23",
-      "times": [
-        "16:20"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
-      "times": [
+        "16:10",
+        "17:20",
         "23:00"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
+      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
       "language": "ITA"
     },
     {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "00:20",
-        "21:40"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "21:50"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
-      "times": [
-        "22:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "GODZILLA MINUS ZERO",
+      "film_id": "UN WEEKEND ARTIFICIALE",
       "cinema_slug": "uci-perugia",
       "date": "2026-11-24",
       "times": [
-        "22:30"
+        "16:00",
+        "18:15",
+        "22:50"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
+      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
       "language": "ITA"
     },
     {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
+      "film_id": "UN WEEKEND ARTIFICIALE",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-25",
       "times": [
-        "15:00"
+        "17:20",
+        "22:10"
       ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "19:40",
-        "22:20"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "14:20",
-        "17:05",
-        "19:40"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/un-weekend-artificiale/",
+      "language": "ITA"
     },
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
@@ -4008,81 +2012,6 @@
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-20",
-      "times": [
-        "22:15"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "15:40"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "19:40"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "15:50"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "18:00"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/il-rumore-delle-cose-nuove",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "the-space-terni",
       "date": "2026-11-23",
       "times": [
         "16:35",
@@ -4144,43 +2073,6 @@
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-20",
-      "times": [
-        "21:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/il-rumore-delle-cose-nuove/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "13:30",
-        "19:00",
-        "21:50"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/il-rumore-delle-cose-nuove/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "14:00",
-        "18:50",
-        "22:00"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/il-rumore-delle-cose-nuove/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
         "18:40"
@@ -4194,7 +2086,7 @@
       "cinema_slug": "uci-perugia",
       "date": "2026-11-24",
       "times": [
-        "18:40"
+        "18:50"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/il-rumore-delle-cose-nuove/",
@@ -4205,40 +2097,11 @@
       "cinema_slug": "uci-perugia",
       "date": "2026-11-25",
       "times": [
-        "18:40"
+        "18:50"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/il-rumore-delle-cose-nuove/",
       "language": "ITA"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-20",
-      "times": [
-        "16:30"
-      ],
-      "source_url": "https://cinemazenith.it/film/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-21",
-      "times": [
-        "16:30",
-        "21:15"
-      ],
-      "source_url": "https://cinemazenith.it/film/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-22",
-      "times": [
-        "16:30",
-        "18:45"
-      ],
-      "source_url": "https://cinemazenith.it/film/il-rumore-delle-cose-nuove/"
     },
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
@@ -4272,35 +2135,6 @@
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
       "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "21:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-21",
-      "times": [
-        "18:00",
-        "21:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-22",
-      "times": [
-        "19:30",
-        "21:30"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "nuovo-cinema-castello",
       "date": "2026-11-23",
       "times": [
         "16:00",
@@ -4329,24 +2163,6 @@
     {
       "film_id": "RUMORE DELLE COSE NUOVE",
       "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-21",
-      "times": [
-        "21:00"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-22",
-      "times": [
-        "18:30"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "RUMORE DELLE COSE NUOVE",
-      "cinema_slug": "cinema-metropolis",
       "date": "2026-11-24",
       "times": [
         "21:00"
@@ -4361,81 +2177,6 @@
         "16:30"
       ],
       "source_url": "https://www.cinemametropolis.it/films/il-rumore-delle-cose-nuove/"
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "14:50"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "15:45"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "14:50"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "16:45"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
     },
     {
       "film_id": "GATTO COL CAPPELLO",
@@ -4515,67 +2256,6 @@
     {
       "film_id": "GATTO COL CAPPELLO",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:15"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "14:40",
-        "17:20"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "14:30"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/il-gatto-con-il-cappello",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "the-space-terni",
       "date": "2026-11-23",
       "times": [
         "16:50"
@@ -4606,36 +2286,10 @@
     {
       "film_id": "GATTO COL CAPPELLO",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "11:00",
-        "16:45",
-        "17:50"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/il-gatto-col-cappello/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
-      "times": [
-        "14:20",
-        "16:45",
-        "17:50"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/il-gatto-col-cappello/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
         "16:00",
-        "16:45"
+        "17:00"
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/il-gatto-col-cappello/",
@@ -4646,7 +2300,7 @@
       "cinema_slug": "uci-perugia",
       "date": "2026-11-24",
       "times": [
-        "16:00",
+        "16:10",
         "16:45"
       ],
       "screen": "2D",
@@ -4658,6 +2312,7 @@
       "cinema_slug": "uci-perugia",
       "date": "2026-11-25",
       "times": [
+        "16:00",
         "16:45"
       ],
       "screen": "2D",
@@ -4665,51 +2320,506 @@
       "language": "ITA"
     },
     {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-21",
-      "times": [
-        "16:30"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/il-gatto-col-cappello/"
-    },
-    {
-      "film_id": "GATTO COL CAPPELLO",
-      "cinema_slug": "cinema-metropolis",
-      "date": "2026-11-22",
-      "times": [
-        "16:30"
-      ],
-      "source_url": "https://www.cinemametropolis.it/films/il-gatto-col-cappello/"
-    },
-    {
-      "film_id": "Ti Presento i Fotter",
+      "film_id": "BALLATA DEL RE DELLE API",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
+      "date": "2026-11-23",
       "times": [
-        "21:30"
+        "19:20"
       ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "screen": "Sala 6",
+      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
       "language": "ITALIANO",
       "session_attributes": [
-        "ANTEPRIMA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "Ti Presento i Fotter",
+      "film_id": "BALLATA DEL RE DELLE API",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
+      "date": "2026-11-24",
       "times": [
-        "21:30"
+        "18:25"
       ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "screen": "Sala 11",
+      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
       "language": "ITALIANO",
       "session_attributes": [
-        "ANTEPRIMA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "BALLATA DEL RE DELLE API",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-23",
+      "times": [
+        "22:10"
+      ],
+      "screen": "Sala 4",
+      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "BALLATA DEL RE DELLE API",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-24",
+      "times": [
+        "18:10"
+      ],
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "BALLATA DEL RE DELLE API",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-25",
+      "times": [
+        "16:30"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/la-ballata-del-re-delle-api",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-23",
+      "times": [
+        "17:20"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-23",
+      "times": [
+        "21:55"
+      ],
+      "screen": "Sala 10",
+      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-24",
+      "times": [
+        "20:45"
+      ],
+      "screen": "Sala 5",
+      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-25",
+      "times": [
+        "18:40"
+      ],
+      "screen": "Sala 5",
+      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-23",
+      "times": [
+        "16:20"
+      ],
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/godzilla-minus-zero",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-23",
+      "times": [
+        "22:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "GODZILLA MINUS ZERO",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-24",
+      "times": [
+        "22:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/godzilla-minus-zero/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-23",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-24",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-25",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-23",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 6",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-24",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 6",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-25",
+      "times": [
+        "20:30"
+      ],
+      "screen": "Sala 6",
+      "source_url": "https://www.thespacecinema.it/film/mustang",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-23",
+      "times": [
+        "18:00",
+        "20:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/mustang/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-24",
+      "times": [
+        "17:50",
+        "20:20"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/mustang/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-25",
+      "times": [
+        "18:00",
+        "20:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/mustang/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "cinema-zenith",
+      "date": "2026-11-23",
+      "times": [
+        "16:00"
+      ],
+      "source_url": "https://cinemazenith.it/film/mustang/"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "cinema-zenith",
+      "date": "2026-11-24",
+      "times": [
+        "21:15"
+      ],
+      "source_url": "https://cinemazenith.it/film/mustang/"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "cinema-zenith",
+      "date": "2026-11-25",
+      "times": [
+        "18:45"
+      ],
+      "source_url": "https://cinemazenith.it/film/mustang/"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "nuovo-cinema-castello",
+      "date": "2026-11-23",
+      "times": [
+        "21:00"
+      ],
+      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "nuovo-cinema-castello",
+      "date": "2026-11-24",
+      "times": [
+        "19:00"
+      ],
+      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
+    },
+    {
+      "film_id": "MUSTANG",
+      "cinema_slug": "nuovo-cinema-castello",
+      "date": "2026-11-25",
+      "times": [
+        "21:00"
+      ],
+      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-23",
+      "times": [
+        "16:50",
+        "19:30"
+      ],
+      "screen": "Sala 10",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-24",
+      "times": [
+        "16:50",
+        "19:30"
+      ],
+      "screen": "Sala 10",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-25",
+      "times": [
+        "16:50",
+        "19:30"
+      ],
+      "screen": "Sala 11",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-23",
+      "times": [
+        "19:30"
+      ],
+      "screen": "Sala 4",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-24",
+      "times": [
+        "19:30"
+      ],
+      "screen": "Sala 4",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-25",
+      "times": [
+        "19:30"
+      ],
+      "screen": "Sala 4",
+      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-23",
+      "times": [
+        "21:20"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-24",
+      "times": [
+        "21:20"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "YOUR NAME",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-25",
+      "times": [
+        "21:20"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-23",
+      "times": [
+        "18:50"
+      ],
+      "screen": "Sala 5",
+      "source_url": "https://www.thespacecinema.it/film/agata-christian-delitto-sulle-nevi",
+      "language": "ITALIANO",
+      "session_attributes": [
         "ITALIANO",
         "2D"
       ]
@@ -4792,32 +2902,45 @@
     },
     {
       "film_id": "Ti Presento i Fotter",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-28",
       "times": [
         "21:30"
       ],
-      "screen": "Sala 9",
+      "screen": "Sala 4",
       "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
       "language": "ITALIANO",
       "session_attributes": [
-        "ANTEPRIMA",
         "ITALIANO",
         "2D"
       ]
     },
     {
       "film_id": "Ti Presento i Fotter",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
       "times": [
         "21:30"
       ],
-      "screen": "Sala 9",
+      "screen": "Sala 4",
       "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
       "language": "ITALIANO",
       "session_attributes": [
-        "ANTEPRIMA",
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Ti Presento i Fotter",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-30",
+      "times": [
+        "21:30"
+      ],
+      "screen": "Sala 7",
+      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "language": "ITALIANO",
+      "session_attributes": [
         "ITALIANO",
         "2D"
       ]
@@ -4899,33 +3022,57 @@
     },
     {
       "film_id": "Ti Presento i Fotter",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-28",
       "times": [
-        "19:50"
+        "21:30"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/ti-presento-i-fotter/",
-      "language": "ITA"
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
       "film_id": "Ti Presento i Fotter",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
       "times": [
-        "19:40"
+        "21:30"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/ti-presento-i-fotter/",
-      "language": "ITA"
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "Ti Presento i Fotter",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-30",
+      "times": [
+        "21:30"
+      ],
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/ti-presento-i-fotter",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
       "film_id": "Ti Presento i Fotter",
       "cinema_slug": "uci-perugia",
       "date": "2026-11-25",
       "times": [
-        "16:30",
-        "19:10",
+        "16:20",
+        "19:00",
+        "20:10",
         "21:50",
         "22:40"
       ],
@@ -4967,50 +3114,37 @@
       "language": "ITA"
     },
     {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
+      "film_id": "Ti Presento i Fotter",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-28",
       "times": [
-        "16:10",
-        "18:45"
+        "21:50"
       ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/ti-presento-i-fotter/",
+      "language": "ITA"
     },
     {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
+      "film_id": "Ti Presento i Fotter",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-29",
       "times": [
-        "15:25"
+        "21:50"
       ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/ti-presento-i-fotter/",
+      "language": "ITA"
     },
     {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
+      "film_id": "Ti Presento i Fotter",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-30",
       "times": [
-        "17:50"
+        "21:50"
       ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/ti-presento-i-fotter/",
+      "language": "ITA"
     },
     {
       "film_id": "DIO RIDE",
@@ -5020,66 +3154,6 @@
         "17:50"
       ],
       "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:50"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "15:20"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "14:00"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/dio-ride",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "22:10"
-      ],
-      "screen": "Sala 4",
       "source_url": "https://www.thespacecinema.it/film/dio-ride",
       "language": "ITALIANO",
       "session_attributes": [
@@ -5119,33 +3193,6 @@
     },
     {
       "film_id": "DIO RIDE",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-20",
-      "times": [
-        "21:15"
-      ],
-      "source_url": "https://cinemazenith.it/film/dio-ride/"
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-21",
-      "times": [
-        "18:45"
-      ],
-      "source_url": "https://cinemazenith.it/film/dio-ride/"
-    },
-    {
-      "film_id": "DIO RIDE",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-20",
-      "times": [
-        "21:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/dio-ride/"
-    },
-    {
-      "film_id": "DIO RIDE",
       "cinema_slug": "nuovo-cinema-castello",
       "date": "2026-11-23",
       "times": [
@@ -5154,786 +3201,208 @@
       "source_url": "https://www.nuovocinemacastello.it/film/dio-ride/"
     },
     {
-      "film_id": "HOPE",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "12:15"
-      ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/hope",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "HOPE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:50"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/hope",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "HOPE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "12:00"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/hope",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "HOPE",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:20"
-      ],
-      "screen": "Sala 3",
-      "source_url": "https://www.thespacecinema.it/film/hope",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "11:45"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/bts-world-tour-arirang-in-kaohsiung-live-viewing-lingua-originale",
-      "language": "LINGUA ORIGINALE",
-      "session_attributes": [
-        "DIRETTA",
-        "EVENTO SPECIALE",
-        "LINGUA ORIGINALE",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "16:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/bts-world-tour-arirang-in-kaohsiung-live-viewing-lingua-originale",
-      "language": "LINGUA ORIGINALE",
-      "session_attributes": [
-        "EVENTO SPECIALE",
-        "LINGUA ORIGINALE",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:45"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/bts-world-tour-arirang-in-kaohsiung-live-viewing-lingua-originale",
-      "language": "LINGUA ORIGINALE",
-      "session_attributes": [
-        "DIRETTA",
-        "EVENTO SPECIALE",
-        "LINGUA ORIGINALE",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "16:00"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/bts-world-tour-arirang-in-kaohsiung-live-viewing-lingua-originale",
-      "language": "LINGUA ORIGINALE",
-      "session_attributes": [
-        "EVENTO SPECIALE",
-        "LINGUA ORIGINALE",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "BTS WORLD TOUR ARIRANG IN KAOHSIUNG: LIVE VIEWING - Lingua originale",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
-      "times": [
-        "11:45",
-        "16:00"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/bts-world-tour-arirang-live-viewing/",
-      "language": "KOR"
-    },
-    {
-      "film_id": "COME RAPINARE UNA BANCA",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "12:35"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/come-rapinare-una-banca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "COME RAPINARE UNA BANCA",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:15"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/come-rapinare-una-banca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "COME RAPINARE UNA BANCA",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "22:30"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/come-rapinare-una-banca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "COME RAPINARE UNA BANCA",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "12:55"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/come-rapinare-una-banca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "CLAYFACE",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "13:10"
-      ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/clayface",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "11:40"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "13:50"
-      ],
-      "screen": "Sala 8",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "13:20"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-21",
-      "times": [
-        "11:00",
-        "13:15"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "SHAUN, VITA DA PECORA - OPERAZIONE Z.U.C.C.A",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "13:35"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/shaun-vita-da-pecora-operazione-zucca",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "Prezzo Family",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-21",
-      "times": [
-        "23:55"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/un-tranquillo-funerale-di-famiglia",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "13:15"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/un-tranquillo-funerale-di-famiglia",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "22:15"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/un-tranquillo-funerale-di-famiglia",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "UN TRANQUILLO FUNERALE DI FAMIGLIA",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "14:45"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/un-tranquillo-funerale-di-famiglia",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:20"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/agata-christian-delitto-sulle-nevi",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "CINEMAPARK",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
-      "times": [
-        "18:50"
-      ],
-      "screen": "Sala 5",
-      "source_url": "https://www.thespacecinema.it/film/agata-christian-delitto-sulle-nevi",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "CINEMAPARK",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "AGATA CHRISTIAN - DELITTO SULLE NEVI",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:20"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/agata-christian-delitto-sulle-nevi",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "CINEMAPARK",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "JE SO' PAZZO",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "13:40"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/je-so-pazzo",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "PAW PATROL: MISSIONE DINOSAURI",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/paw-patrol-missione-dinosauri",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "CINEMAPARK",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "PAW PATROL: MISSIONE DINOSAURI",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-22",
-      "times": [
-        "11:00"
-      ],
-      "screen": "Sala 9",
-      "source_url": "https://www.thespacecinema.it/film/paw-patrol-missione-dinosauri",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "CINEMAPARK",
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-24",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-25",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 7",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-23",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-24",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-25",
-      "times": [
-        "20:30"
-      ],
-      "screen": "Sala 6",
-      "source_url": "https://www.thespacecinema.it/film/mustang",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
-      "times": [
-        "18:00",
-        "20:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/mustang/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-24",
-      "times": [
-        "18:00",
-        "20:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/mustang/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-25",
-      "times": [
-        "18:00",
-        "20:30"
-      ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/mustang/",
-      "language": "ITA"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-23",
-      "times": [
-        "16:00"
-      ],
-      "source_url": "https://cinemazenith.it/film/mustang/"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-24",
-      "times": [
-        "21:15"
-      ],
-      "source_url": "https://cinemazenith.it/film/mustang/"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-25",
-      "times": [
-        "18:45"
-      ],
-      "source_url": "https://cinemazenith.it/film/mustang/"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-23",
+      "date": "2026-11-26",
       "times": [
         "21:00"
       ],
-      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "MUSTANG",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-24",
-      "times": [
-        "19:00"
-      ],
-      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
-    },
-    {
-      "film_id": "MUSTANG",
-      "cinema_slug": "nuovo-cinema-castello",
-      "date": "2026-11-25",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-27",
       "times": [
         "21:00"
       ],
-      "source_url": "https://www.nuovocinemacastello.it/film/mustang/"
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-23",
+      "date": "2026-11-28",
       "times": [
-        "16:50",
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-24",
+      "date": "2026-11-29",
       "times": [
-        "16:50",
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 10",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-corciano",
-      "date": "2026-11-25",
+      "date": "2026-11-30",
       "times": [
-        "16:50",
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 11",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-23",
+      "date": "2026-11-26",
       "times": [
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 1",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-24",
+      "date": "2026-11-27",
       "times": [
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 1",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "the-space-terni",
-      "date": "2026-11-25",
+      "date": "2026-11-28",
       "times": [
-        "19:30"
+        "21:00"
       ],
-      "screen": "Sala 4",
-      "source_url": "https://www.thespacecinema.it/film/your-name",
+      "screen": "Sala 1",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
       "language": "ITALIANO",
       "session_attributes": [
-        "BACK ON THE BIG SCREEN",
-        "EXTRA",
         "ITALIANO",
         "2D"
       ]
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
+      "times": [
+        "21:00"
+      ],
+      "screen": "Sala 1",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-30",
+      "times": [
+        "21:00"
+      ],
+      "screen": "Sala 1",
+      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
+      "date": "2026-11-26",
       "times": [
-        "21:20"
+        "20:30"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
       "language": "ITA"
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-24",
+      "date": "2026-11-27",
       "times": [
-        "21:20"
+        "20:30"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
       "language": "ITA"
     },
     {
-      "film_id": "YOUR NAME",
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-25",
+      "date": "2026-11-28",
       "times": [
-        "21:20"
+        "20:30"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/your-name-4k/",
+      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-29",
+      "times": [
+        "20:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-30",
+      "times": [
+        "20:30"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
       "language": "ITA"
     },
     {
@@ -5970,6 +3439,56 @@
     },
     {
       "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-28",
+      "times": [
+        "14:30",
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 8",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
+      "times": [
+        "14:30",
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 8",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-30",
+      "times": [
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 8",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
       "cinema_slug": "the-space-terni",
       "date": "2026-11-26",
       "times": [
@@ -5988,6 +3507,56 @@
       "film_id": "HEXE: il Regno delle Streghe",
       "cinema_slug": "the-space-terni",
       "date": "2026-11-27",
+      "times": [
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-28",
+      "times": [
+        "14:30",
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
+      "times": [
+        "14:30",
+        "17:15",
+        "20:00"
+      ],
+      "screen": "Sala 2",
+      "source_url": "https://www.thespacecinema.it/film/hexe-il-regno-delle-streghe",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ITALIANO",
+        "2D"
+      ]
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-30",
       "times": [
         "17:15",
         "20:00"
@@ -6025,85 +3594,41 @@
       "language": "ITA"
     },
     {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-26",
-      "times": [
-        "21:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
-      "cinema_slug": "the-space-corciano",
-      "date": "2026-11-27",
-      "times": [
-        "21:00"
-      ],
-      "screen": "Sala 2",
-      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-26",
-      "times": [
-        "21:00"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
-      "cinema_slug": "the-space-terni",
-      "date": "2026-11-27",
-      "times": [
-        "21:00"
-      ],
-      "screen": "Sala 1",
-      "source_url": "https://www.thespacecinema.it/film/lorenzo-l-incredibile-avventura-di-jovanotti",
-      "language": "ITALIANO",
-      "session_attributes": [
-        "ITALIANO",
-        "2D"
-      ]
-    },
-    {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "film_id": "HEXE: il Regno delle Streghe",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-26",
+      "date": "2026-11-28",
       "times": [
-        "20:30"
+        "14:00",
+        "16:40",
+        "20:00"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
+      "source_url": "https://ucicinemas.it/film/hexe-il-regno-delle-streghe/",
       "language": "ITA"
     },
     {
-      "film_id": "LORENZO - L'INCREDIBILE AVVENTURA DI JOVANOTTI",
+      "film_id": "HEXE: il Regno delle Streghe",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-27",
+      "date": "2026-11-29",
       "times": [
-        "20:30"
+        "14:00",
+        "16:40",
+        "20:00"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/lorenzo-lincredibile-avventura-di-jovanotti/",
+      "source_url": "https://ucicinemas.it/film/hexe-il-regno-delle-streghe/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "HEXE: il Regno delle Streghe",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-30",
+      "times": [
+        "16:40",
+        "20:00"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/hexe-il-regno-delle-streghe/",
       "language": "ITA"
     },
     {
@@ -6124,78 +3649,108 @@
       ]
     },
     {
-      "film_id": "Whalefall",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-21",
+      "film_id": "YOU CAN SEE EVERYTHING - Lingua originale",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-28",
       "times": [
-        "00:40"
+        "20:30"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/whalefall/",
-      "language": "ITA"
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/you-can-see-everything-lingua-originale",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ANTEPRIMA",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "Whalefall",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
+      "film_id": "YOU CAN SEE EVERYTHING - Lingua originale",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
       "times": [
-        "22:45"
+        "20:30"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/whalefall/",
-      "language": "ITA"
+      "screen": "Sala 9",
+      "source_url": "https://www.thespacecinema.it/film/you-can-see-everything-lingua-originale",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "ANTEPRIMA",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "I Swear",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-22",
+      "film_id": "PAW PATROL: MISSIONE DINOSAURI",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-29",
       "times": [
-        "18:20"
+        "11:00"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/i-swear/",
-      "language": "ITA"
+      "screen": "Sala 5",
+      "source_url": "https://www.thespacecinema.it/film/paw-patrol-missione-dinosauri",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "CINEMAPARK",
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "I Swear",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-22",
+      "film_id": "PAW PATROL: MISSIONE DINOSAURI",
+      "cinema_slug": "the-space-terni",
+      "date": "2026-11-29",
       "times": [
-        "21:00"
+        "11:00"
       ],
-      "source_url": "https://cinemazenith.it/film/i-swear-e-piu-forte-di-me/"
+      "screen": "Sala 6",
+      "source_url": "https://www.thespacecinema.it/film/paw-patrol-missione-dinosauri",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "CINEMAPARK",
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "Ramayana: La nascita di una leggenda",
-      "cinema_slug": "uci-perugia",
-      "date": "2026-11-23",
+      "film_id": "KEN IL GUERRIERO - IL FILM",
+      "cinema_slug": "the-space-corciano",
+      "date": "2026-11-30",
       "times": [
         "19:00"
       ],
-      "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/ramayana-la-nascita-di-una-leggenda/",
-      "language": "ITA"
+      "screen": "Sala 11",
+      "source_url": "https://www.thespacecinema.it/film/ken-il-guerriero-il-film-40mo-anniversario",
+      "language": "ITALIANO",
+      "session_attributes": [
+        "BACK ON THE BIG SCREEN",
+        "EXTRA",
+        "ITALIANO",
+        "2D"
+      ]
     },
     {
-      "film_id": "Ramayana: La nascita di una leggenda",
+      "film_id": "KEN IL GUERRIERO - IL FILM",
       "cinema_slug": "uci-perugia",
-      "date": "2026-11-24",
+      "date": "2026-11-30",
       "times": [
-        "19:00"
+        "21:10"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/ramayana-la-nascita-di-una-leggenda/",
+      "source_url": "https://ucicinemas.it/film/ken-il-guerriero-il-film/",
       "language": "ITA"
     },
     {
-      "film_id": "Zustissia",
+      "film_id": "Whalefall",
       "cinema_slug": "uci-perugia",
       "date": "2026-11-23",
       "times": [
-        "19:20"
+        "22:50"
       ],
       "screen": "2D",
-      "source_url": "https://ucicinemas.it/film/zustissia/",
+      "source_url": "https://ucicinemas.it/film/whalefall/",
       "language": "ITA"
     },
     {
@@ -6207,6 +3762,17 @@
       ],
       "screen": "2D",
       "source_url": "https://ucicinemas.it/film/ragione-e-sentimento/",
+      "language": "ITA"
+    },
+    {
+      "film_id": "Ramayana: La nascita di una leggenda",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-24",
+      "times": [
+        "19:00"
+      ],
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/ramayana-la-nascita-di-una-leggenda/",
       "language": "ITA"
     },
     {
@@ -6232,37 +3798,37 @@
       "language": "ITA"
     },
     {
-      "film_id": "fuoco che ti porti dentro",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-20",
+      "film_id": "notte delle fragole",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-28",
       "times": [
-        "16:30",
-        "18:45",
-        "21:15"
+        "21:40"
       ],
-      "source_url": "https://cinemazenith.it/film/il-fuoco-che-ti-porti-dentro/"
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/la-notte-delle-fragole/",
+      "language": "ITA"
     },
     {
-      "film_id": "fuoco che ti porti dentro",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-21",
+      "film_id": "notte delle fragole",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-29",
       "times": [
-        "16:30",
-        "18:45",
-        "21:15"
+        "21:40"
       ],
-      "source_url": "https://cinemazenith.it/film/il-fuoco-che-ti-porti-dentro/"
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/la-notte-delle-fragole/",
+      "language": "ITA"
     },
     {
-      "film_id": "fuoco che ti porti dentro",
-      "cinema_slug": "cinema-zenith",
-      "date": "2026-11-22",
+      "film_id": "notte delle fragole",
+      "cinema_slug": "uci-perugia",
+      "date": "2026-11-30",
       "times": [
-        "16:30",
-        "18:45",
-        "21:15"
+        "21:40"
       ],
-      "source_url": "https://cinemazenith.it/film/il-fuoco-che-ti-porti-dentro/"
+      "screen": "2D",
+      "source_url": "https://ucicinemas.it/film/la-notte-delle-fragole/",
+      "language": "ITA"
     },
     {
       "film_id": "fuoco che ti porti dentro",
@@ -6307,13 +3873,13 @@
       "source_url": "https://cinemazenith.it/film/il-tempo-e-lacqua/"
     },
     {
-      "film_id": "PARIS, TEXAS",
+      "film_id": "INCONTRI RAVVICINATI DEL TERZO TIPO",
       "cinema_slug": "cinema-teatro-concordia",
-      "date": "2026-11-22",
+      "date": "2026-11-29",
       "times": [
         "10:30"
       ],
-      "source_url": "https://www.cineconcordia.it/films/paris-texas/"
+      "source_url": "https://www.cineconcordia.it/films/incontri-ravvicinati-del-terzo-tipo/"
     }
   ]
 }
