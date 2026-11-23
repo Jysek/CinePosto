@@ -348,3 +348,15 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   nei lettori di dettaglio e confronto dello slug che si rompe con query o fragment — sono latenti
   e sono finite in `problemi-aperti.md` con la prova. Conteggi a 194 scraper (193 pass + 1 `xfail`) e
   289 totali. Gate verdi: `make lint`, `make test-scraper`, `make check-console`.
+- **2026-11-23** — Upgrade dell'app a **Expo SDK 58.0.26** (React Native 0.88.1, React 19.3.0,
+  `react-native-web` 0.21.4, WebView 14.0.1). Unica modifica al codice: la barra di stato delle tre
+  schermate perde `backgroundColor` e `translucent`, rimossi da React Native 0.88 (`247a42d`). Le
+  icone restano alla 13.x, `expo-doctor` non le segnala. L'app è in JavaScript puro, quindi la
+  rottura "Strict TypeScript API" di React Native 0.87 non la riguarda. Verifiche: `npx expo install
+  --check` senza segnalazioni, `expo-doctor` tutti i check verdi, `expo export --platform web`
+  verde, giro Playwright sull'export web (home con i film di oggi, filtro con 8 cinema e lista che
+  cambia alla selezione, località con 8 righe e 8 marker senza pin rotti, dettaglio con trama e
+  orari leggibili). Tre avvertenze di console arrivano da MapLibre dentro l'iframe della mappa, non
+  dall'app: la stessa stringa è nel CDN di `maplibre-gl` 5.24.0. Prima dell'upgrade è stato
+  committato il palinsesto del giorno (`7a72a99`). La WebView nativa non è stata provata su un
+  telefono: in questo ambiente non c'è un device.

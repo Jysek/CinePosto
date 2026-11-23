@@ -1,8 +1,9 @@
 # App — React Native + Expo
 
-> Verificato su fase-7 (2026-10-03): banner «Programmazione non aggiornata» nella Home
-> (`StaleDataBanner`), verificato su web con Playwright su export web (dati vecchi → banner,
-> dati freschi → nessun banner).
+> Verificato su `247a42d` (`2026-11-23`): stack allineato a Expo SDK 58 (React Native 0.88.1,
+> React 19.3.0, react-native-web 0.21.4); le quattro schermate ricontrollate sull'export web con
+> Playwright. Il banner «Programmazione non aggiornata» (`StaleDataBanner`) è quello verificato
+> su fase-7 (2026-10-03) e non è cambiato.
 > Precedente: fase-18 (`2026-10-03`): popup della mappa (rettangolo bianco)
 > interamente cliccabile verso Google Maps, verificato su web con Playwright
 > su export web. Precedente: fase-19 (`2026-10-03`) — apertura di Google Maps dalla
@@ -22,12 +23,12 @@ Stato: **integrata e funzionante su web e smartphone**, agganciata al backend
 
 | Cosa | Versione / scelta |
 |---|---|
-| React Native | 0.86.3 |
-| Expo | SDK 57 |
-| React | 19.2.3 |
+| React Native | 0.88.1 |
+| Expo | SDK 58 |
+| React | 19.3.0 |
 | Navigazione | **React Navigation 7** (bottom-tabs + native-stack) — entry classico `App.js`, *non* Expo Router |
 | Linguaggio | JavaScript `.js` |
-| Web | `react-native-web` 0.21 (stessa codebase per il browser) |
+| Web | `react-native-web` 0.21.4 (stessa codebase per il browser) |
 | Mappa | OpenFreeMap + MapLibre GL JS dentro `react-native-webview` (nativo) / `<iframe>` (web) |
 | Storage locale | `@react-native-async-storage/async-storage` (preferiti) |
 
@@ -48,7 +49,7 @@ app/
 ├── App.js                 ← root: splash + navigazione (tab + stack annidati)
 ├── index.js               ← registerRootComponent(App)
 ├── app.json               ← name "CinePosto", slug "cineposto", tema scuro
-├── package.json           ← dipendenze SDK 57
+├── package.json           ← dipendenze SDK 58
 ├── babel.config.js        ← babel-preset-expo
 ├── metro.config.js        ← shim web per react-native-webview
 ├── shims/                 ← codegenNativeComponent.web.js (compat web WebView)

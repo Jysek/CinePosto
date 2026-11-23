@@ -1,8 +1,8 @@
 # CinePosto — Panoramica del sistema
 
-> Verificato su fase-7 (2026-10-03): endpoint pubblico `GET /api/v1/dataset` e avviso di
-> freschezza nell'app (12 endpoint, 95 test backend). Il resto del documento non
-> è stato ricontrollato in questa sessione (ultima lettura completa su `9dc8fc1`).
+> Verificato su `247a42d` (`2026-11-23`): stack dell'app a Expo SDK 58. Il resto del documento è
+> quello dell'ultima verifica completa su fase-7 (2026-10-03), endpoint e avviso di freschezza
+> compresi.
 
 > **Il documento da leggere per capire il progetto da cima a fondo.** Spiega cosa fa ogni componente, come si parlano e perché sono stati fatti così. Per il dettaglio di ogni parte, i link alle aree tecniche sono in fondo a ogni sezione.
 
@@ -89,7 +89,7 @@ schemas/      → DTO Pydantic: il contratto JSON verso l'app (trasversale)
 
 **Compito**: interfaccia utente iOS + Android + web da un'unica codebase.
 
-- Stack: React Native + **Expo SDK 57** (nativo via development build, non Expo Go), navigazione con React Navigation — tre tab (Film, Cerca, Località) più uno stack per il dettaglio del film.
+- Stack: React Native + **Expo SDK 58** (nativo via development build, non Expo Go), navigazione con React Navigation — tre tab (Film, Cerca, Località) più uno stack per il dettaglio del film.
 - Legge tutto dal backend via `fetch`: nessun dato finto. L'indirizzo dell'API è configurabile con la variabile `EXPO_PUBLIC_API_BASE`.
 - Le schermate: Home con carosello e cartellone del giorno, dettaglio con gli orari raggruppati per cinema, ricerca per titolo con debounce, mappa delle sale (OpenFreeMap). L'anagrafica dei cinema arriva dall'API, non da costanti dell'app. Se il backend dichiara i dati non aggiornati (`GET /dataset`), la Home mostra un avviso non bloccante «Programmazione non aggiornata».
 - Codice in JavaScript (`.js`); la migrazione a TypeScript resta rimandata (decisione D5).

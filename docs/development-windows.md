@@ -1,7 +1,7 @@
 # Sviluppo su Windows
 
-> Verificato su `4c18aa7` (`2026-11-21`): conteggi dei test (194 scraper, 95 backend). Comandi
-> e percorsi ricontrollati su `056f04f` (`2026-09-26`) e `9dc8fc1`; §5 (Expo Go, rete e firewall su
+> Verificato su `247a42d` (`2026-11-23`): nota su Expo Go e prerequisito Node portati a SDK 58.
+> Comandi e percorsi ricontrollati su `4c18aa7` (`2026-11-21`); §5 (Expo Go, rete e firewall su
 > telefono reale) non rieseguita.
 
 Guida pratica per far girare CinePosto su Windows. Tutti i comandi qui sono stati eseguiti
@@ -19,7 +19,7 @@ i percorsi e due dettagli di rete. La fonte di verità portabile resta la CI su 
 |---|---|---|
 | **Docker Desktop** | backend e scraper girano in container: **Python 3.12 non serve installarlo** | installato, va solo **avviato** |
 | **Git** | ovvio | installato |
-| **Node.js 20+** | solo per l'app Expo | installato (Node 24) |
+| **Node.js 22.13+** | solo per l'app Expo | installato (Node 24) |
 | **make** *(opzionale)* | scorciatoie al posto dei comandi `docker compose` | `winget install --id ezwinports.make -e` |
 | **GitHub CLI** *(opzionale)* | PR, release | `winget install --id GitHub.cli -e` |
 
@@ -135,12 +135,13 @@ EXPO_PUBLIC_API_BASE="http://<IP-LAN>:8000/api/v1" npx expo start
 - **Web**: apri http://localhost:8081 (o premi `w`).
 - **iPhone**: apri **Expo Go** e scansiona il QR code.
 
-> **Nota (SDK 57)** — Expo Go sugli store supporta **una sola versione dell'SDK**, che
-> cambia a ogni release di Expo: non è una base stabile per un progetto che dura. Con il
-> progetto su SDK 57, la strada consigliata per il nativo è un **development build**
-> (`npx eas build --profile development --platform ios`), che si installa una volta sul
-> telefono e non dipende da Expo Go. Su **Android**, `npx expo start` può installare da sé
-> la versione di Expo Go corrispondente all'SDK in uso.
+> **Nota (SDK 58)** — Expo Go sugli store supporta **una sola versione dell'SDK**, che
+> cambia a ogni release di Expo: oggi è ancora ferma alla 57, quindi non è una base stabile
+> per un progetto su SDK 58. La strada consigliata per il nativo resta un **development
+> build** (`npx eas build --profile development --platform ios`), che si installa una volta
+> sul telefono e non dipende da Expo Go. Su **Android**, `npx expo start` può installare da
+> sé la versione di Expo Go corrispondente all'SDK in uso. Il tooling dell'SDK 58 richiede
+> **Node 22.13 o superiore** sulla linea 22 (in alternativa 24.3+ o 26+).
 
 Non serve Android per sviluppare: l'app è React Native e gira anche su Android, ma non avendo
 un device Android la verifica su quella piattaforma non è stata fatta.

@@ -15,7 +15,7 @@ scraper e backend, **API REST** tra backend e app):
 ```
 scraper/   pipeline Python 3.12 → JSON in scraper/output/
 backend/   FastAPI + SQLAlchemy + SQLite (seed dai JSON)
-app/       Expo SDK 57 / React Native 0.86 (web + iOS + Android dalla stessa codebase)
+app/       Expo SDK 58 / React Native 0.88 (web + iOS + Android dalla stessa codebase)
 docs/      documentazione tecnica (in italiano)
 ```
 
@@ -190,7 +190,7 @@ una pagina vecchia.
 ## Consegna — git
 
 - **Trunk**: `main`. I branch di lavoro sono brevi, con nome `<tipo>/<scope>-<slug>`
-  (esempio: `chore/app-sdk-57`), e confluiscono in `main` appena pronti.
+  (esempio: `chore/app-sdk-58`), e confluiscono in `main` appena pronti.
 - **Commit**: atomici, una modifica logica per commit, messaggio in italiano
   `<tipo>: <descrizione>` con scope `scraper` / `backend` / `app` / `docs` / `ci`.
 - **Push**: consentito su `origin` (repository personale). Sul remote `upstream` (repository di

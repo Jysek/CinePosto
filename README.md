@@ -27,7 +27,7 @@ Uno dei test dello scraper è marcato `xfail`: documenta un limite noto ([`docs/
 |---|---|---|
 | `scraper/` | Python 3.12, requests, BeautifulSoup, Wikidata SPARQL | un connettore per cinema (pattern Strategy), normalizzazione dei titoli, dedup, arricchimento metadati |
 | `backend/` | FastAPI, SQLAlchemy 2.0, SQLite, Pydantic | architettura a strati (routers → services → repositories → models), 12 endpoint REST, seed idempotente |
-| `app/` | Expo SDK 57, React Native 0.86, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
+| `app/` | Expo SDK 58, React Native 0.88, React Navigation | home con film di oggi, dettaglio film, ricerca con debounce, mappa delle sale, versione web identica |
 | infra | Docker Compose, GitHub Actions, Caddy | Docker per sviluppo e produzione, CI che testa dentro le immagini, HTTPS gestito da Caddy |
 
 ## Avvio rapido

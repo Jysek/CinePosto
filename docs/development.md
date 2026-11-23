@@ -1,7 +1,8 @@
 # Guida allo sviluppo
 
-> Verificato su `056f04f` (`2026-09-26`): numeri dei test (181 scraper, 70 backend). Report del
-> seed (`identity_conflicts`, `duplicate_titles`) e comandi confrontati col codice su `20ca1bb`.
+> Verificato su `247a42d` (`2026-11-23`): app su Expo SDK 58 e prerequisito Node 22.13+ per il
+> tooling dell'SDK. Comandi di app e test ricontrollati; numeri dei test invariati dall'ultima
+> verifica (`056f04f`, `2026-09-26`).
 
 > **Ambiente primario: Docker** (backend + scraper), uguale su Windows e macOS.
 > Scorciatoie in `make help`; setup passo-passo su Windows in
@@ -18,7 +19,7 @@
 ## Prerequisiti
 
 - Python 3.12+
-- Node.js 20+ (solo per app React Native)
+- Node.js 22.13+ (solo per app React Native)
 
 ---
 
@@ -169,7 +170,7 @@ Setup dei test:
 
 ## App (React Native)
 
-App integrata e collegata al backend (React Navigation, **Expo SDK 57**). **NON usare
+App integrata e collegata al backend (React Navigation, **Expo SDK 58**). **NON usare
 `create-expo-app`** — il progetto è già inizializzato e per il nativo serve un
 **development build** (`expo prebuild` + EAS), non Expo Go.
 
