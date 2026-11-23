@@ -125,7 +125,7 @@ export default function SearchTab({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <StatusBar barStyle="light-content" />
       <View style={styles.header}>
         {/* Versione senza tagline: a questa dimensione non sarebbe leggibile */}
         <Image source={require('../../assets/logo_header.png')} style={styles.logo} resizeMode="contain" />
