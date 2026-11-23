@@ -30,7 +30,7 @@
 6. Verifica completa: export, doctor, harness web, giro visivo in browser | files: nessuno | done: checklist di `scripts/check-app-web.sh` soddisfatta (home carica, filtro 8 cinema, località 8 righe + 8 marker senza pin rotti, dettaglio leggibile) e `expo-doctor` tutti i check verdi | Stato: DONE
 7. Se l'export web si rompe per il deep import del codegen, estendere lo shim Metro | files: app/metro.config.js,app/shims/codegenNativeComponent.web.js | done: export web verde; se non serve -> `N/A` | Stato: N/A
 8. Documenti allineati a SDK 58 | files: AGENTS.md,README.md,docs/app/overview.md,docs/development.md,docs/development-windows.md,docs/panoramica.md,docs/stato-e-diario.md | done: `grep -rn "SDK 57\|0\.86" AGENTS.md README.md docs/*.md docs/app/overview.md` vuoto (esclusa la cronologia in `stato-e-diario.md`), nota Expo Go e tabella stack aggiornate con le versioni reali, riga di diario in coda | Stato: DONE
-9. Review a tre angoli, fix accettate, push del branch | files: nessuno | done: P0/P1 chiusi o motivati, gate verde, `git push -u origin chore/app-sdk-58` | Stato: TODO
+9. Review a tre angoli, fix accettate, push del branch | files: nessuno | done: P0/P1 chiusi o motivati, gate verde, `git push -u origin chore/app-sdk-58` | Stato: DONE
 
 ## Lanes
 

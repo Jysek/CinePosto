@@ -359,4 +359,8 @@ Una riga per sessione, in coda. Formato: `- **<data>** — cosa è stato fatto, 
   orari leggibili). Tre avvertenze di console arrivano da MapLibre dentro l'iframe della mappa, non
   dall'app: la stessa stringa è nel CDN di `maplibre-gl` 5.24.0. Prima dell'upgrade è stato
   committato il palinsesto del giorno (`7a72a99`). La WebView nativa non è stata provata su un
-  telefono: in questo ambiente non c'è un device.
+  telefono: in questo ambiente non c'è un device. Review a tre angoli (correttezza, sicurezza e
+  dati, coerenza col brief): nessun P0/P1, un P2 accettato — `react-native-web` riportato a
+  `~0.21.4` in `package.json`, che `expo install --fix` aveva scritto come `^0.21.4`, così il
+  range non può derivare a 0.22 fuori dalla matrice dell'SDK. Push del branch sul remoto a fine
+  ciclo.
